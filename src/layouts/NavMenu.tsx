@@ -1,8 +1,7 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
 	SidebarGroup,
@@ -13,8 +12,10 @@ import {
 	SidebarMenuItem,
 	SidebarMenuSub,
 	SidebarMenuSubButton,
-	SidebarMenuSubItem,
+	SidebarMenuSubItem
 } from "@/components/ui/sidebar";
+
+import { Link, usePathname } from "@/i18n/navigation";
 import type { NavItemProps } from "@/layouts/Layout.types";
 
 interface NavMenuProps {
@@ -27,7 +28,7 @@ export function NavMenu(props: NavMenuProps) {
 
 	const isActive = (items?: NavItemProps["items"]) => {
 		if (items) {
-			const isActive = items.some((subItem) => subItem.url === pathname);
+			const isActive = items.some(subItem => subItem.url === pathname);
 			return isActive;
 		}
 		return false;
@@ -37,7 +38,7 @@ export function NavMenu(props: NavMenuProps) {
 		<SidebarGroup>
 			<SidebarGroupLabel>{props.label}</SidebarGroupLabel>
 			<SidebarMenu>
-				{props.items.map((item) => (
+				{props.items.map(item => (
 					<Collapsible key={item.title} asChild defaultOpen={isActive(item.items)}>
 						<SidebarMenuItem>
 							<SidebarMenuButton
@@ -60,7 +61,7 @@ export function NavMenu(props: NavMenuProps) {
 									</CollapsibleTrigger>
 									<CollapsibleContent>
 										<SidebarMenuSub>
-											{item.items?.map((subItem) => (
+											{item.items?.map(subItem => (
 												<SidebarMenuSubItem key={subItem.title}>
 													<SidebarMenuSubButton asChild isActive={subItem.url === pathname}>
 														<Link href={subItem.url}>

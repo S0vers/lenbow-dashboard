@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Poppins } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -13,16 +13,7 @@ import { ThemeProvider } from "@/providers/NextThemesProvider";
 import { RedirectProvider } from "@/providers/RedirectProvider";
 import ReduxProvider from "@/providers/ReduxProvider";
 
-const poppins = Poppins({
-	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-	subsets: ["latin"],
-	adjustFontFallback: true,
-	display: "swap",
-	preload: true,
-	fallback: ["Helvetica", "Arial", "sans-serif"],
-	style: "normal",
-	variable: "--font-poppins"
-});
+const notoSans = Noto_Sans({ variable: "--font-sans" });
 
 export const metadata: Metadata = {
 	title: {
@@ -45,8 +36,8 @@ export default async function RootLayout({
 	setRequestLocale(locale);
 
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body className={`${poppins.className} antialiased`} suppressHydrationWarning>
+		<html lang="en" suppressHydrationWarning className={notoSans.variable}>
+			<body className={`antialiased`} suppressHydrationWarning>
 				<Suspense fallback={<Loader />}>
 					<ReduxProvider>
 						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>

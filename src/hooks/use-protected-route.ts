@@ -1,7 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-
+import { usePathname } from "@/i18n/navigation";
 import { route } from "@/routes/routes";
 
 export default function useProtectedRoute() {
