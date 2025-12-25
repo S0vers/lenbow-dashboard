@@ -19,6 +19,7 @@ import {
 	useSidebar
 } from "@/components/ui/sidebar";
 
+import useAuth from "@/hooks/use-auth";
 import { NavUserItemProps, NavUserMaxItemProps } from "@/layout/Layout.types";
 
 interface NavUserComponentProps {
@@ -27,16 +28,7 @@ interface NavUserComponentProps {
 
 export function NavUser(props: NavUserComponentProps) {
 	const { isMobile } = useSidebar();
-	// const { user, isAuthenticated, handleLogout } = useAuth();
-	const user = {
-		name: "John Doe",
-		email: "john.doe@example.com",
-		image: "/avatars/johndoe.jpg"
-	};
-	const isAuthenticated = true;
-	const handleLogout = () => {
-		// Implement logout functionality here
-	};
+	const { user, isAuthenticated, handleLogout } = useAuth();
 
 	if (!isAuthenticated || !user) {
 		return null;
@@ -56,7 +48,7 @@ export function NavUser(props: NavUserComponentProps) {
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
-							<Avatar className="h-8 w-8 rounded-lg bg-transparent grayscale">
+							<Avatar className="h-8 w-8 rounded-lg bg-transparent">
 								<AvatarImage src={userImage} alt={userName} />
 								<AvatarFallback className="text-foreground rounded-lg bg-transparent">
 									{initials}

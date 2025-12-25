@@ -3,9 +3,15 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { Poppins } from "next/font/google";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+
+import Loader from "@/components/ui/loader";
 
 import "./globals.css";
 import { routing } from "@/i18n/routing";
+import { ThemeProvider } from "@/providers/NextThemesProvider";
+import { RedirectProvider } from "@/providers/RedirectProvider";
+import ReduxProvider from "@/providers/ReduxProvider";
 
 const poppins = Poppins({
 	subsets: ["latin"],
@@ -36,7 +42,15 @@ export default async function RootLayout({
 	return (
 		<html lang="en" className={poppins.className} suppressHydrationWarning>
 			<body className="antialiased" suppressHydrationWarning>
-				<NextIntlClientProvider>{children}</NextIntlClientProvider>
+				<Suspense fallback={<Loader />}>
+					<ReduxProvider>
+						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+							<RedirectProvider>
+								<NextIntlClientProvider>{children}</NextIntlClientProvider>
+							</RedirectProvider>
+						</ThemeProvider>
+					</ReduxProvider>
+				</Suspense>
 			</body>
 		</html>
 	);
