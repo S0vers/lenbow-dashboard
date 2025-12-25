@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, type ReactNode, useState } from "react";
+import React, { type ReactNode, createContext, useState } from "react";
 
 import { useBreadcrumb } from "@/hooks/use-breadcrumb";
 import { route } from "@/routes/routes";
@@ -20,7 +20,7 @@ export const BreadcrumbContext = createContext<BreadcrumbContextType | undefined
 
 export function BreadcrumbProvider({ children }: { children: ReactNode }) {
 	const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([
-		{ name: "Dashboard", href: route.private.dashboard },
+		{ name: "Dashboard", href: route.private.dashboard }
 	]);
 
 	return (

@@ -63,7 +63,7 @@ const fullLogoSizePresets = {
 	md: { width: 150, height: 33 },
 	lg: { width: 180, height: 40 },
 	xl: { width: 225, height: 50 },
-	"2xl": { width: 270, height: 60 },
+	"2xl": { width: 270, height: 60 }
 };
 
 // Size presets for mini logo (approximately 1:1 ratio)
@@ -73,19 +73,19 @@ const miniLogoSizePresets = {
 	md: { width: 32, height: 32 },
 	lg: { width: 40, height: 40 },
 	xl: { width: 48, height: 48 },
-	"2xl": { width: 56, height: 56 },
+	"2xl": { width: 56, height: 56 }
 };
 
 // Theme to logo mapping
 const logoSources = {
 	full: {
 		dark: "/images/logo.webp",
-		white: "/images/logo.webp",
+		white: "/images/logo.webp"
 	},
 	mini: {
 		dark: "/images/logo.webp",
-		white: "/images/logo.webp",
-	},
+		white: "/images/logo.webp"
+	}
 };
 
 export const BrandLogo = React.forwardRef<HTMLDivElement | HTMLButtonElement, BrandLogoProps>(
@@ -103,7 +103,7 @@ export const BrandLogo = React.forwardRef<HTMLDivElement | HTMLButtonElement, Br
 			priority = false,
 			...props
 		},
-		ref,
+		ref
 	) => {
 		// Determine dimensions based on variant
 		const sizePresets = variant === "mini" ? miniLogoSizePresets : fullLogoSizePresets;
@@ -119,12 +119,12 @@ export const BrandLogo = React.forwardRef<HTMLDivElement | HTMLButtonElement, Br
 					height:
 						typeof height === "number"
 							? height
-							: Number.parseInt(height?.toString() || "0") || preset.height,
+							: Number.parseInt(height?.toString() || "0") || preset.height
 				};
 			}
 			return {
 				width: preset.width,
-				height: preset.height,
+				height: preset.height
 			};
 		}, [width, height, preset]);
 
@@ -142,7 +142,7 @@ export const BrandLogo = React.forwardRef<HTMLDivElement | HTMLButtonElement, Br
 					"flex items-center justify-center select-none",
 					interactive && "rounded-md focus:opacity-80",
 					interactive && onClick && "cursor-pointer",
-					className,
+					className
 				)}
 				onClick={onClick}
 				role={interactive ? "button" : undefined}
@@ -159,12 +159,12 @@ export const BrandLogo = React.forwardRef<HTMLDivElement | HTMLButtonElement, Br
 					className="object-contain"
 					style={{
 						width: typeof width === "string" ? width : `${dimensions.width}px`,
-						height: typeof height === "string" ? height : `${dimensions.height}px`,
+						height: typeof height === "string" ? height : `${dimensions.height}px`
 					}}
 				/>
 			</Component>
 		);
-	},
+	}
 );
 
 BrandLogo.displayName = "BrandLogo";

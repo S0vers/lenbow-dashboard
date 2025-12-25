@@ -1,15 +1,32 @@
-import Image from "next/image";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-export default function Home() {
+import { AppSidebar } from "@/layout/AppSidebar";
+import { SiteHeader } from "@/layout/SiteHeader";
+import { SectionCards } from "@/layout/section-cards";
+
+export default function Page() {
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<h1 className="text-5xl font-bold">Welcome to Next.js!</h1>
-			<p className="mt-4 text-lg">
-				Get started by editing <code>src/app/page.tsx</code>
-			</p>
-			<div className="mt-8">
-				<Image src="/next.svg" alt="Next.js Logo" width={200} height={200} />
-			</div>
-		</main>
+		<SidebarProvider
+			style={
+				{
+					"--sidebar-width": "calc(var(--spacing) * 72)",
+					"--header-height": "calc(var(--spacing) * 12)"
+				} as React.CSSProperties
+			}
+		>
+			<AppSidebar variant="inset" />
+			<SidebarInset>
+				<SiteHeader />
+				<div className="flex flex-1 flex-col">
+					<div className="@container/main flex flex-1 flex-col gap-2">
+						<div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+							<div className="px-4 lg:px-6">
+								<SectionCards />
+							</div>
+						</div>
+					</div>
+				</div>
+			</SidebarInset>
+		</SidebarProvider>
 	);
 }
