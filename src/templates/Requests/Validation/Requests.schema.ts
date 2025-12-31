@@ -14,4 +14,10 @@ export const createRequestsSchema = z.object({
 	dueDate: validateDate("Due date is required").optional()
 });
 
+export const updatePendingRequestsSchema = z.object({
+	amount: validateClientNumber("Amount is required"),
+	dueDate: validateDate("Due date is required").optional()
+});
+
 export type CreateRequestsSchema = z.infer<typeof createRequestsSchema>;
+export type UpdatePendingRequestsSchema = z.infer<typeof updatePendingRequestsSchema>;

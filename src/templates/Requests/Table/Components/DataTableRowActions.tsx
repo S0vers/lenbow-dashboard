@@ -16,13 +16,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-import useAuth from "@/hooks/use-auth";
 import {
 	transactionApiSlice,
 	useDeleteTransactionRequestMutation
 } from "@/redux/APISlices/TransactionAPISlice";
 import { useAppDispatch } from "@/redux/hooks";
+import RequestsUpdateModel from "@/templates/Requests/Form/RequestsUpdateModel";
 
 interface DataTableRowActionsProps<TData> {
 	row: Row<TData>;
@@ -32,9 +33,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 	const dispatch = useAppDispatch();
 	const data = row.original as RequestsInterface;
 
-	const { user } = useAuth();
-
-	const userId = user?.id!;
+	const type = data.type;
 
 	const [isPending, startTransition] = useTransition();
 	const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
@@ -64,48 +63,65 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 		});
 	};
 
-	return (
-		<>
-			{/* Request Update Modal */}
-			{/* <RequestRoleUpdateModal
-				isUpdateModal={isUpdateModal}
-				setIsUpdateModal={setIsUpdateModal}
-				currentRequestRole={data.organizationRole}
-			/> */}
-			{/* Delete Modal */}
-			<AlertDialog open={isOpenDeleteModal} onOpenChange={setIsOpenDeleteModal}>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>Are you sure you want to delete request?</AlertDialogTitle>
-						<AlertDialogDescription>Request will be deleted permanently</AlertDialogDescription>
-					</AlertDialogHeader>
-					<AlertDialogFooter>
-						<AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-						<LoadingButton
-							onClick={() => handleDeleteRequest(data.id)}
-							variant="destructive"
-							isLoading={isPending}
-							loadingText="Deleting..."
-						>
-							Delete Request
-						</LoadingButton>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
+	if (type === "borrow") {
+		return (
+			<>
+				{/* Request Update Modal */}
+				<RequestsUpdateModel
+					transactionId={data.id}
+					isUpdateModalOpen={isUpdateModal}
+					setIsUpdateModalOpen={setIsUpdateModal}
+				/>
+				{/* Delete Modal */}
+				<AlertDialog open={isOpenDeleteModal} onOpenChange={setIsOpenDeleteModal}>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>Are you sure you want to delete request?</AlertDialogTitle>
+							<AlertDialogDescription>Request will be deleted permanently</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+							<LoadingButton
+								onClick={() => handleDeleteRequest(data.id)}
+								variant="destructive"
+								isLoading={isPending}
+								loadingText="Deleting..."
+							>
+								Delete Request
+							</LoadingButton>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
 
-			<div className="flex gap-2">
-				<Button onClick={() => setIsUpdateModal(true)} size={"icon"} variant="outline">
-					<Edit />
-				</Button>
-				<Button
-					size={"icon"}
-					onClick={() => setIsOpenDeleteModal(true)}
-					disabled={isPending}
-					variant="destructive"
-				>
-					<Trash2 />
-				</Button>
-			</div>
-		</>
-	);
+				<div className="flex gap-2">
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button onClick={() => setIsUpdateModal(true)} size={"icon"} variant="outline">
+								<Edit />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>Update Request</p>
+						</TooltipContent>
+					</Tooltip>
+
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								size={"icon"}
+								onClick={() => setIsOpenDeleteModal(true)}
+								disabled={isPending}
+								variant="destructive"
+							>
+								<Trash2 />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>Delete Request</p>
+						</TooltipContent>
+					</Tooltip>
+				</div>
+			</>
+		);
+	}
 }

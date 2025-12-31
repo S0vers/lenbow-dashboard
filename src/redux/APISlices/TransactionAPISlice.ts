@@ -3,7 +3,10 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithCSRF } from "@/lib/rtk-base-query";
 
 import { apiRoute } from "@/routes/routes";
-import { CreateRequestsSchema } from "@/templates/Requests/Validation/CreateRequests.schema";
+import {
+	CreateRequestsSchema,
+	UpdatePendingRequestsSchema
+} from "@/templates/Requests/Validation/Requests.schema";
 
 export interface ConnectedContactList {
 	userId: string;
@@ -44,6 +47,14 @@ export const transactionApiSlice = createApi({
 			invalidatesTags: ["Transaction"]
 		}),
 
+		getTransactionById: builder.query<ApiResponse<RequestsInterface>, { transactionId: string }>({
+			query: ({ transactionId }) => ({
+				url: apiRoute.transaction(transactionId),
+				method: "GET"
+			}),
+			providesTags: ["Transaction"]
+		}),
+
 		transactionContactsList: builder.query<ApiResponse<ConnectedContactList[]>, void>({
 			query: () => ({
 				url: apiRoute.transactionConnectedContacts,
@@ -61,6 +72,18 @@ export const transactionApiSlice = createApi({
 				providesTags: ["TransactionContact"]
 			}
 		),
+
+		updatePendingTransactionRequest: builder.mutation<
+			ApiResponse<RequestsInterface>,
+			{ transactionId: string; body: UpdatePendingRequestsSchema }
+		>({
+			query: ({ transactionId, body }) => ({
+				url: apiRoute.updatePendingTransactionRequest(transactionId),
+				method: "PUT",
+				body
+			}),
+			invalidatesTags: ["Transaction"]
+		}),
 
 		deleteTransactionRequest: builder.mutation<
 			ApiResponse<string | null>,
@@ -80,8 +103,11 @@ export const transactionApiSlice = createApi({
 export const {
 	useTransactionRequestsListQuery,
 	useCreateTransactionRequestMutation,
+	useGetTransactionByIdQuery,
+	useLazyGetTransactionByIdQuery,
 	useTransactionContactsListQuery,
 	useLazyGetTransactionContactByIdQuery,
+	useUpdatePendingTransactionRequestMutation,
 	useDeleteTransactionRequestMutation
 } = transactionApiSlice;
 

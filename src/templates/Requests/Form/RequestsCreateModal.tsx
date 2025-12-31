@@ -33,7 +33,7 @@ import FetchConnectedContactList from "@/templates/Requests/Form/FetchConnectedC
 import {
 	CreateRequestsSchema,
 	createRequestsSchema
-} from "@/templates/Requests/Validation/CreateRequests.schema";
+} from "@/templates/Requests/Validation/Requests.schema";
 
 interface RequestsCreateModalProps {
 	isCreateModalOpen: boolean;

@@ -6,7 +6,10 @@ import { toast } from "sonner";
 import { initialPagination } from "@/core/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { useTransactionRequestsListQuery } from "@/redux/APISlices/TransactionAPISlice";
+import {
+	useDeleteTransactionRequestMutation,
+	useTransactionRequestsListQuery
+} from "@/redux/APISlices/TransactionAPISlice";
 import { initialRequestsApiSearchParams } from "@/templates/Requests/Table/Data/data";
 
 // ✅ adjust path if needed
@@ -83,6 +86,8 @@ export default function RequestsProvider({ children }: GlobalLayoutProps) {
 		refetch,
 		isFetching
 	} = useTransactionRequestsListQuery(apiSearchParams);
+
+	const [deleteTransactionRequest] = useDeleteTransactionRequestMutation();
 
 	// Router & Pathname
 	const router = useRouter();
@@ -354,8 +359,7 @@ export default function RequestsProvider({ children }: GlobalLayoutProps) {
 	const handleDeleteSelected = () => {
 		startDelete(async () => {
 			try {
-				// TODO: Replace with actual delete function from RTK Query when available
-				// await deleteRequests({ ids: selectedIds }).unwrap();
+				await deleteTransactionRequest({ transactionIds: selectedIds }).unwrap();
 				toast.success("Successfully deleted selected data");
 				setSelectedIds([]);
 			} catch (error) {
