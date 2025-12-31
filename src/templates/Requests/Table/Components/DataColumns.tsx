@@ -33,28 +33,22 @@ export default function DataColumns() {
 			id: "select",
 			header: ({ table }) => {
 				const handleSelection = (value: boolean) => {
-					// Delay execution to get updated selection state
-					setTimeout(() => {
-						const selectedRows = table.getSelectedRowModel().rows;
-
-						if (value) {
-							const selectedIds = selectedRows.map(row => row.original.id);
-							setSelectedIds(selectedIds);
-						} else {
-							setSelectedIds([]);
-						}
-					}, 0);
-
 					table.toggleAllPageRowsSelected(value);
+
+					// Update selectedIds based on the new selection state
+					if (value) {
+						const selectedIds = table.getRowModel().rows.map(row => row.original.id);
+						setSelectedIds(selectedIds);
+					} else {
+						setSelectedIds([]);
+					}
 				};
 
 				return (
 					<Checkbox
 						checked={
-							selectedIds.length > 0
-								? table.getIsAllPageRowsSelected() ||
-									(table.getIsSomePageRowsSelected() && "indeterminate")
-								: false
+							table.getIsAllPageRowsSelected() ||
+							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
 						onCheckedChange={value => handleSelection(!!value)}
 						aria-label="Select all"
@@ -163,7 +157,8 @@ export default function DataColumns() {
 						{row.original.type.charAt(0).toUpperCase() + row.original.type.slice(1)}
 					</ExtendedBadge>
 				);
-			}
+			},
+			enableSorting: false
 		},
 		{
 			accessorKey: "amount",
@@ -196,7 +191,8 @@ export default function DataColumns() {
 						{status.charAt(0).toUpperCase() + status.slice(1)}
 					</ExtendedBadge>
 				);
-			}
+			},
+			enableSorting: false
 		},
 		{
 			accessorKey: "requestDate",

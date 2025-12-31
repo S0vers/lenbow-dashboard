@@ -47,20 +47,19 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 			<div className="flex items-center justify-between">
 				<div className="flex flex-1 items-center space-x-2">
 					<form onSubmit={handleSearch} className="relative flex items-center">
-						<Input
-							placeholder="Type & enter to search..."
-							value={search}
-							onChange={event => setSearch(event.target.value)}
-							className="h-8 w-37.5 lg:w-62.5"
-						/>
-						<Button
-							type="submit"
-							variant={"ghost"}
-							size={"icon"}
-							className="absolute right-0 h-8 px-2 hover:bg-transparent lg:px-3"
-						>
-							<Search />
-						</Button>
+						<div className="relative">
+							<div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
+								<Search className="size-4" />
+								<span className="sr-only">Search</span>
+							</div>
+							<Input
+								placeholder="Type 3 letters to search..."
+								value={search}
+								onChange={event => setSearch(event.target.value)}
+								type="text"
+								className="peer pl-9"
+							/>
+						</div>
 					</form>
 					<DataTableFacetedFilter
 						title="Transaction Type"
