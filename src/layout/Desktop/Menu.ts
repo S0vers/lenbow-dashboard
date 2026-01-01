@@ -11,7 +11,7 @@ import {
 	Users
 } from "lucide-react";
 
-import type { NavItemProps, NavUserMaxItemProps } from "@/layout/Layout.types";
+import type { NavItemProps, NavUserMaxItemProps } from "@/layout/Desktop/Layout.types";
 import { route } from "@/routes/routes";
 
 const userItems: NavUserMaxItemProps = [

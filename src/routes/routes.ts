@@ -27,6 +27,8 @@ export const apiRoute = {
 	requestedTransactions: "/transactions/requested",
 	updatePendingTransactionRequest: (transactionId: string) =>
 		`/transactions/${transactionId}/update-pending`,
+	approveTransactionRequest: (transactionId: string) => `/transactions/${transactionId}/approved`,
+	rejectTransactionRequest: (transactionId: string) => `/transactions/${transactionId}/rejected`,
 	contact: (userId: string) => `/contacts/${userId}`,
 	connectedContacts: "/contacts/connected"
 } as const;

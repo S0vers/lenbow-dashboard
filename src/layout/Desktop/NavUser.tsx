@@ -1,8 +1,13 @@
 "use client";
 
-import { LogOut, MoreVertical } from "lucide-react";
+import { CheckIcon, CopyIcon, LogOut, MoreVertical } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -18,9 +23,10 @@ import {
 	SidebarMenuItem,
 	useSidebar
 } from "@/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import useAuth from "@/hooks/use-auth";
-import { NavUserItemProps, NavUserMaxItemProps } from "@/layout/Layout.types";
+import { NavUserItemProps, NavUserMaxItemProps } from "@/layout/Desktop/Layout.types";
 
 interface NavUserComponentProps {
 	items: NavUserMaxItemProps;
@@ -30,9 +36,21 @@ export function NavUser(props: NavUserComponentProps) {
 	const { isMobile } = useSidebar();
 	const { user, isAuthenticated, handleLogout } = useAuth();
 
+	const [copied, setCopied] = useState<boolean>(false);
+
 	if (!isAuthenticated || !user) {
 		return null;
 	}
+
+	const handleCopy = async () => {
+		try {
+			await navigator.clipboard.writeText(user.id);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 1500);
+		} catch (err) {
+			toast.error("Failed to copy to clipboard");
+		}
+	};
 
 	const userName = user.name ? user.name : user.email;
 	const userImage = user?.image ? user?.image : "";
@@ -75,10 +93,42 @@ export function NavUser(props: NavUserComponentProps) {
 										{initials}
 									</AvatarFallback>
 								</Avatar>
+
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="text-foreground truncate font-medium">{user.name}</span>
 									<span className="text-muted-foreground truncate text-xs">{user.email}</span>
 								</div>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Button
+											variant="outline"
+											className="relative disabled:opacity-100"
+											onClick={handleCopy}
+											size={"icon"}
+											disabled={copied}
+										>
+											<span
+												className={cn(
+													"transition-all",
+													copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
+												)}
+											>
+												<CheckIcon className="stroke-green-600 dark:stroke-green-400" />
+											</span>
+											<span
+												className={cn(
+													"absolute transition-all",
+													copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
+												)}
+											>
+												<CopyIcon />
+											</span>
+										</Button>
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>Copy Account ID</p>
+									</TooltipContent>
+								</Tooltip>
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />

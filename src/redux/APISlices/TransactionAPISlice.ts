@@ -5,6 +5,7 @@ import { baseQueryWithCSRF } from "@/lib/rtk-base-query";
 import { apiRoute } from "@/routes/routes";
 import {
 	CreateRequestsSchema,
+	RejectRequestsSchema,
 	UpdatePendingRequestsSchema
 } from "@/templates/Desktop/Requests/Validation/Requests.schema";
 
@@ -68,6 +69,29 @@ export const transactionApiSlice = createApi({
 				body
 			}),
 			invalidatesTags: ["Transaction"]
+		}),
+
+		approveTransactionRequest: builder.mutation<
+			ApiResponse<RequestsInterface>,
+			{ transactionId: string }
+		>({
+			query: ({ transactionId }) => ({
+				url: apiRoute.approveTransactionRequest(transactionId),
+				method: "PUT"
+			}),
+			invalidatesTags: ["Transaction"]
+		}),
+
+		rejectTransactionRequest: builder.mutation<
+			ApiResponse<RequestsInterface>,
+			{ transactionId: string; body: RejectRequestsSchema }
+		>({
+			query: ({ transactionId, body }) => ({
+				url: apiRoute.rejectTransactionRequest(transactionId),
+				method: "PUT",
+				body
+			}),
+			invalidatesTags: ["Transaction"]
 		})
 	})
 });
@@ -79,7 +103,9 @@ export const {
 	useGetTransactionByIdQuery,
 	useLazyGetTransactionByIdQuery,
 	useUpdatePendingTransactionRequestMutation,
-	useDeleteTransactionRequestMutation
+	useDeleteTransactionRequestMutation,
+	useApproveTransactionRequestMutation,
+	useRejectTransactionRequestMutation
 } = transactionApiSlice;
 
 export const transactionApiReducer = transactionApiSlice.reducer;

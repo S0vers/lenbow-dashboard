@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Link, usePathname } from "@/i18n/navigation";
-import { NavItemProps } from "@/layout/Layout.types";
+import { NavItemProps } from "@/layout/Desktop/Layout.types";
 
 interface NavMenuProps {
 	label: string;

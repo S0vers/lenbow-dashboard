@@ -1,7 +1,7 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-import { AppSidebar } from "@/layout/AppSidebar";
-import { SiteHeader } from "@/layout/SiteHeader";
+import { AppSidebar } from "@/layout/Desktop/AppSidebar";
+import { SiteHeader } from "@/layout/Desktop/SiteHeader";
 import { BreadcrumbProvider } from "@/providers/BreadcrumbProvider";
 import UnifiedAuthProvider from "@/providers/UnifiedAuthProvider";
 

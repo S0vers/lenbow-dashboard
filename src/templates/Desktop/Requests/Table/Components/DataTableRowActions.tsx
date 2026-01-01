@@ -1,10 +1,12 @@
 "use client";
 
 import { Row } from "@tanstack/react-table";
-import { Edit, Trash2 } from "lucide-react";
+import { Check, Edit, Trash2, X } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { ExtendedButton } from "@/components/custom-ui/extended-button";
+import { ExtendedLoadingButton } from "@/components/custom-ui/extended-loading-button";
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -20,9 +22,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 import {
 	transactionApiSlice,
+	useApproveTransactionRequestMutation,
 	useDeleteTransactionRequestMutation
 } from "@/redux/APISlices/TransactionAPISlice";
 import { useAppDispatch } from "@/redux/hooks";
+import RequestsRejectModal from "@/templates/Desktop/Requests/Form/RequestsRejectModal";
 import RequestsUpdateModel from "@/templates/Desktop/Requests/Form/RequestsUpdateModel";
 
 interface DataTableRowActionsProps<TData> {
@@ -37,11 +41,14 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 
 	const [isPending, startTransition] = useTransition();
 	const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+	const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
 
-	const [isUpdateModal, setIsUpdateModal] = useState(false);
+	const [isUpdateDeleteModal, setIsUpdateDeleteModal] = useState(false);
+	const [isUpdateApproveModal, setIsUpdateApproveModal] = useState(false);
 
 	// RTK Query mutation hook
 	const [deleteRequest] = useDeleteTransactionRequestMutation();
+	const [approveRequest] = useApproveTransactionRequestMutation();
 
 	const handleDeleteRequest = (id: string) => {
 		startTransition(async () => {
@@ -63,14 +70,96 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 		});
 	};
 
+	const handleApproveRequest = (id: string) => {
+		startTransition(async () => {
+			await approveRequest({ transactionId: id })
+				.unwrap()
+				.then(res => {
+					toast.success(res.message);
+					setIsOpenApproveModal(false);
+					dispatch(transactionApiSlice.util.invalidateTags([{ type: "Transaction" }]));
+				})
+				.catch(error => {
+					setIsOpenApproveModal(false);
+					toast.error(error?.data?.message || "Failed to delete request. Please try again later.");
+				});
+		});
+	};
+
+	if (type === "lend") {
+		return (
+			<>
+				{/* Request Reject Modal */}
+				<RequestsRejectModal
+					transactionId={data.id}
+					isRejectModalOpen={isUpdateApproveModal}
+					setIsRejectModalOpen={setIsUpdateApproveModal}
+				/>
+				{/* Approve Modal */}
+				<AlertDialog open={isOpenApproveModal} onOpenChange={setIsOpenApproveModal}>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>Are you sure you want to approve request?</AlertDialogTitle>
+							<AlertDialogDescription>Request will be approved permanently</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+							<ExtendedLoadingButton
+								onClick={() => handleApproveRequest(data.id)}
+								variant="success"
+								isLoading={isPending}
+								loadingText="Approving..."
+							>
+								Approve Request
+							</ExtendedLoadingButton>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+
+				<div className="flex gap-2">
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<ExtendedButton
+								size={"icon"}
+								onClick={() => setIsOpenApproveModal(true)}
+								disabled={isPending}
+								variant="lime"
+							>
+								<Check />
+							</ExtendedButton>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>Approve Request</p>
+						</TooltipContent>
+					</Tooltip>
+
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<ExtendedButton
+								onClick={() => setIsUpdateApproveModal(true)}
+								size={"icon"}
+								variant="warning"
+							>
+								<X />
+							</ExtendedButton>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>Reject Request</p>
+						</TooltipContent>
+					</Tooltip>
+				</div>
+			</>
+		);
+	}
+
 	if (type === "borrow") {
 		return (
 			<>
 				{/* Request Update Modal */}
 				<RequestsUpdateModel
 					transactionId={data.id}
-					isUpdateModalOpen={isUpdateModal}
-					setIsUpdateModalOpen={setIsUpdateModal}
+					isUpdateModalOpen={isUpdateDeleteModal}
+					setIsUpdateModalOpen={setIsUpdateDeleteModal}
 				/>
 				{/* Delete Modal */}
 				<AlertDialog open={isOpenDeleteModal} onOpenChange={setIsOpenDeleteModal}>
@@ -96,9 +185,13 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 				<div className="flex gap-2">
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Button onClick={() => setIsUpdateModal(true)} size={"icon"} variant="outline">
+							<ExtendedButton
+								onClick={() => setIsUpdateDeleteModal(true)}
+								size={"icon"}
+								variant="teal"
+							>
 								<Edit />
-							</Button>
+							</ExtendedButton>
 						</TooltipTrigger>
 						<TooltipContent>
 							<p>Update Request</p>

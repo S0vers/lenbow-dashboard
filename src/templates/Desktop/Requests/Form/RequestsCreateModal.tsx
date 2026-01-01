@@ -20,6 +20,7 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 import { useCreateTransactionRequestMutation } from "@/redux/APISlices/TransactionAPISlice";
 import FetchConnectedContactList from "@/templates/Desktop/Requests/Form/FetchConnectedContactList";
@@ -57,7 +58,8 @@ export default function RequestsCreateModal({
 		defaultValues: {
 			lenderId: "",
 			amount: "",
-			dueDate: undefined
+			dueDate: undefined,
+			description: ""
 		}
 	});
 
@@ -70,7 +72,8 @@ export default function RequestsCreateModal({
 			await createTransactionRequest({
 				lenderId: data.lenderId,
 				amount: Number(data.amount),
-				...(data.dueDate && { dueDate: data.dueDate })
+				...(data.dueDate && { dueDate: data.dueDate }),
+				...(data.description && { description: data.description })
 			})
 				.then(response => {
 					if (response.data) {
@@ -202,6 +205,24 @@ export default function RequestsCreateModal({
 													</Popover>
 												</div>
 
+												{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+											</Field>
+										)}
+									/>
+
+									<Controller
+										name="description"
+										control={form.control}
+										render={({ field, fieldState }) => (
+											<Field data-invalid={fieldState.invalid}>
+												<FieldLabel htmlFor="description">Reason</FieldLabel>
+												<Textarea
+													{...field}
+													id="description"
+													aria-invalid={fieldState.invalid}
+													placeholder="Enter reason for the loan request"
+													className="max-h-40"
+												/>
 												{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 											</Field>
 										)}

@@ -1,4 +1,4 @@
-import { SectionCards } from "@/layout/section-cards";
+import { SectionCards } from "@/layout/Desktop/section-cards";
 import { SetBreadcrumb } from "@/providers/BreadcrumbProvider";
 
 export default function Dashboard() {

@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import ThemeToggle from "@/components/ui/theme-toggle";
 
-import { AppBreadcrumb } from "@/layout/AppBreadcrumb";
+import { AppBreadcrumb } from "@/layout/Desktop/AppBreadcrumb";
 
 export function SiteHeader() {
 	return (

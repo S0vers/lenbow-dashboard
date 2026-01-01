@@ -12,7 +12,6 @@ import {
 	CommandList
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 import {
 	ConnectedContactList,
@@ -60,7 +59,7 @@ export default function FetchConnectedContactList({
 	// Check if search is invalid UUID (only when no local match and search >= 3 chars)
 	const isInvalidUUID = useMemo(() => {
 		if (search.length >= 3 && !hasLocalMatch) {
-			const uuidValidation = validateUUID("User ID").safeParse(search);
+			const uuidValidation = validateUUID("Account ID").safeParse(search);
 			return !uuidValidation.success;
 		}
 		return false;
@@ -70,7 +69,7 @@ export default function FetchConnectedContactList({
 	useEffect(() => {
 		if (search.length >= 3 && !hasLocalMatch) {
 			// Validate if search is a valid UUID v4 before calling API
-			const uuidValidation = validateUUID("User ID").safeParse(search);
+			const uuidValidation = validateUUID("Account ID").safeParse(search);
 
 			if (uuidValidation.success) {
 				const timer = setTimeout(() => {
@@ -93,7 +92,7 @@ export default function FetchConnectedContactList({
 	const selectedUser = combinedUsers.find(user => user.userId === controlledValue);
 
 	return (
-		<Popover open={open} onOpenChange={setOpen} modal={false}>
+		<Popover open={open} onOpenChange={setOpen} modal={true}>
 			<PopoverTrigger asChild>
 				<Button
 					id={id}
@@ -115,7 +114,7 @@ export default function FetchConnectedContactList({
 						</span>
 					) : (
 						<span className="text-muted-foreground font-normal">
-							Select a contact or enter user id
+							Select a contact or enter account id
 						</span>
 					)}
 
@@ -134,56 +133,53 @@ export default function FetchConnectedContactList({
 						onValueChange={setSearch}
 					/>
 
-					{/* Scroll container */}
-					<ScrollArea className="max-h-60 rounded-md" onWheelCapture={e => e.stopPropagation()}>
-						<CommandList className="max-h-none">
-							<CommandEmpty>
-								{isLoading || isContactLoading
-									? "Loading contacts..."
-									: isInvalidUUID
-										? "Invalid account ID format. Please enter a valid UUID."
-										: search.length >= 3
-											? "No contact found with this ID."
-											: "Type at least 3 characters to search for a contact."}
-							</CommandEmpty>
+					<CommandList className="max-h-60">
+						<CommandEmpty>
+							{isLoading || isContactLoading
+								? "Loading contacts..."
+								: isInvalidUUID
+									? "Invalid account ID format. Please enter a valid UUID."
+									: search.length >= 3
+										? "No contact found with this ID."
+										: "Type at least 3 characters to search for a contact."}
+						</CommandEmpty>
 
-							<CommandGroup>
-								{combinedUsers.map(user => (
-									<CommandItem
-										key={user.userId}
-										value={user.userId}
-										keywords={[user.name || "", user.email, user.userId]}
-										onSelect={currentValue => {
-											const newValue = currentValue === controlledValue ? "" : currentValue;
-											onChange?.(newValue);
-											setOpen(false);
-										}}
-										className="flex w-full items-center gap-2 pr-3"
-									>
-										{/* Left content */}
-										<span className="flex min-w-0 flex-1 items-center gap-2">
-											<Avatar className="size-7 shrink-0">
-												<AvatarImage src={user.image || undefined} alt={user.name || ""} />
-												<AvatarFallback>{user.name?.[0] || "U"}</AvatarFallback>
-											</Avatar>
+						<CommandGroup>
+							{combinedUsers.map(user => (
+								<CommandItem
+									key={user.userId}
+									value={user.userId}
+									keywords={[user.name || "", user.email, user.userId]}
+									onSelect={currentValue => {
+										const newValue = currentValue === controlledValue ? "" : currentValue;
+										onChange?.(newValue);
+										setOpen(false);
+									}}
+									className="flex w-full items-center gap-2 pr-3"
+								>
+									{/* Left content */}
+									<span className="flex min-w-0 flex-1 items-center gap-2">
+										<Avatar className="size-7 shrink-0">
+											<AvatarImage src={user.image || undefined} alt={user.name || ""} />
+											<AvatarFallback>{user.name?.[0] || "U"}</AvatarFallback>
+										</Avatar>
 
-											<span className="flex min-w-0 flex-col">
-												<span className="truncate font-medium">{user.name || user.email}</span>
-												<span className="text-muted-foreground truncate text-sm">{user.email}</span>
-											</span>
+										<span className="flex min-w-0 flex-col">
+											<span className="w-48 truncate font-medium">{user.name || user.email}</span>
+											<span className="text-muted-foreground truncate text-sm">{user.email}</span>
 										</span>
+									</span>
 
-										{/* Reserved icon space */}
-										<span className="ml-auto grid w-0.5 shrink-0 place-items-center">
-											{controlledValue === user.userId && (
-												<CheckIcon className="text-foreground size-4" />
-											)}
-										</span>
-									</CommandItem>
-								))}
-							</CommandGroup>
-						</CommandList>
-					</ScrollArea>
+									{/* Reserved icon space */}
+									<span className="ml-auto grid w-0.5 shrink-0 place-items-center">
+										{controlledValue === user.userId && (
+											<CheckIcon className="text-foreground size-4" />
+										)}
+									</span>
+								</CommandItem>
+							))}
+						</CommandGroup>
+					</CommandList>
 				</Command>
 			</PopoverContent>
 		</Popover>

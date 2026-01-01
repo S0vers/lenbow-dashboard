@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Link } from "@/i18n/navigation";
-import { navItem, navSupportingItem, userItems } from "@/layout/Menu";
-import { NavMenu } from "@/layout/NavMenu";
-import { NavUser } from "@/layout/NavUser";
+import { navItem, navSupportingItem, userItems } from "@/layout/Desktop/Menu";
+import { NavMenu } from "@/layout/Desktop/NavMenu";
+import { NavUser } from "@/layout/Desktop/NavUser";
 import { route } from "@/routes/routes";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
