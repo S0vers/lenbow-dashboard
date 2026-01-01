@@ -140,8 +140,8 @@ export default function FetchConnectedContactList({
 								: isInvalidUUID
 									? "Invalid account ID format. Please enter a valid UUID."
 									: search.length >= 3
-										? "No contact found with this ID."
-										: "Type at least 3 characters to search for a contact."}
+										? "No contact found"
+										: "You have no connected contacts. Enter an account ID to connect."}
 						</CommandEmpty>
 
 						<CommandGroup>
