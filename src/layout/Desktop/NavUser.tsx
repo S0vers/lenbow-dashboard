@@ -26,6 +26,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import useAuth from "@/hooks/use-auth";
+import { Link } from "@/i18n/navigation";
 import { NavUserItemProps, NavUserMaxItemProps } from "@/layout/Desktop/Layout.types";
 
 interface NavUserComponentProps {
@@ -137,9 +138,11 @@ export function NavUser(props: NavUserComponentProps) {
 								props.items
 									.filter((item): item is NavUserItemProps => item !== undefined)
 									.map(item => (
-										<DropdownMenuItem key={item.title}>
-											<item.icon />
-											{item.title}
+										<DropdownMenuItem key={item.title} asChild>
+											<Link href={item.url}>
+												<item.icon />
+												{item.title}
+											</Link>
 										</DropdownMenuItem>
 									))}
 						</DropdownMenuGroup>
