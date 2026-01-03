@@ -22,8 +22,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 import {
 	transactionApiSlice,
-	useApproveTransactionRequestMutation,
-	useDeleteTransactionRequestMutation
+	useDeleteTransactionRequestMutation,
+	useUpdateTransactionStatusMutation
 } from "@/redux/APISlices/TransactionAPISlice";
 import { useAppDispatch } from "@/redux/hooks";
 import RequestsRejectModal from "@/templates/Desktop/Requests/Form/RequestsRejectModal";
@@ -48,7 +48,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 
 	// RTK Query mutation hook
 	const [deleteRequest] = useDeleteTransactionRequestMutation();
-	const [approveRequest] = useApproveTransactionRequestMutation();
+	const [updateTransactionStatus] = useUpdateTransactionStatusMutation();
 
 	const handleDeleteRequest = (id: string) => {
 		startTransition(async () => {
@@ -72,7 +72,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 
 	const handleApproveRequest = (id: string) => {
 		startTransition(async () => {
-			await approveRequest({ transactionId: id })
+			await updateTransactionStatus({ transactionId: id, body: { status: "accepted" } })
 				.unwrap()
 				.then(res => {
 					toast.success(res.message);

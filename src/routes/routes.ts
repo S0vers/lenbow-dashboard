@@ -26,13 +26,11 @@ export const apiRoute = {
 	transactions: "/transactions",
 	transaction: (transactionId: string) => `/transactions/${transactionId}`,
 	requestedTransactions: "/transactions/requested",
-	updatePendingTransactionRequest: (transactionId: string) =>
-		`/transactions/${transactionId}/update-pending`,
-	approveTransactionRequest: (transactionId: string) => `/transactions/${transactionId}/approved`,
-	rejectTransactionRequest: (transactionId: string) => `/transactions/${transactionId}/rejected`,
-	completeRepayTransactionBorrow: "/transactions/borrow/complete-repay",
-	partialRepayTransactionRequest: (transactionId: string) =>
-		`/transactions/${transactionId}/borrow/partial-repay`,
+	updateTransactionRequest: (transactionId: string) => `/transactions/${transactionId}/update`,
+	updateTransactionStatus: (transactionId: string) => `/transactions/${transactionId}/status`,
+	completeRepaymentTransaction: "/transactions/repayment/complete",
+	partialRepaymentTransaction: (transactionId: string) =>
+		`/transactions/${transactionId}/repayment/partial`,
 	contact: (userId: string) => `/contacts/${userId}`,
 	connectedContacts: "/contacts/connected"
 } as const;

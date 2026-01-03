@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/responsive-dialog";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useRejectTransactionRequestMutation } from "@/redux/APISlices/TransactionAPISlice";
+import { useUpdateTransactionStatusMutation } from "@/redux/APISlices/TransactionAPISlice";
 import {
 	RejectRequestsSchema,
 	rejectRequestsSchema
@@ -37,13 +37,16 @@ export default function RequestsRejectModal(props: RequestsRejectModalProps) {
 		}
 	});
 
-	const [rejectTransactionRequest, { isLoading }] = useRejectTransactionRequestMutation();
+	const [updateTransactionStatus, { isLoading }] = useUpdateTransactionStatusMutation();
 
 	const onSubmit = async (data: RejectRequestsSchema) => {
 		try {
-			await rejectTransactionRequest({
+			await updateTransactionStatus({
 				transactionId: props.transactionId,
-				body: data
+				body: {
+					status: "rejected",
+					rejectionReason: data.rejectionReason
+				}
 			})
 				.then(response => {
 					if (response.data) {

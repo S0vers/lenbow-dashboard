@@ -21,7 +21,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 import {
 	transactionApiSlice,
-	useCompleteRepayTransactionBorrowMutation
+	useCompleteRepaymentTransactionMutation
 } from "@/redux/APISlices/TransactionAPISlice";
 import { useAppDispatch } from "@/redux/hooks";
 import BorrowPartialRepayModal from "@/templates/Desktop/Borrow/Form/BorrowPartialRepayModal";
@@ -42,11 +42,11 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 	const [isUpdatePartialRepayModal, setIsUpdatePartialRepayModal] = useState(false);
 
 	// RTK Query mutation hook
-	const [completeRepayBorrow] = useCompleteRepayTransactionBorrowMutation();
+	const [completeRepaymentTransaction] = useCompleteRepaymentTransactionMutation();
 
 	const handleCompleteRepayBorrow = (id: string) => {
 		startTransition(async () => {
-			await completeRepayBorrow({ transactionIds: [id] })
+			await completeRepaymentTransaction({ transactionIds: [id] })
 				.unwrap()
 				.then(res => {
 					if (res.data) {

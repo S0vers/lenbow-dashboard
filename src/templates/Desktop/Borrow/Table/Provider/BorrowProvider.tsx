@@ -7,7 +7,7 @@ import { initialPagination } from "@/core/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import {
-	useCompleteRepayTransactionBorrowMutation,
+	useCompleteRepaymentTransactionMutation,
 	useTransactionBorrowListQuery
 } from "@/redux/APISlices/TransactionAPISlice";
 import { initialBorrowApiSearchParams } from "@/templates/Desktop/Borrow/Table/Data/data";
@@ -87,7 +87,7 @@ export default function BorrowProvider({ children }: GlobalLayoutProps) {
 		isFetching
 	} = useTransactionBorrowListQuery();
 
-	const [completeRepayTransactionRequest] = useCompleteRepayTransactionBorrowMutation();
+	const [completeRepaymentTransaction] = useCompleteRepaymentTransactionMutation();
 
 	// Router & Pathname
 	const router = useRouter();
@@ -359,7 +359,7 @@ export default function BorrowProvider({ children }: GlobalLayoutProps) {
 	const handleCompleteRepaySelected = () => {
 		startCompleteRepay(async () => {
 			try {
-				await completeRepayTransactionRequest({ transactionIds: selectedIds }).unwrap();
+				await completeRepaymentTransaction({ transactionIds: selectedIds }).unwrap();
 				toast.success("Successfully completed repay for selected data");
 				setSelectedIds([]);
 			} catch (error) {

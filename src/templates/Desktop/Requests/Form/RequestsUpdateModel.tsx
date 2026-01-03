@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import {
 	useLazyGetTransactionByIdQuery,
-	useUpdatePendingTransactionRequestMutation
+	useUpdateTransactionRequestMutation
 } from "@/redux/APISlices/TransactionAPISlice";
 import "@/templates/Desktop/Requests/Validation/Requests.schema";
 import {
@@ -57,7 +57,7 @@ export default function RequestsUpdateModel({
 	const [getTransactionById, { isLoading: transactionIsLoading, data: transactionData }] =
 		useLazyGetTransactionByIdQuery();
 
-	const [updateTransactionRequest, { isLoading }] = useUpdatePendingTransactionRequestMutation();
+	const [updateTransactionRequest, { isLoading }] = useUpdateTransactionRequestMutation();
 
 	const form = useForm({
 		resolver: zodResolver(updatePendingRequestsSchema),
