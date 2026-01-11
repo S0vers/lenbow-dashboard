@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+import { getUserInitials } from "@/core/helper";
 import useAuth from "@/hooks/use-auth";
 import { Link } from "@/i18n/navigation";
 import { NavUserItemProps, NavUserMaxItemProps } from "@/layout/Desktop/Layout.types";
@@ -56,8 +57,6 @@ export function NavUser(props: NavUserComponentProps) {
 	const userName = user.name ? user.name : user.email;
 	const userImage = user?.image ? user?.image : "";
 
-	const initials = userName?.slice(0, 2).toUpperCase();
-
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -70,7 +69,7 @@ export function NavUser(props: NavUserComponentProps) {
 							<Avatar className="h-8 w-8 rounded-lg bg-transparent">
 								<AvatarImage src={userImage} alt={userName} />
 								<AvatarFallback className="text-foreground rounded-lg bg-transparent">
-									{initials}
+									{getUserInitials(user.name)}
 								</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
@@ -91,7 +90,7 @@ export function NavUser(props: NavUserComponentProps) {
 								<Avatar className="text-foreground h-8 w-8 rounded-lg bg-transparent">
 									<AvatarImage src={userImage} alt={userName} />
 									<AvatarFallback className="text-foreground rounded-lg bg-transparent">
-										{initials}
+										{getUserInitials(user.name)}
 									</AvatarFallback>
 								</Avatar>
 

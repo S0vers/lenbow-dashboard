@@ -7,25 +7,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+import { getUserInitials } from "@/core/helper";
+
 interface ProfileHeaderProps {
 	user: User;
 	onEdit: () => void;
 }
 
 export default function ProfileHeader({ user, onEdit }: ProfileHeaderProps) {
-	const initials = (user.name || user.email)
-		.split(" ")
-		.map(n => n[0])
-		.join("")
-		.toUpperCase();
-
 	return (
 		<Card className="p-6">
 			<div className="flex items-start justify-between">
 				<div className="flex items-center gap-4">
 					<Avatar className="h-16 w-16">
 						<AvatarImage src={user.image || undefined} alt={user.name || user.email} />
-						<AvatarFallback>{initials}</AvatarFallback>
+						<AvatarFallback>{getUserInitials(user.name)}</AvatarFallback>
 					</Avatar>
 					<div className="space-y-2">
 						<div>

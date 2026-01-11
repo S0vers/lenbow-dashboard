@@ -1,4 +1,4 @@
-export const siteTitle = "Loan App";
+export const siteTitle = "Lenbow";
 export const initialPagination: Pagination = {
 	currentPage: 1,
 	limit: 10,

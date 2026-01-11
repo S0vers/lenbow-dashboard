@@ -46,7 +46,7 @@ interface BrandLogoProps {
 	onClick?: () => void;
 	/**
 	 * Alt text for accessibility
-	 * @default "Loan App"
+	 * @default "Lenbow"
 	 */
 	alt?: string;
 	/**
@@ -99,7 +99,7 @@ export const BrandLogo = React.forwardRef<HTMLDivElement | HTMLButtonElement, Br
 			variant = "full",
 			interactive = false,
 			onClick,
-			alt = "Loan App",
+			alt = "Lenbow",
 			priority = false,
 			...props
 		},

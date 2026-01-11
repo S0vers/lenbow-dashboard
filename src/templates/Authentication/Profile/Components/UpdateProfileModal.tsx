@@ -15,6 +15,8 @@ import {
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
 
+import { getUserInitials } from "@/core/helper";
+
 interface UpdateProfileModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -31,12 +33,6 @@ export default function UpdateProfileModal({
 	const [name, setName] = useState(user.name);
 	const [avatar, setAvatar] = useState(user.image);
 	const [isLoading, setIsLoading] = useState(false);
-
-	const initials = (name || user.email)
-		.split(" ")
-		.map(n => n[0])
-		.join("")
-		.toUpperCase();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -69,8 +65,8 @@ export default function UpdateProfileModal({
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="flex justify-center">
 						<Avatar className="h-20 w-20">
-							<AvatarImage src={avatar || "/placeholder.svg"} alt={name || user.email} />
-							<AvatarFallback>{initials}</AvatarFallback>
+							<AvatarImage src={avatar || undefined} alt={name || user.email} />
+							<AvatarFallback>{getUserInitials(name)}</AvatarFallback>
 						</Avatar>
 					</div>
 

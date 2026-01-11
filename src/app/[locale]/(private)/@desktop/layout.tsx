@@ -5,7 +5,7 @@ import { SiteHeader } from "@/layout/Desktop/SiteHeader";
 import { BreadcrumbProvider } from "@/providers/BreadcrumbProvider";
 import UnifiedAuthProvider from "@/providers/UnifiedAuthProvider";
 
-export default function DashboardLayout({ children }: Readonly<GlobalLayoutProps>) {
+export default function DesktopLayout({ children }: Readonly<GlobalLayoutProps>) {
 	return (
 		<UnifiedAuthProvider requireAuth>
 			<BreadcrumbProvider>
