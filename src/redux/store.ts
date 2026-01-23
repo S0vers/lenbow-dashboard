@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { contactApiReducer, contactApiSlice } from "@/redux/APISlices/ContactAPISlice";
 import { currencyApiReducer, currencyApiSlice } from "@/redux/APISlices/CurrencyAPISlice";
+import { overviewApiReducer, overviewApiSlice } from "@/redux/APISlices/OverviewAPISlice";
 import { transactionApiReducer, transactionApiSlice } from "@/redux/APISlices/TransactionAPISlice";
 import {
 	authenticationApiReducer,
@@ -16,7 +17,8 @@ export const makeStore = () => {
 			authenticationApiReducer,
 			transactionApiReducer,
 			contactApiReducer,
-			currencyApiReducer
+			currencyApiReducer,
+			overviewApiReducer
 		},
 		middleware: getDefaultMiddleware =>
 			getDefaultMiddleware({
@@ -25,7 +27,8 @@ export const makeStore = () => {
 				authenticationApiSlice.middleware,
 				transactionApiSlice.middleware,
 				contactApiSlice.middleware,
-				currencyApiSlice.middleware
+				currencyApiSlice.middleware,
+				overviewApiSlice.middleware
 			])
 	});
 };

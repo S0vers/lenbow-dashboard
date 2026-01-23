@@ -39,11 +39,12 @@ export const apiRoute = {
 		`/transactions/${transactionId}/repayment/reject`,
 	contacts: "/contacts",
 	contact: (userId: string) => `/contacts/${userId}`,
-	connectedContacts: "/contacts/connected"
+	connectedContacts: "/contacts/connected",
+	overview: "/overview"
 } as const;
 
 const DEFAULT_LOGIN_REDIRECT = route.private.dashboard;
 
 const appRoutePrefix = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
-export { appRoutePrefix, DEFAULT_LOGIN_REDIRECT };
+export { DEFAULT_LOGIN_REDIRECT, appRoutePrefix };

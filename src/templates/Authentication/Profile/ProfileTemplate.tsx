@@ -29,7 +29,7 @@ export default function ProfileTemplate() {
 	}
 
 	return (
-		<div className="space-y-6 p-3">
+		<div className="space-y-6 p-3 md:p-0">
 			<ProfileHeader user={user} onEdit={() => setIsEditingProfile(true)} />
 			<ProfileInfo user={user} />
 			<SecuritySettings user={user} onDeleteAccount={handleDeleteAccount} />

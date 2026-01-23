@@ -4,10 +4,16 @@ import { MonitorIcon as MonitorCog, Moon, Sun } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTheme } from "next-themes";
 
+import { cn } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+	variant?: "default" | "colored";
+}
+
+export default function ThemeToggle({ variant = "default" }: ThemeToggleProps) {
 	const { theme, setTheme } = useTheme();
 
 	const handleSetTheme = () => {
@@ -30,7 +36,12 @@ export default function ThemeToggle() {
 					<Button
 						variant="outline"
 						size="icon"
-						className="relative cursor-pointer overflow-hidden bg-transparent"
+						className={cn(
+							"relative cursor-pointer overflow-hidden",
+							variant === "colored"
+								? "border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
+								: ""
+						)}
 						onClick={handleSetTheme}
 						aria-label="Toggle theme"
 						suppressHydrationWarning

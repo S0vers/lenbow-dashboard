@@ -1,3 +1,11 @@
+type TransactionStatusType =
+	| "pending"
+	| "accepted"
+	| "rejected"
+	| "partially_paid"
+	| "requested_repay"
+	| "completed";
+
 interface TransactionInterface {
 	id: string;
 	publicId: string;
@@ -28,7 +36,7 @@ interface TransactionInterface {
 	acceptedAt: string | null;
 	completedAt: string | null;
 	rejectedAt: string | null;
-	status: "pending" | "accepted" | "rejected" | "partially_paid" | "requested_repay" | "completed";
+	status: TransactionStatusType;
 	description: string | null;
 	dueDate: string | null;
 	createdAt: string;
