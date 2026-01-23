@@ -28,14 +28,30 @@ export default function ProfileHeader({ user, onEdit }: ProfileHeaderProps) {
 							<h1 className="text-foreground text-2xl font-bold">{user.name}</h1>
 							<p className="text-muted-foreground text-sm">{user.email}</p>
 						</div>
-						{user.emailVerified && (
-							<Badge variant="outline" className="w-fit">
-								✓ Email Verified
-							</Badge>
-						)}
+						<div className="flex flex-col gap-4">
+							{user.emailVerified && (
+								<Badge variant="outline" className="w-fit">
+									✓ Email Verified
+								</Badge>
+							)}
+							<Button
+								onClick={onEdit}
+								variant="outline"
+								size="sm"
+								className="gap-2 bg-transparent md:hidden"
+							>
+								<Edit2 className="h-4 w-4" />
+								Edit Profile
+							</Button>
+						</div>
 					</div>
 				</div>
-				<Button onClick={onEdit} variant="outline" size="sm" className="gap-2 bg-transparent">
+				<Button
+					onClick={onEdit}
+					variant="outline"
+					size="sm"
+					className="hidden gap-2 bg-transparent md:flex"
+				>
 					<Edit2 className="h-4 w-4" />
 					Edit Profile
 				</Button>

@@ -3,6 +3,8 @@
 import type React from "react";
 import { useState } from "react";
 
+// Import User type
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,53 +57,66 @@ export default function UpdateProfileModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
-			<ResponsiveDialogContent className="sm:max-w-md">
+			<ResponsiveDialogContent className="max-w-md p-4 sm:w-full sm:p-6">
 				<ResponsiveDialogHeader>
-					<ResponsiveDialogTitle>Edit Profile</ResponsiveDialogTitle>
-					<ResponsiveDialogDescription>
+					<ResponsiveDialogTitle className="text-xl sm:text-2xl">
+						Edit Profile
+					</ResponsiveDialogTitle>
+					<ResponsiveDialogDescription className="text-sm sm:text-base">
 						Update your profile information and avatar
 					</ResponsiveDialogDescription>
 				</ResponsiveDialogHeader>
-				<form onSubmit={handleSubmit} className="space-y-6">
-					<div className="flex justify-center">
-						<Avatar className="h-20 w-20">
+				<form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+					<div className="flex justify-center py-2">
+						<Avatar className="h-16 w-16 sm:h-20 sm:w-20">
 							<AvatarImage src={avatar || undefined} alt={name || user.email} />
 							<AvatarFallback>{getUserInitials(name)}</AvatarFallback>
 						</Avatar>
 					</div>
 
 					<div className="space-y-2">
-						<Label htmlFor="full-name">Full Name</Label>
+						<Label htmlFor="full-name" className="text-sm sm:text-base">
+							Full Name
+						</Label>
 						<Input
 							id="full-name"
 							value={name || ""}
 							onChange={e => setName(e.target.value)}
 							placeholder="Enter your full name"
+							className="text-sm sm:text-base"
 							required
 						/>
 					</div>
 
 					<div className="space-y-2">
-						<Label htmlFor="avatar-url">Avatar URL</Label>
+						<Label htmlFor="avatar-url" className="text-sm sm:text-base">
+							Avatar URL
+						</Label>
 						<Input
 							id="avatar-url"
 							type="url"
 							value={avatar || ""}
 							onChange={e => setAvatar(e.target.value)}
 							placeholder="https://example.com/avatar.jpg"
+							className="text-sm sm:text-base"
 						/>
 					</div>
 
-					<div className="flex justify-end gap-3 pt-4">
+					<div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end sm:gap-3 sm:pt-4">
 						<Button
 							type="button"
 							variant="outline"
 							onClick={() => handleOpenChange(false)}
 							disabled={isLoading}
+							className="w-full text-sm sm:w-auto sm:text-base"
 						>
 							Cancel
 						</Button>
-						<Button type="submit" disabled={isLoading}>
+						<Button
+							type="submit"
+							disabled={isLoading}
+							className="w-full text-sm sm:w-auto sm:text-base"
+						>
 							{isLoading ? "Saving..." : "Save Changes"}
 						</Button>
 					</div>

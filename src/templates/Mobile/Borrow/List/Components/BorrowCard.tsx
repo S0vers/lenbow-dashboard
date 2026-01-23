@@ -9,17 +9,17 @@ import { ExtendedBadge, type ExtendedVariant } from "@/components/custom-ui/exte
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
-import { RequestMobileActions } from "./RequestMobileActions";
 import useAuth from "@/hooks/use-auth";
-import { useRequests } from "@/templates/Mobile/Requests/Hook/useRequests";
+import { useBorrow } from "@/templates/Mobile/Borrow/Hook/useBorrow";
+import { BorrowMobileActions } from "./BorrowMobileActions";
 
-interface RequestCardProps {
+interface BorrowCardProps {
 	data: TransactionInterface;
 }
 
-export default function RequestCard({ data }: RequestCardProps) {
+export default function BorrowCard({ data }: BorrowCardProps) {
 	const { user } = useAuth();
-	const { setActiveTransaction } = useRequests();
+	const { setActiveTransaction } = useBorrow();
 
 	const isUserBorrower = user && user.id === data.borrower.id;
 	const image = isUserBorrower ? data.lender.image : data.borrower.image;
@@ -29,8 +29,13 @@ export default function RequestCard({ data }: RequestCardProps) {
 
 	const email = isUserBorrower ? data.lender.email : data.borrower.email;
 
-	// Improved Badge Variants for nicer look
+	// Badge variants
 	const typeVariant: ExtendedVariant = data.type === "lend" ? "emerald" : "destructive";
+
+	let statusVariant: ExtendedVariant = "warning";
+	if (data.status === "accepted") statusVariant = "emerald";
+	if (data.status === "rejected") statusVariant = "destructive";
+	if (data.status === "completed") statusVariant = "purple"; // Example color for completed
 
 	return (
 		<motion.div
@@ -56,8 +61,7 @@ export default function RequestCard({ data }: RequestCardProps) {
 						</div>
 						<div className="ml-auto flex flex-col items-end gap-1">
 							<span className="text-foreground text-lg font-bold tracking-tight">
-								{data.currency.symbol}
-								{data.amount.toLocaleString()}
+							{data.currency.symbol}{data.amount.toLocaleString()}
 							</span>
 							<ExtendedBadge
 								variant={typeVariant}
@@ -101,16 +105,29 @@ export default function RequestCard({ data }: RequestCardProps) {
 									: "No due date"}
 							</span>
 						</div>
+						{/* Show Remaining if key exists, otherwise omit or show amount */}
+						{data.remainingAmount !== undefined && data.remainingAmount < data.amount && (
+							<div className="flex items-center justify-between">
+								<span className="text-muted-foreground text-xs font-medium">Remaining</span>
+							<span className="font-medium">{data.currency.symbol}{data.remainingAmount.toLocaleString()}</span>
+							</div>
+						)}
 						<div className="mt-1 flex items-center justify-between">
 							<span className="text-muted-foreground text-xs font-medium">Status</span>
-							<ExtendedBadge variant={"destructive"} className="capitalize">
-								{data.status}
+							<ExtendedBadge
+								variant={statusVariant}
+								className="bg-opacity-15 hover:bg-opacity-25 px-2.5 py-0.5 text-[11px] capitalize shadow-none transition-colors"
+							>
+								{data.status
+									.split("_")
+									.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+									.join(" ")}
 							</ExtendedBadge>
 						</div>
 					</CardContent>
 				</div>
 				<CardFooter className="flex justify-end pt-2">
-					<RequestMobileActions data={data} />
+					<BorrowMobileActions data={data} />
 				</CardFooter>
 			</Card>
 		</motion.div>

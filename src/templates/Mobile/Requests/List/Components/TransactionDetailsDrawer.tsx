@@ -70,7 +70,8 @@ export function TransactionDetailsDrawer() {
 								</span>
 								<div className="flex items-baseline gap-1">
 									<span className="text-foreground text-4xl font-bold tracking-tight">
-										${data.amount.toLocaleString()}
+										{data.currency.symbol}
+										{data.amount.toLocaleString()}
 									</span>
 								</div>
 								<div className="mt-1 flex gap-2">
