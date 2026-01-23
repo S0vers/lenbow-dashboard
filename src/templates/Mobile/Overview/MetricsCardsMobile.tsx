@@ -74,7 +74,7 @@ export default function MetricsCardsMobile({ metrics, isLoading }: MetricsCardsM
 		<div className="grid grid-cols-2 gap-3">
 			<MetricCard
 				title="Borrowed"
-				value={`$${metrics.totalBorrowed.toFixed(0)}`}
+				value={metrics.totalBorrowed.toFixed(0)}
 				icon={<DollarSign className="h-3.5 w-3.5" />}
 				description={
 					metrics.overdueBorrowed > 0 ? `${metrics.overdueBorrowed} overdue` : "Active amount"
@@ -83,7 +83,7 @@ export default function MetricsCardsMobile({ metrics, isLoading }: MetricsCardsM
 			/>
 			<MetricCard
 				title="Lent"
-				value={`$${metrics.totalLent.toFixed(0)}`}
+				value={metrics.totalLent.toFixed(0)}
 				icon={<TrendingUp className="h-3.5 w-3.5" />}
 				description={metrics.overdueLent > 0 ? `${metrics.overdueLent} overdue` : "Active amount"}
 				variant={metrics.overdueLent > 0 ? "warning" : "success"}

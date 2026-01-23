@@ -1,7 +1,6 @@
 "use client";
 
 import ActionRequiredSection from "./ActionRequiredSection";
-import ChartsSection from "./ChartsSection";
 import EmptyState from "./EmptyState";
 import MetricsCards from "./MetricsCards";
 import RecentTransactionsSection from "./RecentTransactionsSection";
@@ -84,7 +83,7 @@ export default function OverviewTemplate() {
 			</div>
 
 			{/* Charts Section */}
-			<ChartsSection chartData={overviewData?.chartData!} isLoading={isLoading} />
+			{/* <ChartsSection chartData={overviewData?.chartData!} isLoading={isLoading} /> */}
 
 			{/* Recent Transactions */}
 			<RecentTransactionsSection

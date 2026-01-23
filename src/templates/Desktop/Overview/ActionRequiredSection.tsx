@@ -56,8 +56,20 @@ function ActionItem({
 	const config = actionTypeConfig[action.type];
 	const Icon = config.icon;
 
+	const transactionStatusType = action.userRole === "lender" ? "lend" : "borrow";
+
+	const redirectLink = (type: "lend" | "borrow", status: TransactionStatusType, id: string) => {
+		if (status === "pending") {
+			return `${route.private.requests}?search=${id}`;
+		} else if (status === "rejected" || status === "completed") {
+			return `${route.private.history}?search=${id}`;
+		} else {
+			return `${type === "lend" ? route.private.lend : route.private.borrow}?search=${id}`;
+		}
+	};
+
 	return (
-		<Link href={`${route.private.requests}?search=${action.transactionId}`}>
+		<Link href={redirectLink(transactionStatusType, action.status, action.id)}>
 			<div
 				className={cn(
 					"hover:bg-muted/50 flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-colors",

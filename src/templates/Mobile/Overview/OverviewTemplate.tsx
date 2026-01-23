@@ -1,7 +1,6 @@
 "use client";
 
 import ActionRequiredMobile from "./ActionRequiredMobile";
-import ChartsMobile from "./ChartsMobile";
 import EmptyStateMobile from "./EmptyStateMobile";
 import MetricsCardsMobile from "./MetricsCardsMobile";
 import RecentTransactionsMobile from "./RecentTransactionsMobile";
@@ -67,7 +66,7 @@ export default function OverviewTemplate() {
 					/>
 
 					{/* Charts */}
-					<ChartsMobile chartData={overviewData?.chartData!} isLoading={isLoading} />
+					{/* <ChartsMobile chartData={overviewData?.chartData!} isLoading={isLoading} /> */}
 
 					{/* Recent Transactions */}
 					<RecentTransactionsMobile

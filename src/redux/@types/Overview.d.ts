@@ -28,6 +28,7 @@ interface ActionRequiredItem {
 	status: "pending" | "accepted" | "rejected" | "partially_paid" | "requested_repay" | "completed";
 	userRole: "borrower" | "lender";
 	requestDate: string;
+	id: string;
 }
 
 interface StatusDistribution {

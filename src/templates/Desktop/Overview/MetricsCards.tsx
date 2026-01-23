@@ -78,7 +78,7 @@ export default function MetricsCards({ metrics, isLoading }: MetricsCardsProps) 
 		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 			<MetricCard
 				title="Total Borrowed"
-				value={`$${metrics.totalBorrowed.toFixed(2)}`}
+				value={metrics.totalBorrowed.toFixed(2)}
 				icon={<DollarSign className="h-4 w-4" />}
 				description={
 					metrics.overdueBorrowed > 0
@@ -89,7 +89,7 @@ export default function MetricsCards({ metrics, isLoading }: MetricsCardsProps) 
 			/>
 			<MetricCard
 				title="Total Lent"
-				value={`$${metrics.totalLent.toFixed(2)}`}
+				value={metrics.totalLent.toFixed(2)}
 				icon={<DollarSign className="h-4 w-4" />}
 				description={
 					metrics.overdueLent > 0
