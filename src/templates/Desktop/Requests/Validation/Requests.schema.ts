@@ -10,12 +10,14 @@ import {
 export const createRequestsSchema = z.object({
 	lenderId: validateString("Account ID", { min: 36, max: 36 }),
 	amount: validateClientNumber("Amount"),
+	currency: validateString("Currency", { min: 3, max: 3 }),
 	dueDate: validateDate("Due date").optional(),
 	description: validateString("Reason", { max: 500 }).optional()
 });
 
 export const updatePendingRequestsSchema = z.object({
 	amount: validateClientNumber("Amount"),
+	currency: validateString("Currency", { min: 3, max: 3 }),
 	dueDate: validateDate("Due date").optional()
 });
 

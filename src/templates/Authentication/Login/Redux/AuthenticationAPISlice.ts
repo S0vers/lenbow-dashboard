@@ -8,11 +8,11 @@ export const authenticationApiSlice = createApi({
 	reducerPath: "authenticationApiReducer",
 	keepUnusedDataFor: 0,
 	baseQuery: baseQueryWithCSRF,
-	tagTypes: ["User"],
+	tagTypes: ["User", "Me"],
 	endpoints: builder => ({
 		me: builder.query<ApiResponse<User>, void>({
 			query: () => apiRoute.me,
-			providesTags: ["User"]
+			providesTags: ["Me"]
 		}),
 
 		logout: builder.mutation<ApiResponse<null>, void>({
@@ -20,7 +20,7 @@ export const authenticationApiSlice = createApi({
 				url: apiRoute.logout,
 				method: "POST"
 			}),
-			invalidatesTags: ["User"]
+			invalidatesTags: ["User", "Me"]
 		})
 	})
 });

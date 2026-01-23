@@ -19,8 +19,17 @@ import {
 import InputNumeric from "@/components/ui/input-numeric";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useCurrencyListQuery } from "@/redux/APISlices/CurrencyAPISlice";
 import {
 	useLazyGetTransactionByIdQuery,
 	useUpdateTransactionRequestMutation
@@ -56,11 +65,13 @@ export default function RequestsUpdateModel({
 		useLazyGetTransactionByIdQuery();
 
 	const [updateTransactionRequest, { isLoading }] = useUpdateTransactionRequestMutation();
+	const { data, isLoading: isCurrencyLoading } = useCurrencyListQuery();
 
 	const form = useForm({
 		resolver: zodResolver(updatePendingRequestsSchema),
 		defaultValues: {
 			amount: "",
+			currency: "",
 			dueDate: undefined
 		}
 	});
@@ -72,6 +83,7 @@ export default function RequestsUpdateModel({
 					const responseData = response.data.data;
 					form.reset({
 						amount: responseData.amount.toString(),
+						currency: responseData.currency.code,
 						dueDate: responseData.dueDate ? new Date(responseData.dueDate) : undefined
 					});
 				}
@@ -85,6 +97,7 @@ export default function RequestsUpdateModel({
 				transactionId,
 				body: {
 					amount: Number(data.amount),
+					currency: data.currency,
 					...(data.dueDate && { dueDate: data.dueDate })
 				}
 			});
@@ -114,9 +127,15 @@ export default function RequestsUpdateModel({
 						<div className="flex-1 space-y-6 p-4">
 							<div className="space-y-6">
 								<div className="flex flex-col gap-6">
-									<div className="space-y-2">
-										<Skeleton className="h-4 w-16" />
-										<Skeleton className="h-12 w-full rounded-xl" />
+									<div className="flex gap-4">
+										<div className="flex-1 space-y-2">
+											<Skeleton className="h-4 w-16" />
+											<Skeleton className="h-12 w-full rounded-xl" />
+										</div>
+										<div className="w-28 space-y-2">
+											<Skeleton className="h-4 w-16" />
+											<Skeleton className="h-12 w-full rounded-xl" />
+										</div>
 									</div>
 									<div className="space-y-2">
 										<Skeleton className="h-4 w-16" />
@@ -134,33 +153,75 @@ export default function RequestsUpdateModel({
 							>
 								<div className="space-y-6">
 									<div className="flex flex-col gap-6">
-										<Controller
-											name="amount"
-											control={form.control}
-											render={({ field, fieldState }) => (
-												<div className="space-y-2">
-													<div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
-														<DollarSign className="h-3.5 w-3.5" /> Amount
+										<div className="flex gap-4">
+											<Controller
+												name="amount"
+												control={form.control}
+												render={({ field, fieldState }) => (
+													<div className="flex-1 space-y-2">
+														<div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+															<DollarSign className="h-3.5 w-3.5" /> Amount
+														</div>
+														<div className="relative">
+															<InputNumeric
+																{...field}
+																id="amount"
+																aria-invalid={fieldState.invalid}
+																placeholder="0.00"
+																inputMode="numeric"
+																className="bg-muted/40 focus:border-primary h-12 rounded-xl border-transparent transition-all"
+															/>
+														</div>
+														{fieldState.invalid && (
+															<p className="text-destructive text-xs">
+																{fieldState.error?.message}
+															</p>
+														)}
 													</div>
-													<div className="relative">
-														<InputNumeric
-															{...field}
-															id="amount"
-															aria-invalid={fieldState.invalid}
-															placeholder="0.00"
-															inputMode="numeric"
-															className="bg-muted/40 focus:border-primary h-12 rounded-xl border-transparent pl-8 transition-all"
-														/>
-														<span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 font-semibold">
-															$
-														</span>
+												)}
+											/>
+
+											<Controller
+												name="currency"
+												control={form.control}
+												render={({ field, fieldState }) => (
+													<div className="w-28 space-y-2">
+														<div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+															Currency
+														</div>
+														<Select value={field.value} onValueChange={field.onChange}>
+															<SelectTrigger className="bg-muted/40 focus:border-primary h-12! w-full rounded-xl border-transparent transition-all">
+																<SelectValue placeholder="Currency" />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectGroup>
+																	{isCurrencyLoading ? (
+																		<SelectItem value="loading" disabled>
+																			Loading...
+																		</SelectItem>
+																	) : data && data.data && data.data.length > 0 ? (
+																		data.data.map(currency => (
+																			<SelectItem key={currency.code} value={currency.code}>
+																				{currency.code} ({currency.symbol})
+																			</SelectItem>
+																		))
+																	) : (
+																		<SelectItem value="no-data" disabled>
+																			No currencies
+																		</SelectItem>
+																	)}
+																</SelectGroup>
+															</SelectContent>
+														</Select>
+														{fieldState.invalid && (
+															<p className="text-destructive text-xs">
+																{fieldState.error?.message}
+															</p>
+														)}
 													</div>
-													{fieldState.invalid && (
-														<p className="text-destructive text-xs">{fieldState.error?.message}</p>
-													)}
-												</div>
-											)}
-										/>
+												)}
+											/>
+										</div>
 
 										<Controller
 											name="dueDate"

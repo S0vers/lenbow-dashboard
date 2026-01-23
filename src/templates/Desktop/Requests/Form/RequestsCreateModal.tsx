@@ -20,9 +20,21 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+import useAuth from "@/hooks/use-auth";
+import { useCurrencyListQuery } from "@/redux/APISlices/CurrencyAPISlice";
 import { useCreateTransactionRequestMutation } from "@/redux/APISlices/TransactionAPISlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { authenticationApiSlice } from "@/templates/Authentication/Login/Redux/AuthenticationAPISlice";
 import FetchConnectedContactList from "@/templates/Desktop/Requests/Form/FetchConnectedContactList";
 import {
 	CreateRequestsSchema,
@@ -51,32 +63,50 @@ export default function RequestsCreateModal({
 }: RequestsCreateModalProps) {
 	const [open, setOpen] = useState<boolean>(false);
 
+	const { user } = useAuth();
+	const dispatch = useAppDispatch();
+
 	const [createTransactionRequest, { isLoading }] = useCreateTransactionRequestMutation();
+	const { data, isLoading: isCurrencyLoading } = useCurrencyListQuery();
 
 	const form = useForm({
 		resolver: zodResolver(createRequestsSchema),
 		defaultValues: {
 			lenderId: "",
 			amount: "",
+			currency: "",
 			dueDate: undefined,
 			description: ""
 		}
 	});
 
 	useEffect(() => {
-		if (isCreateModalOpen) form.reset();
-	}, [isCreateModalOpen, form]);
+		if (isCreateModalOpen) {
+			form.reset({
+				lenderId: "",
+				amount: "",
+				currency: user?.currencyCode || "",
+				dueDate: undefined,
+				description: ""
+			});
+		}
+	}, [isCreateModalOpen, form, user]);
 
 	const onSubmit = async (data: CreateRequestsSchema) => {
 		try {
 			await createTransactionRequest({
 				lenderId: data.lenderId,
 				amount: Number(data.amount),
+				currency: data.currency,
 				...(data.dueDate && { dueDate: data.dueDate }),
 				...(data.description && { description: data.description })
 			})
 				.then(response => {
 					if (response.data) {
+						// revalidate user information if currency code was null
+						if (!user?.currencyCode) {
+							dispatch(authenticationApiSlice.util.invalidateTags(["Me"]));
+						}
 						form.reset();
 						setIsCreateModalOpen(false);
 						toast.success("Loan request created successfully.");
@@ -119,23 +149,61 @@ export default function RequestsCreateModal({
 											</Field>
 										)}
 									/>
-									<Controller
-										name="amount"
-										control={form.control}
-										render={({ field, fieldState }) => (
-											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor="amount">Amount</FieldLabel>
-												<InputNumeric
-													{...field}
-													id="amount"
-													aria-invalid={fieldState.invalid}
-													placeholder="Enter amount"
-													inputMode="numeric"
-												/>
-												{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-											</Field>
-										)}
-									/>
+
+									<div className="flex gap-4">
+										<Controller
+											name="amount"
+											control={form.control}
+											render={({ field, fieldState }) => (
+												<Field data-invalid={fieldState.invalid}>
+													<FieldLabel htmlFor="amount">Amount</FieldLabel>
+													<InputNumeric
+														{...field}
+														id="amount"
+														aria-invalid={fieldState.invalid}
+														placeholder="Enter amount"
+														inputMode="numeric"
+													/>
+													{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+												</Field>
+											)}
+										/>
+
+										<Controller
+											name="currency"
+											control={form.control}
+											render={({ field, fieldState }) => (
+												<Field data-invalid={fieldState.invalid}>
+													<FieldLabel htmlFor="currency">Currency</FieldLabel>
+													<Select value={field.value} onValueChange={field.onChange}>
+														<SelectTrigger aria-invalid={fieldState.invalid}>
+															<SelectValue placeholder="Select currency" />
+														</SelectTrigger>
+														<SelectContent>
+															<SelectGroup>
+																{isCurrencyLoading ? (
+																	<SelectItem value="loading" disabled>
+																		Loading currencies...
+																	</SelectItem>
+																) : data && data.data && data.data.length > 0 ? (
+																	data.data.map(currency => (
+																		<SelectItem key={currency.code} value={currency.code}>
+																			{currency.code} ({currency.symbol})
+																		</SelectItem>
+																	))
+																) : (
+																	<SelectItem value="no-data" disabled>
+																		No currencies available
+																	</SelectItem>
+																)}
+															</SelectGroup>
+														</SelectContent>
+													</Select>
+													{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+												</Field>
+											)}
+										/>
+									</div>
 
 									<Controller
 										name="dueDate"

@@ -20,8 +20,17 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useCurrencyListQuery } from "@/redux/APISlices/CurrencyAPISlice";
 import {
 	useLazyGetTransactionByIdQuery,
 	useUpdateTransactionRequestMutation
@@ -54,15 +63,17 @@ export default function RequestsUpdateModel({
 }: RequestsUpdateModelProps) {
 	const [open, setOpen] = useState<boolean>(false);
 
-	const [getTransactionById, { isLoading: transactionIsLoading, data: transactionData }] =
+	const [getTransactionById, { isLoading: transactionIsLoading }] =
 		useLazyGetTransactionByIdQuery();
 
 	const [updateTransactionRequest, { isLoading }] = useUpdateTransactionRequestMutation();
+	const { data, isLoading: isCurrencyLoading } = useCurrencyListQuery();
 
 	const form = useForm({
 		resolver: zodResolver(updatePendingRequestsSchema),
 		defaultValues: {
 			amount: "",
+			currency: "",
 			dueDate: undefined
 		}
 	});
@@ -74,6 +85,7 @@ export default function RequestsUpdateModel({
 					const responseData = response.data.data;
 					form.reset({
 						amount: responseData.amount.toString(),
+						currency: responseData.currency.code,
 						dueDate: responseData.dueDate ? new Date(responseData.dueDate) : undefined
 					});
 				}
@@ -87,6 +99,7 @@ export default function RequestsUpdateModel({
 				transactionId,
 				body: {
 					amount: Number(data.amount),
+					currency: data.currency,
 					...(data.dueDate && { dueDate: data.dueDate })
 				}
 			});
@@ -115,9 +128,15 @@ export default function RequestsUpdateModel({
 
 							<div className="p-6">
 								<div className="space-y-6">
-									<div className="space-y-2">
-										<Skeleton className="h-4 w-16" />
-										<Skeleton className="h-10 w-full" />
+									<div className="flex gap-4">
+										<div className="flex-1 space-y-2">
+											<Skeleton className="h-4 w-16" />
+											<Skeleton className="h-10 w-full" />
+										</div>
+										<div className="flex-1 space-y-2">
+											<Skeleton className="h-4 w-16" />
+											<Skeleton className="h-10 w-full" />
+										</div>
 									</div>
 									<div className="space-y-2">
 										<Skeleton className="h-4 w-20" />
@@ -142,23 +161,60 @@ export default function RequestsUpdateModel({
 							<ResponsiveDialogDescription asChild>
 								<div className="p-6">
 									<FieldGroup>
-										<Controller
-											name="amount"
-											control={form.control}
-											render={({ field, fieldState }) => (
-												<Field data-invalid={fieldState.invalid}>
-													<FieldLabel htmlFor="amount">Amount</FieldLabel>
-													<InputNumeric
-														{...field}
-														id="amount"
-														aria-invalid={fieldState.invalid}
-														placeholder="Enter amount"
-														inputMode="numeric"
-													/>
-													{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-												</Field>
-											)}
-										/>
+										<div className="flex gap-4">
+											<Controller
+												name="amount"
+												control={form.control}
+												render={({ field, fieldState }) => (
+													<Field data-invalid={fieldState.invalid}>
+														<FieldLabel htmlFor="amount">Amount</FieldLabel>
+														<InputNumeric
+															{...field}
+															id="amount"
+															aria-invalid={fieldState.invalid}
+															placeholder="Enter amount"
+															inputMode="numeric"
+														/>
+														{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+													</Field>
+												)}
+											/>
+
+											<Controller
+												name="currency"
+												control={form.control}
+												render={({ field, fieldState }) => (
+													<Field data-invalid={fieldState.invalid}>
+														<FieldLabel htmlFor="currency">Currency</FieldLabel>
+														<Select value={field.value} onValueChange={field.onChange}>
+															<SelectTrigger aria-invalid={fieldState.invalid}>
+																<SelectValue placeholder="Select currency" />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectGroup>
+																	{isCurrencyLoading ? (
+																		<SelectItem value="loading" disabled>
+																			Loading currencies...
+																		</SelectItem>
+																	) : data && data.data && data.data.length > 0 ? (
+																		data.data.map(currency => (
+																			<SelectItem key={currency.code} value={currency.code}>
+																				{currency.code} ({currency.symbol})
+																			</SelectItem>
+																		))
+																	) : (
+																		<SelectItem value="no-data" disabled>
+																			No currencies available
+																		</SelectItem>
+																	)}
+																</SelectGroup>
+															</SelectContent>
+														</Select>
+														{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+													</Field>
+												)}
+											/>
+										</div>
 
 										<Controller
 											name="dueDate"

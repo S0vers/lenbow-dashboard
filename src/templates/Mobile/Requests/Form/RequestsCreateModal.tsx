@@ -19,9 +19,21 @@ import {
 import InputNumeric from "@/components/ui/input-numeric";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+import useAuth from "@/hooks/use-auth";
+import { useCurrencyListQuery } from "@/redux/APISlices/CurrencyAPISlice";
 import { useCreateTransactionRequestMutation } from "@/redux/APISlices/TransactionAPISlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { authenticationApiSlice } from "@/templates/Authentication/Login/Redux/AuthenticationAPISlice";
 import {
 	CreateRequestsSchema,
 	createRequestsSchema
@@ -50,32 +62,50 @@ export default function RequestsCreateModal({
 }: RequestsCreateModalProps) {
 	const [open, setOpen] = useState<boolean>(false);
 
+	const { user } = useAuth();
+	const dispatch = useAppDispatch();
+
 	const [createTransactionRequest, { isLoading }] = useCreateTransactionRequestMutation();
+	const { data, isLoading: isCurrencyLoading } = useCurrencyListQuery();
 
 	const form = useForm({
 		resolver: zodResolver(createRequestsSchema),
 		defaultValues: {
 			lenderId: "",
 			amount: "",
+			currency: "",
 			dueDate: undefined,
 			description: ""
 		}
 	});
 
 	useEffect(() => {
-		if (isCreateModalOpen) form.reset();
-	}, [isCreateModalOpen, form]);
+		if (isCreateModalOpen) {
+			form.reset({
+				lenderId: "",
+				amount: "",
+				currency: user?.currencyCode || "",
+				dueDate: undefined,
+				description: ""
+			});
+		}
+	}, [isCreateModalOpen, form, user?.currencyCode]);
 
 	const onSubmit = async (data: CreateRequestsSchema) => {
 		try {
 			await createTransactionRequest({
 				lenderId: data.lenderId,
 				amount: Number(data.amount),
+				currency: data.currency,
 				...(data.dueDate && { dueDate: data.dueDate }),
 				...(data.description && { description: data.description })
 			})
 				.then(response => {
 					if (response.data) {
+						// revalidate user information if currency code was null
+						if (!user?.currencyCode) {
+							dispatch(authenticationApiSlice.util.invalidateTags(["Me"]));
+						}
 						form.reset();
 						setIsCreateModalOpen(false);
 						toast.success("Loan request created successfully.");
@@ -129,34 +159,71 @@ export default function RequestsCreateModal({
 								/>
 
 								<div className="flex flex-col gap-6">
-									<Controller
-										name="amount"
-										control={form.control}
-										render={({ field, fieldState }) => (
-											<div className="space-y-2">
-												<div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
-													<DollarSign className="h-3.5 w-3.5" /> Amount
+									<div className="flex gap-4">
+										<Controller
+											name="amount"
+											control={form.control}
+											render={({ field, fieldState }) => (
+												<div className="flex-1 space-y-2">
+													<div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+														<DollarSign className="h-3.5 w-3.5" /> Amount
+													</div>
+													<div className="relative">
+														<InputNumeric
+															{...field}
+															id="amount"
+															aria-invalid={fieldState.invalid}
+															placeholder="0.00"
+															inputMode="numeric"
+															className="bg-muted/40 focus:border-primary h-12 rounded-xl border-transparent transition-all"
+														/>
+													</div>
+													{fieldState.invalid && (
+														<p className="text-destructive text-xs">{fieldState.error?.message}</p>
+													)}
 												</div>
-												<div className="relative">
-													<InputNumeric
-														{...field}
-														id="amount"
-														aria-invalid={fieldState.invalid}
-														placeholder="0.00"
-														inputMode="numeric"
-														className="bg-muted/40 focus:border-primary h-12 rounded-xl border-transparent pl-8 transition-all"
-													/>
-													<span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 font-semibold">
-														$
-													</span>
-												</div>
-												{fieldState.invalid && (
-													<p className="text-destructive text-xs">{fieldState.error?.message}</p>
-												)}
-											</div>
-										)}
-									/>
+											)}
+										/>
 
+										<Controller
+											name="currency"
+											control={form.control}
+											render={({ field, fieldState }) => (
+												<div className="w-28 space-y-2">
+													<div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+														Currency
+													</div>
+													<Select value={field.value} onValueChange={field.onChange}>
+														<SelectTrigger className="bg-muted/40 focus:border-primary h-12! w-full rounded-xl border-transparent transition-all">
+															<SelectValue placeholder="Currency" />
+														</SelectTrigger>
+														<SelectContent>
+															<SelectGroup>
+																{isCurrencyLoading ? (
+																	<SelectItem value="loading" disabled>
+																		Loading...
+																	</SelectItem>
+																) : data && data.data && data.data.length > 0 ? (
+																	data.data.map(currency => (
+																		<SelectItem key={currency.code} value={currency.code}>
+																			{currency.code} ({currency.symbol})
+																		</SelectItem>
+																	))
+																) : (
+																	<SelectItem value="no-data" disabled>
+																		No currencies
+																	</SelectItem>
+																)}
+															</SelectGroup>
+														</SelectContent>
+													</Select>
+													{fieldState.invalid && (
+														<p className="text-destructive text-xs">{fieldState.error?.message}</p>
+													)}
+												</div>
+											)}
+										/>
+									</div>
 									<Controller
 										name="dueDate"
 										control={form.control}
@@ -212,7 +279,7 @@ export default function RequestsCreateModal({
 												id="description"
 												aria-invalid={fieldState.invalid}
 												placeholder="What's this loan for?"
-												className="bg-muted/40 focus:border-primary min-h-[100px] resize-none rounded-xl border-transparent p-3 transition-all"
+												className="bg-muted/40 focus:border-primary min-h-25 resize-none rounded-xl border-transparent p-3 transition-all"
 											/>
 											{fieldState.invalid && (
 												<p className="text-destructive text-xs">{fieldState.error?.message}</p>

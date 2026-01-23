@@ -414,6 +414,11 @@ export default function RequestsProvider({ children }: GlobalLayoutProps) {
 	};
 
 	const handleRefresh = () => {
+		// Reset to page 1 and clear accumulated data for proper refresh
+		setAccumulatedData([]);
+		setApiSearchParams(prev => ({ ...prev, page: 1 }));
+		handleSearchParams([{ key: "page", value: "1" }]);
+
 		return toast.promise(refetch().unwrap(), {
 			loading: "Refreshing data...",
 			success: "Data refreshed successfully!",

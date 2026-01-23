@@ -27,6 +27,7 @@ export const apiRoute = {
 	changePassword: "/auth/change-password",
 	toggle2FA: "/auth/2fa",
 	deleteAccount: "/auth/account",
+	currency: "/currency",
 	transactions: "/transactions",
 	transaction: (transactionId: string) => `/transactions/${transactionId}`,
 	requestedTransactions: "/transactions/requested",
@@ -45,4 +46,4 @@ const DEFAULT_LOGIN_REDIRECT = route.private.dashboard;
 
 const appRoutePrefix = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
-export { DEFAULT_LOGIN_REDIRECT, appRoutePrefix };
+export { appRoutePrefix, DEFAULT_LOGIN_REDIRECT };

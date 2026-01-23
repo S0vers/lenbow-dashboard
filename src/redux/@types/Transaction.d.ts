@@ -17,6 +17,11 @@ interface TransactionInterface {
 	amount: number;
 	amountPaid: number;
 	remainingAmount: number;
+	currency: {
+		symbol: string;
+		name: string;
+		code: string;
+	};
 	reviewAmount: number;
 	rejectionReason: string | null;
 	requestDate: string | null;
