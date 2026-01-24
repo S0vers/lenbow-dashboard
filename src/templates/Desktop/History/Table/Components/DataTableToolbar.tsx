@@ -1,7 +1,7 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { Plus, RefreshCw, Search, X } from "lucide-react";
+import { RefreshCw, Search, X } from "lucide-react";
 
 import { ExtendedButton } from "@/components/custom-ui/extended-button";
 import { DataTableFacetedFilter } from "@/components/table/data-table-faceted-filter";
@@ -24,11 +24,8 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 		handleSearch,
 		selectedGlobalValues,
 		handleResetAll,
-		selectedIds,
 		handleOptionFilter,
 		searchParams,
-		isHistoryCreateModalOpen,
-		setIsHistoryCreateModalOpen,
 		handleRefresh,
 		isFetching
 	} = useHistory();
@@ -76,15 +73,6 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 					)}
 				</div>
 				<div className="flex items-center gap-2">
-					<ExtendedButton
-						variant="default"
-						size="sm"
-						className="ml-auto hidden h-8 lg:flex"
-						onClick={() => setIsHistoryCreateModalOpen(true)}
-					>
-						<Plus className="size-4" aria-hidden="true" />
-						Add History
-					</ExtendedButton>
 					<ExtendedButton
 						variant="orange"
 						size="sm"
