@@ -1,0 +1,476 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
+import { createContext, useEffect, useMemo, useState } from "react";
+import { DateRange } from "react-day-picker";
+import { toast } from "sonner";
+
+import { initialPagination } from "@/core/constants";
+import { useDebounce } from "@/hooks/use-debounce";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { useGetTransactionHistoryQuery } from "@/redux/APISlices/TransactionHistoryAPISlice";
+import { initialHistoryApiSearchParams } from "@/templates/Desktop/History/Table/Data/data";
+
+interface HistoryContextType {
+	// Required States & Functions
+	id: string | null;
+	setId: React.Dispatch<React.SetStateAction<string | null>>;
+	selectedIds: string[];
+	setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>;
+	sortBy: string;
+	sortSetOrder: React.Dispatch<React.SetStateAction<string>>;
+	sortOrder: "asc" | "desc";
+	setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
+	isLoading: boolean;
+	selectedDateRange: DateRange;
+	pagination: Pagination;
+	apiSearchParams: HistoryApiSearchParams;
+	setApiSearchParams: React.Dispatch<React.SetStateAction<HistoryApiSearchParams>>;
+	search: string;
+	setSearch: React.Dispatch<React.SetStateAction<string>>;
+	selectedGlobalValues: GlobalValues | undefined;
+	searchParams: URLSearchParams;
+	tableData: TransactionHistoryInterface[];
+	handleDateFilter: (date: DateRange) => void;
+	handleSearch: (event: React.FormEvent<HTMLFormElement>) => void;
+	handleSorting: (sortBy: string, sortOrder: "asc" | "desc") => void;
+	handleOptionFilter: (key: string, value: string | string[] | undefined | null) => void;
+	handleMultipleFilters: (
+		filters: Array<{ key: string; value: string | string[] | undefined | null }>
+	) => void;
+	handleResetAll: () => void;
+	handleRefresh: () => ReturnType<typeof toast.promise>;
+	isFetching: boolean;
+	loadMore: () => void;
+	hasMore: boolean;
+
+	// Active Transaction for Details Drawer
+	activeTransaction: TransactionHistoryInterface | null;
+	setActiveTransaction: React.Dispatch<React.SetStateAction<TransactionHistoryInterface | null>>;
+}
+
+export const HistoryContext = createContext<HistoryContextType | undefined>(undefined);
+
+export default function HistoryProvider({ children }: GlobalLayoutProps) {
+	const [id, setId] = useState<string | null>(null);
+	const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+	// Search Params
+	const searchParams = useSearchParams();
+
+	// Initialize API Search Params if there are search params
+	const initializeApiSearchParams: HistoryApiSearchParams = {
+		page: Number(searchParams.get("page")) || initialHistoryApiSearchParams.page,
+		limit: Number(searchParams.get("limit")) || initialHistoryApiSearchParams.limit,
+		sortBy: searchParams.get("sortBy") || initialHistoryApiSearchParams.sortBy,
+		sortOrder:
+			(searchParams.get("sortOrder") as "asc" | "desc") || initialHistoryApiSearchParams.sortOrder,
+		search: searchParams.get("search") || initialHistoryApiSearchParams.search,
+		from: searchParams.get("from") ? new Date(searchParams.get("from")!) : undefined,
+		to: searchParams.get("to") ? new Date(searchParams.get("to")!) : undefined,
+		type: searchParams.get("type") || initialHistoryApiSearchParams.type,
+		status: searchParams.get("status") || initialHistoryApiSearchParams.status
+	};
+
+	// API Search Params
+	const [apiSearchParams, setApiSearchParams] =
+		useState<HistoryApiSearchParams>(initializeApiSearchParams);
+
+	// Pass apiSearchParams to the query hook to enable filtering
+	const {
+		data: transactionHistoryResponse,
+		isLoading,
+		refetch,
+		isFetching
+	} = useGetTransactionHistoryQuery(apiSearchParams);
+
+	// Router & Pathname
+	const router = useRouter();
+	const pathname = usePathname();
+
+	// Local state
+	const [search, setSearch] = useState(searchParams.get("search") || "");
+	const debouncedSearch = useDebounce(search, 500); // ✅ debounce delay (ms)
+
+	const [sortBy, sortSetOrder] = useState<string>(initializeApiSearchParams.sortBy);
+	const [sortOrder, setSortOrder] = useState<"asc" | "desc">(initializeApiSearchParams.sortOrder);
+
+	// Initialize selectedDateRange from URL params
+	const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
+		from: searchParams.get("from") ? new Date(searchParams.get("from")!) : undefined,
+		to: searchParams.get("to") ? new Date(searchParams.get("to")!) : undefined
+	});
+
+	// Active Transaction for Details Drawer
+	const [activeTransaction, setActiveTransaction] = useState<TransactionHistoryInterface | null>(
+		null
+	);
+
+	// Accumulated Data for Infinite Scroll
+	const [accumulatedData, setAccumulatedData] = useState<TransactionHistoryInterface[]>([]);
+	const [hasMore, setHasMore] = useState(true);
+
+	// Sync accumulated data
+	useEffect(() => {
+		if (transactionHistoryResponse?.data) {
+			if (apiSearchParams.page === 1) {
+				setAccumulatedData(transactionHistoryResponse.data);
+			} else {
+				setAccumulatedData(prev => {
+					// Create a Map to ensure uniqueness by ID
+					const newData = transactionHistoryResponse.data || [];
+					const combined = [...prev, ...newData];
+					const unique = new Map(combined.map(item => [item.id, item]));
+					return Array.from(unique.values());
+				});
+			}
+
+			const totalPages = transactionHistoryResponse.pagination?.totalPages || 1;
+			setHasMore(apiSearchParams.page < totalPages);
+		}
+	}, [transactionHistoryResponse, apiSearchParams.page]);
+
+	const tableData = accumulatedData;
+	const pagination = transactionHistoryResponse?.pagination || initialPagination;
+
+	const loadMore = () => {
+		if (!isFetching && hasMore) {
+			setApiSearchParams(prev => ({ ...prev, page: prev.page + 1 }));
+		}
+	};
+
+	/**
+	 * Derives selectedGlobalValues from search parameters (excluding pagination and sorting params).
+	 */
+	const selectedGlobalValues = useMemo(() => {
+		const preservedParams = {
+			page: searchParams.get("page"),
+			limit: searchParams.get("limit"),
+			sortBy: searchParams.get("sortBy"),
+			sortOrder: searchParams.get("sortOrder")
+		};
+
+		const values = Object.fromEntries(
+			Array.from(searchParams.entries()).filter(
+				([key]) => !Object.keys(preservedParams).includes(key)
+			)
+		);
+
+		return Object.keys(values).length ? values : undefined;
+	}, [searchParams]);
+
+	/**
+	 * Updates the URL search parameters by pushing a new query string.
+	 *
+	 * @param key - The search parameter key to be updated
+	 * @param value - The value(s) to be associated with the key. Can be a string or array of strings
+	 *
+	 * @remarks
+	 * If the value is an array, it will be joined with commas before being added to the URL.
+	 * Uses Next.js router to update the URL without page reload.
+	 *
+	 * Do not use this function directly. Use handleOptionFilter instead.
+	 */
+	const handleSearchParams = (
+		params: { key: string; value: string | string[] | undefined | null }[]
+	) => {
+		const newParams = new URLSearchParams(searchParams.toString());
+
+		params.forEach(({ key, value }) => {
+			if (value) {
+				newParams.set(key, Array.isArray(value) ? value.join(",") : value);
+			} else {
+				newParams.delete(key);
+			}
+		});
+
+		router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+	};
+
+	/**
+	 * ✅ Debounced search effect:
+	 * - Updates URL "search" param (removes if empty)
+	 * - Resets page to 1
+	 * - Updates apiSearchParams to trigger RTK Query
+	 * - Clears selection
+	 */
+	useEffect(() => {
+		const raw = debouncedSearch.trim();
+		const currentSearchParam = searchParams.get("search") || "";
+
+		// 🔴 1–2 characters → do nothing
+		if (raw.length > 0 && raw.length < 3) return;
+
+		// Avoid redundant updates
+		if (raw === currentSearchParam) return;
+
+		// Clear selection
+		setSelectedIds([]);
+
+		// Reset page when search changes
+		const pageReset = { key: "page", value: "1" };
+
+		if (raw.length === 0) {
+			// ✅ User cleared input → remove search param
+			handleSearchParams([{ key: "search", value: null }, pageReset]);
+
+			setApiSearchParams(prev => ({
+				...prev,
+				search: "",
+				page: 1
+			}));
+			return;
+		}
+
+		// ✅ raw.length >= 3 → trigger search
+		handleSearchParams([{ key: "search", value: raw }, pageReset]);
+
+		setApiSearchParams(prev => ({
+			...prev,
+			search: raw,
+			page: 1
+		}));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debouncedSearch]);
+
+	/**
+	 * Handles the search form submission event.
+	 * (Optional now. You can keep it to allow "Enter" to trigger immediate search.)
+	 */
+	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		const currentSearchParam = searchParams.get("search") || "";
+		const next = search.trim();
+
+		if (next === currentSearchParam) return;
+
+		handleSearchParams([
+			{ key: "search", value: next || null },
+			{ key: "page", value: "1" }
+		]);
+
+		setSelectedIds([]);
+		setApiSearchParams(prevState => ({
+			...prevState,
+			search: next,
+			page: 1
+		}));
+	};
+
+	/**
+	 * Deletes a specific search parameter from the URL and updates the route.
+	 */
+	const handleDeleteSearch = (key: string) => {
+		const newParams = new URLSearchParams(searchParams.toString());
+		newParams.delete(key);
+		router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+	};
+
+	/**
+	 * Handles the date filter functionality.
+	 */
+	const handleDateFilter = (date: DateRange) => {
+		setSelectedDateRange(date);
+
+		const fromDate = date.from ? date.from.toISOString().split("T")[0] : undefined;
+		const toDate = date.to ? date.to.toISOString().split("T")[0] : undefined;
+
+		const searchObjects: { key: string; value: string | undefined | null }[] = [];
+
+		if (fromDate) searchObjects.push({ key: "from", value: fromDate });
+		else handleDeleteSearch("from");
+
+		if (toDate) searchObjects.push({ key: "to", value: toDate });
+		else handleDeleteSearch("to");
+
+		if (searchObjects.length > 0) {
+			handleSearchParams(searchObjects);
+		}
+
+		setSelectedIds([]);
+		setApiSearchParams(prevState => ({
+			...prevState,
+			from: date.from,
+			to: date.to,
+			page: 1 // ✅ usually expected when filtering by date
+		}));
+
+		// Also keep URL page reset consistent if you want:
+		handleSearchParams([{ key: "page", value: "1" }]);
+	};
+
+	/**
+	 * Handles the sorting functionality for the table.
+	 */
+	const handleSorting = (sortBy: string, sortOrder: "asc" | "desc") => {
+		sortSetOrder(sortBy);
+		setSortOrder(sortOrder);
+
+		handleSearchParams([
+			{ key: "sortBy", value: sortBy },
+			{ key: "sortOrder", value: sortOrder }
+		]);
+
+		setSelectedIds([]);
+		setApiSearchParams(prevState => ({
+			...prevState,
+			sortBy,
+			sortOrder
+		}));
+	};
+
+	/**
+	 * Handles filtering options by updating search parameters and API search state
+	 */
+	const handleOptionFilter = (key: string, value: string | string[] | undefined | null) => {
+		const updates: { key: string; value: string | string[] | null | undefined }[] = [];
+
+		const isDefaultPagination =
+			(key === "page" && value === "1") || (key === "limit" && value === "10");
+
+		if (isDefaultPagination) {
+			// Instead of calling handleDeleteSearch immediately, push a null update
+			updates.push({ key, value: null });
+		} else {
+			updates.push({ key, value });
+		}
+
+		const isPaginationFilter = key === "page" || key === "limit";
+		if (!isPaginationFilter) {
+			setSelectedIds([]);
+			// ✅ common expectation: when changing a non-pagination filter, reset page
+			updates.push({ key: "page", value: "1" });
+		}
+
+		// Perform all URL updates in one go
+		handleSearchParams(updates);
+
+		setApiSearchParams(prevState => ({
+			...prevState,
+			[key]: value,
+			...(isPaginationFilter ? {} : { page: 1 })
+		}));
+	};
+
+	/**
+	 * Handles multiple filters at once to avoid race conditions with URL params
+	 */
+	const handleMultipleFilters = (
+		filters: Array<{ key: string; value: string | string[] | undefined | null }>
+	) => {
+		const updates: { key: string; value: string | string[] | null | undefined }[] = [];
+
+		filters.forEach(({ key, value }) => {
+			const isDefaultPagination =
+				(key === "page" && value === "1") || (key === "limit" && value === "10");
+
+			if (isDefaultPagination) {
+				updates.push({ key, value: null });
+			} else {
+				updates.push({ key, value });
+			}
+		});
+
+		// Always reset page when applying multiple filters
+		updates.push({ key: "page", value: "1" });
+
+		// Perform all URL updates in one go
+		handleSearchParams(updates);
+
+		// Update API search params with all filters
+		const newApiParams: Record<string, any> = { ...apiSearchParams, page: 1 };
+		filters.forEach(({ key, value }) => {
+			newApiParams[key] = value;
+		});
+		setApiSearchParams(newApiParams as HistoryApiSearchParams);
+
+		setSelectedIds([]);
+	};
+
+	/**
+	 * Resets all filter values while preserving pagination and sorting parameters.
+	 */
+	const handleResetAll = () => {
+		setSearch("");
+		setSelectedDateRange({ from: undefined, to: undefined });
+		setSelectedIds([]);
+
+		const preservedParams = {
+			page: searchParams.get("page"),
+			limit: searchParams.get("limit"),
+			sortBy: searchParams.get("sortBy"),
+			sortOrder: searchParams.get("sortOrder")
+		};
+
+		setApiSearchParams({
+			...initialHistoryApiSearchParams,
+			page: Number(preservedParams.page) || initialHistoryApiSearchParams.page,
+			limit: Number(preservedParams.limit) || initialHistoryApiSearchParams.limit,
+			sortBy: preservedParams.sortBy || "id",
+			sortOrder:
+				(preservedParams.sortOrder as "asc" | "desc") || initialHistoryApiSearchParams.sortOrder,
+			search: "" // ✅ clear search in API params too
+		});
+
+		const newParams = new URLSearchParams();
+		Object.entries(preservedParams).forEach(([key, value]) => {
+			if (value) newParams.set(key, value);
+		});
+
+		router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+	};
+
+	const handleRefresh = () => {
+		// Reset to page 1 and clear accumulated data for proper refresh
+		setAccumulatedData([]);
+		setApiSearchParams(prev => ({ ...prev, page: 1 }));
+		handleSearchParams([{ key: "page", value: "1" }]);
+
+		return toast.promise(refetch().unwrap(), {
+			loading: "Refreshing data...",
+			success: "Data refreshed successfully!",
+			error: "Failed to refresh data"
+		});
+	};
+
+	return (
+		<HistoryContext.Provider
+			value={{
+				id,
+				setId,
+				selectedIds,
+				setSelectedIds,
+				sortBy,
+				sortSetOrder,
+				sortOrder,
+				setSortOrder,
+				isLoading,
+				selectedDateRange,
+				pagination,
+				apiSearchParams,
+				setApiSearchParams,
+				search,
+				setSearch,
+				selectedGlobalValues,
+				handleDateFilter,
+				tableData,
+				searchParams,
+				handleSorting,
+				handleOptionFilter,
+				handleMultipleFilters,
+				handleResetAll,
+				handleSearch,
+				handleRefresh,
+				isFetching,
+				loadMore,
+				hasMore,
+
+				activeTransaction,
+				setActiveTransaction
+			}}
+		>
+			{children}
+		</HistoryContext.Provider>
+	);
+}

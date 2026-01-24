@@ -1,9 +1,9 @@
-import ComingSoon from "@/components/helpers/coming-soon";
+import HistoryTemplate from "@/templates/Mobile/History/HistoryTemplate";
 
 export default function History() {
 	return (
 		<>
-			<ComingSoon />
+			<HistoryTemplate />
 		</>
 	);
 }

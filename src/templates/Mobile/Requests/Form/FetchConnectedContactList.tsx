@@ -169,7 +169,7 @@ export default function FetchConnectedContactList({
 										) : isInvalidUUID ? (
 											<div className="flex flex-col items-center gap-1">
 												<span className="text-destructive font-medium">Invalid Account ID</span>
-												<span className="text-muted-foreground max-w-[200px] text-xs leading-relaxed">
+												<span className="text-muted-foreground max-w-50 text-xs leading-relaxed">
 													The ID must be a valid UUID code. Check the format and try again.
 												</span>
 											</div>
