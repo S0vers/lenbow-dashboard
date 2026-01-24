@@ -69,7 +69,7 @@ function ActionItem({
 	};
 
 	return (
-		<Link href={redirectLink(transactionStatusType, action.status, action.id)}>
+		<Link href={redirectLink(transactionStatusType, action.status, action.transactionId)}>
 			<div
 				className={cn(
 					"hover:bg-muted/50 flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-colors",
