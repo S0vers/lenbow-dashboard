@@ -194,7 +194,7 @@ export default function LendProvider({ children }: GlobalLayoutProps) {
 			page: 1
 		}));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [debouncedSearch, searchParams]);
+	}, [debouncedSearch]);
 
 	/**
 	 * Handles the search form submission event.

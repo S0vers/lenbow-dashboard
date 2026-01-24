@@ -12,7 +12,7 @@ import {
 	useDeleteTransactionRequestMutation,
 	useTransactionRequestsListQuery
 } from "@/redux/APISlices/TransactionAPISlice";
-import { initialRequestsApiSearchParams } from "@/templates/Mobile/Requests/Data/data";
+import { initialRequestsApiSearchParams } from "@/templates/Desktop/Requests/Table/Data/data";
 
 interface RequestsContextType {
 	// Required States & Functions
@@ -243,7 +243,7 @@ export default function RequestsProvider({ children }: GlobalLayoutProps) {
 			page: 1
 		}));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [debouncedSearch, searchParams]);
+	}, [debouncedSearch]);
 
 	/**
 	 * Handles the search form submission event.

@@ -9,7 +9,7 @@ import { initialPagination } from "@/core/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useTransactionBorrowListQuery } from "@/redux/APISlices/TransactionAPISlice";
-import { initialBorrowApiSearchParams } from "@/templates/Mobile/Borrow/Data/data";
+import { initialBorrowApiSearchParams } from "@/templates/Desktop/Borrow/Table/Data/data";
 
 interface BorrowContextType {
 	// Required States & Functions
@@ -210,7 +210,7 @@ export default function BorrowProvider({ children }: GlobalLayoutProps) {
 			page: 1
 		}));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [debouncedSearch, searchParams]);
+	}, [debouncedSearch]);
 
 	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();

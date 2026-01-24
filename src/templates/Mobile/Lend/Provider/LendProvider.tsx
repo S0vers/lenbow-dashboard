@@ -9,7 +9,7 @@ import { initialPagination } from "@/core/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useTransactionLendListQuery } from "@/redux/APISlices/TransactionAPISlice";
-import { initialLendApiSearchParams } from "@/templates/Mobile/Lend/Data/data";
+import { initialLendApiSearchParams } from "@/templates/Desktop/Lend/Table/Data/data";
 
 interface LendContextType {
 	// Required States & Functions
@@ -203,7 +203,7 @@ export default function LendProvider({ children }: GlobalLayoutProps) {
 			page: 1
 		}));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [debouncedSearch, searchParams]);
+	}, [debouncedSearch]);
 
 	const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();

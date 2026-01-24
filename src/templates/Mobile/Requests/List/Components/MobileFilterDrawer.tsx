@@ -19,7 +19,7 @@ import {
 	DrawerTrigger
 } from "@/components/ui/drawer";
 
-import { TRANSACTION_TYPE } from "@/templates/Mobile/Requests/Data/data";
+import { TRANSACTION_TYPE } from "@/templates/Desktop/Requests/Table/Data/data";
 import { useRequests } from "@/templates/Mobile/Requests/Hook/useRequests";
 
 export function MobileFilterDrawer() {
