@@ -123,20 +123,22 @@ export default function RequestsCreateModal({
 
 	return (
 		<Drawer open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-			<DrawerContent className="flex max-h-[85vh] flex-col">
+			<DrawerContent className="flex max-h-[75vh] flex-col">
 				<div className="mx-auto flex h-full w-full max-w-sm flex-col overflow-hidden">
-					<DrawerHeader className="flex-none">
-						<DrawerTitle className="text-2xl font-bold">New Request</DrawerTitle>
-						<DrawerDescription>Create a new loan request to send to a contact.</DrawerDescription>
+					<DrawerHeader className="flex-none px-4 pt-4 pb-3">
+						<DrawerTitle className="text-xl font-bold">New Request</DrawerTitle>
+						<DrawerDescription className="text-sm">
+							Create a new loan request to send to a contact.
+						</DrawerDescription>
 					</DrawerHeader>
 
 					<ScrollArea className="-mx-4 flex-1 overflow-y-auto px-4">
 						<form
 							id="create-request-form"
 							onSubmit={form.handleSubmit(onSubmit)}
-							className="px-4 pt-2 pb-4"
+							className="px-4 pt-1 pb-2"
 						>
-							<div className="space-y-6">
+							<div className="space-y-5">
 								<Controller
 									name="lenderId"
 									control={form.control}
@@ -238,7 +240,7 @@ export default function RequestsCreateModal({
 														<PopoverTrigger asChild>
 															<Button
 																variant={"outline"}
-																className={`border-input/60 h-12 w-full justify-start rounded-xl text-left font-normal ${!field.value && "text-muted-foreground"}`}
+																className={`border-input/60 h-11 w-full justify-start rounded-xl text-left font-normal ${!field.value && "text-muted-foreground"}`}
 															>
 																{field.value ? formatDate(field.value) : <span>Pick a date</span>}
 																<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -291,11 +293,11 @@ export default function RequestsCreateModal({
 						</form>
 					</ScrollArea>
 
-					<DrawerFooter className="bg-background flex-none border-t px-4 pt-4 pb-8">
+					<DrawerFooter className="bg-background flex-none border-t px-4 pt-3 pb-6">
 						<ExtendedLoadingButton
 							type="submit"
 							form="create-request-form"
-							className="shadow-primary/20 h-12 w-full rounded-xl text-base font-semibold shadow-lg"
+							className="shadow-primary/20 h-11 w-full rounded-xl text-base font-semibold shadow-lg"
 							isLoading={isLoading}
 							loadingText="Creating Request..."
 						>
@@ -304,7 +306,7 @@ export default function RequestsCreateModal({
 						<DrawerClose asChild>
 							<Button
 								variant="ghost"
-								className="text-muted-foreground hover:text-foreground h-12 rounded-xl"
+								className="text-muted-foreground hover:text-foreground h-10 rounded-xl"
 							>
 								Cancel
 							</Button>

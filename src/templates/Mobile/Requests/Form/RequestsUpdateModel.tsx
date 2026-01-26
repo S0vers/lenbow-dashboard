@@ -237,7 +237,7 @@ export default function RequestsUpdateModel({
 															<PopoverTrigger asChild>
 																<Button
 																	variant={"outline"}
-																	className={`border-input/60 h-12 w-full justify-start rounded-xl text-left font-normal ${!field.value && "text-muted-foreground"}`}
+																	className={`border-input/60 h-11 w-full justify-start rounded-xl text-left font-normal ${!field.value && "text-muted-foreground"}`}
 																>
 																	{field.value ? formatDate(field.value) : <span>Pick a date</span>}
 																	<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -273,7 +273,7 @@ export default function RequestsUpdateModel({
 						<ExtendedLoadingButton
 							type="submit"
 							form="update-request-form"
-							className="h-12 w-full rounded-xl text-base font-semibold"
+							className="h-11 w-full rounded-xl text-base font-semibold"
 							isLoading={isLoading || transactionIsLoading}
 							loadingText="Updating Request..."
 							disabled={transactionIsLoading}
@@ -283,7 +283,7 @@ export default function RequestsUpdateModel({
 						<DrawerClose asChild>
 							<Button
 								variant="ghost"
-								className="text-muted-foreground hover:text-foreground h-12 rounded-xl"
+								className="text-muted-foreground hover:text-foreground h-11 rounded-xl"
 							>
 								Cancel
 							</Button>

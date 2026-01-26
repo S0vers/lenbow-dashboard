@@ -74,7 +74,7 @@ export function MobileToolbar() {
 				<div className="flex items-center gap-2 overflow-x-auto pb-2">
 					<MobileFilterDrawer />
 					{selectedGlobalValues && (
-						<Button variant="ghost" onClick={handleResetAll} className="h-8 px-2">
+						<Button variant="ghost" onClick={handleResetAll} className="h-10 rounded-xl px-3">
 							Reset
 							<X className="ml-2 h-4 w-4" />
 						</Button>

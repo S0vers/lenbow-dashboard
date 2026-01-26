@@ -116,16 +116,25 @@ export function MobileFilterDrawer() {
 						</div>
 					</div>
 				</div>
-				<DrawerFooter className="pt-4 pb-8">
-					<ExtendedButton size="lg" onClick={handleApply} className="w-full text-base">
+				<DrawerFooter className="pt-4 pb-6">
+					<ExtendedButton
+						size="lg"
+						onClick={handleApply}
+						className="h-11 w-full rounded-xl text-base font-semibold"
+					>
 						Apply Filters
 					</ExtendedButton>
 					<div className="flex gap-3">
-						<Button variant="outline" size="lg" className="flex-1" onClick={handleClear}>
+						<Button
+							variant="outline"
+							size="lg"
+							className="h-11 flex-1 rounded-xl"
+							onClick={handleClear}
+						>
 							Reset Selection
 						</Button>
 						<DrawerClose asChild>
-							<Button variant="ghost" size="lg" className="flex-1">
+							<Button variant="ghost" size="lg" className="h-11 flex-1 rounded-xl">
 								Cancel
 							</Button>
 						</DrawerClose>

@@ -70,7 +70,7 @@ export default function LoginTemplate() {
 							loadingText="Redirecting..."
 							onClick={handleGoogleLogin}
 						>
-							<FaGoogle className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
+							<FaGoogle className="h-5 w-5 transition-opacity duration-200 group-hover:opacity-80" />
 							<span className="font-semibold">Continue with Google</span>
 						</LoadingButton>
 						<p className="text-muted-foreground text-center text-xs">

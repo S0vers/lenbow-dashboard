@@ -105,9 +105,14 @@ export default function BorrowPartialRepayModal(props: BorrowPartialRepayModalPr
 							</div>
 						</ResponsiveDialogDescription>
 					</ResponsiveDialogHeader>
-					<ResponsiveDialogFooter className="bg-transparent px-8 pb-8 sm:justify-end">
+					<ResponsiveDialogFooter className="bg-transparent px-8 pt-4 pb-6 sm:justify-end">
 						<ResponsiveDialogClose asChild>
-							<Button type="button" variant="outline" disabled={isLoading}>
+							<Button
+								type="button"
+								variant="outline"
+								disabled={isLoading}
+								className="h-11 rounded-xl"
+							>
 								<ChevronLeftIcon />
 								Back
 							</Button>
@@ -118,6 +123,7 @@ export default function BorrowPartialRepayModal(props: BorrowPartialRepayModalPr
 							isLoading={isLoading}
 							loadingText="Repaying..."
 							variant={"rose"}
+							className="h-11 rounded-xl font-semibold"
 						>
 							Partial Repay
 						</ExtendedLoadingButton>

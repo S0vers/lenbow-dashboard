@@ -88,7 +88,7 @@ export function RequestMobileActions({ data, showFullButtons = false }: RequestM
 	};
 
 	const containerClass = showFullButtons ? "flex flex-col w-full gap-3" : "flex gap-2";
-	const buttonClass = showFullButtons ? "w-full justify-center h-12 text-base" : "h-10 w-10";
+	const buttonClass = showFullButtons ? "w-full justify-center h-11 text-base" : "h-10 w-10";
 
 	if (type === "lend") {
 		return (
@@ -181,7 +181,7 @@ export function RequestMobileActions({ data, showFullButtons = false }: RequestM
 						onClick={() => setIsUpdateDeleteModal(true)}
 						size={showFullButtons ? "default" : "icon"}
 						variant="secondary"
-						className={`${buttonClass} bg-muted hover:bg-muted/80 text-foreground border-border border`}
+						className={`${buttonClass} bg-muted hover:bg-muted/80 text-foreground border-border h-11 rounded-xl border`}
 					>
 						<Edit className="h-4 w-4" />
 						{showFullButtons && <span className="ml-2">Edit Request</span>}
@@ -192,7 +192,7 @@ export function RequestMobileActions({ data, showFullButtons = false }: RequestM
 						onClick={() => setIsOpenDeleteModal(true)}
 						disabled={isPending}
 						variant="outline"
-						className={`${buttonClass} border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive`}
+						className={`${buttonClass} border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive h-11 rounded-xl`}
 					>
 						<Trash2 className="h-4 w-4" />
 						{showFullButtons && <span className="ml-2">Delete Request</span>}

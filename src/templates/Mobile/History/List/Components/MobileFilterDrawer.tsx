@@ -123,7 +123,7 @@ export function MobileFilterDrawer() {
 											type="button"
 											onClick={() => toggleType(option.value)}
 											className={cn(
-												"relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 transition-all duration-200 active:scale-95",
+												"relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 transition-all duration-200",
 												isSelected
 													? "border-primary bg-primary/5 shadow-sm"
 													: "border-muted hover:border-primary/50 hover:bg-accent"
@@ -179,16 +179,25 @@ export function MobileFilterDrawer() {
 						</div>
 					</div>
 				</div>
-				<DrawerFooter className="pt-4 pb-8">
-					<ExtendedButton size="lg" onClick={handleApply} className="w-full text-base">
+				<DrawerFooter className="pt-4 pb-6">
+					<ExtendedButton
+						size="lg"
+						onClick={handleApply}
+						className="h-11 w-full rounded-xl text-base font-semibold"
+					>
 						Apply Filters
 					</ExtendedButton>
 					<div className="flex gap-3">
-						<Button variant="outline" size="lg" className="flex-1" onClick={handleClear}>
+						<Button
+							variant="outline"
+							size="lg"
+							className="h-11 flex-1 rounded-xl"
+							onClick={handleClear}
+						>
 							Reset Selection
 						</Button>
 						<DrawerClose asChild>
-							<Button variant="ghost" size="lg" className="flex-1">
+							<Button variant="ghost" size="lg" className="h-11 flex-1 rounded-xl">
 								Cancel
 							</Button>
 						</DrawerClose>

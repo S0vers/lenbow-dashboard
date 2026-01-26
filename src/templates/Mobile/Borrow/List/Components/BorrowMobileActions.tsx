@@ -61,7 +61,7 @@ export function BorrowMobileActions({ data, showFullButtons = false }: BorrowMob
 	};
 
 	const containerClass = showFullButtons ? "flex flex-col w-full gap-3" : "flex gap-2";
-	const buttonClass = showFullButtons ? "w-full justify-center h-12 text-base" : "h-10 w-10";
+	const buttonClass = showFullButtons ? "w-full justify-center h-11 text-base" : "h-10 w-10";
 
 	// Show action only if status allows (e.g. accepted/ongoing loans that can be repaid)
 	// For now, mirroring usual borrow logic: if it's "accepted", user can repay.
@@ -103,7 +103,7 @@ export function BorrowMobileActions({ data, showFullButtons = false }: BorrowMob
 						onClick={() => setIsRepayModalOpen(true)}
 						size={showFullButtons ? "default" : "icon"}
 						variant="teal"
-						className={buttonClass}
+						className={`${buttonClass} h-11 rounded-xl`}
 						disabled={isPending}
 					>
 						<HandCoins className="mr-0 h-5 w-5 md:mr-2" />
@@ -114,7 +114,7 @@ export function BorrowMobileActions({ data, showFullButtons = false }: BorrowMob
 						onClick={() => setIsCompleteRepayOpen(true)}
 						size={showFullButtons ? "default" : "icon"}
 						variant="success"
-						className={buttonClass}
+						className={`${buttonClass} h-11 rounded-xl`}
 						disabled={isPending}
 					>
 						<Banknote className="mr-0 h-5 w-5 md:mr-2" />

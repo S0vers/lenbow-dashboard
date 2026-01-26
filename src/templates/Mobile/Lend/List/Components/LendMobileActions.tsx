@@ -82,7 +82,7 @@ export function LendMobileActions({ data, showFullButtons = false }: LendMobileA
 	};
 
 	const containerClass = showFullButtons ? "flex flex-col w-full gap-3" : "flex gap-2";
-	const buttonClass = showFullButtons ? "w-full justify-center h-12 text-base" : "h-10 w-10";
+	const buttonClass = showFullButtons ? "w-full justify-center h-11 text-base" : "h-10 w-10";
 
 	// Show actions only if status is "requested_repay"
 	if (data.status === "requested_repay") {
@@ -141,7 +141,7 @@ export function LendMobileActions({ data, showFullButtons = false }: LendMobileA
 						onClick={() => setIsAcceptRequestOpenModal(true)}
 						size={showFullButtons ? "default" : "icon"}
 						variant="lime"
-						className={buttonClass}
+						className={`${buttonClass} h-11 rounded-xl`}
 						disabled={isPending}
 					>
 						<Check className="mr-0 h-5 w-5 md:mr-2" />
@@ -152,7 +152,7 @@ export function LendMobileActions({ data, showFullButtons = false }: LendMobileA
 						onClick={() => setIsRejectRequestOpenModal(true)}
 						size={showFullButtons ? "default" : "icon"}
 						variant="warning"
-						className={buttonClass}
+						className={`${buttonClass} h-11 rounded-xl`}
 						disabled={isPending}
 					>
 						<X className="mr-0 h-5 w-5 md:mr-2" />

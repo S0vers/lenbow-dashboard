@@ -109,7 +109,7 @@ export default function FetchConnectedContactList({
 					role="combobox"
 					aria-expanded={open}
 					aria-invalid={ariaInvalid}
-					className="border-input/60 bg-background/50 h-12 w-full justify-between rounded-xl backdrop-blur-sm"
+					className="border-input/60 bg-background/50 h-11 w-full justify-between rounded-xl backdrop-blur-sm"
 				>
 					{selectedUser ? (
 						<span className="flex items-center gap-3 truncate">
@@ -226,9 +226,9 @@ export default function FetchConnectedContactList({
 					</Command>
 				</div>
 
-				<DrawerFooter className="flex-none">
+				<DrawerFooter className="flex-none pt-4 pb-6">
 					<DrawerClose asChild>
-						<Button variant="outline" className="w-full">
+						<Button variant="outline" className="h-11 w-full rounded-xl">
 							Cancel
 						</Button>
 					</DrawerClose>

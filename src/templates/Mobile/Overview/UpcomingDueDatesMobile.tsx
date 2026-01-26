@@ -49,7 +49,7 @@ function DueDateItem({
 	return (
 		<div
 			className={cn(
-				"active:bg-muted/50 flex items-center gap-3 rounded-lg border p-3 transition-colors",
+				"active:bg-muted/50 flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors duration-200",
 				item.urgency === "high" && "border-destructive/50 bg-destructive/5"
 			)}
 			onClick={() => onItemClick?.(item)}

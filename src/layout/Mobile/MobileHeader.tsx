@@ -32,7 +32,7 @@ export default function MobileHeader() {
 						size="icon"
 						onClick={handleLogout}
 						disabled={isLoggingOut}
-						className="text-primary-foreground hover:bg-primary-foreground/10 transition-all hover:scale-105 disabled:opacity-50"
+						className="text-primary-foreground hover:bg-primary-foreground/20 transition-colors duration-200 disabled:opacity-50"
 					>
 						<LogOut className="h-5 w-5" />
 					</Button>

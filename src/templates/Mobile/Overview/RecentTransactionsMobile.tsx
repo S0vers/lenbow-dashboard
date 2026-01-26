@@ -67,7 +67,7 @@ function TransactionItem({
 	return (
 		<Link href={redirectLink(transaction.type, transaction.status, transaction.id)}>
 			<div
-				className="active:bg-muted/50 flex items-center gap-3 rounded-lg border p-3 transition-colors"
+				className="active:bg-muted/50 flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors duration-200"
 				onClick={() => onTransactionClick?.(transaction)}
 			>
 				<Avatar className="h-10 w-10 shrink-0">
