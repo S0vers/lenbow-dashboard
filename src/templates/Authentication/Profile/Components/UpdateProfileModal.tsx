@@ -83,28 +83,11 @@ export default function UpdateProfileModal({
 				return;
 			}
 
-			// Validate image is square
+			// Set file and create preview
+			setSelectedFile(file);
 			const reader = new FileReader();
-			reader.onload = event => {
-				const img = new Image();
-				img.onload = () => {
-					if (img.width !== img.height) {
-						toast.error("Please select a square image (width and height must be equal)");
-						// Reset the file input
-						if (fileInputRef.current) {
-							fileInputRef.current.value = "";
-						}
-						return;
-					}
-
-					// Image is valid and square - set preview
-					setSelectedFile(file);
-					setImagePreview(event.target?.result as string);
-				};
-				img.onerror = () => {
-					alert("Failed to load image. Please try another file.");
-				};
-				img.src = event.target?.result as string;
+			reader.onloadend = () => {
+				setImagePreview(reader.result as string);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -187,7 +170,7 @@ export default function UpdateProfileModal({
 							</div>
 						</button>
 						<p className="text-muted-foreground text-center text-xs sm:text-sm">
-							Click avatar to change photo <br /> (square images only)
+							Click avatar to change photo
 						</p>
 					</div>
 
