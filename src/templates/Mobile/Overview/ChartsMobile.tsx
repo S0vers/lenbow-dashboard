@@ -80,7 +80,7 @@ export default function ChartsMobile({ chartData, isLoading }: ChartsMobileProps
 								borderRadius: "6px",
 								fontSize: "12px"
 							}}
-							formatter={(value: number) => value.toFixed(0)}
+							formatter={(value: number | undefined) => (value ? value.toFixed(0) : "0")}
 						/>
 						<Bar dataKey="borrowed" fill="#ef4444" name="Borrowed" radius={[4, 4, 0, 0]} />
 						<Bar dataKey="lent" fill="#10b981" name="Lent" radius={[4, 4, 0, 0]} />

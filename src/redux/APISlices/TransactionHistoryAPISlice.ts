@@ -6,7 +6,6 @@ import { apiRoute } from "@/routes/routes";
 
 export const transactionHistoryApiSlice = createApi({
 	reducerPath: "transactionHistoryApiReducer",
-	keepUnusedDataFor: 60, // Cache for 60 seconds
 	baseQuery: baseQueryWithCSRF,
 	tagTypes: ["TransactionHistory"],
 	endpoints: builder => ({

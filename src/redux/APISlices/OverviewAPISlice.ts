@@ -6,7 +6,6 @@ import { apiRoute } from "@/routes/routes";
 
 export const overviewApiSlice = createApi({
 	reducerPath: "overviewApiReducer",
-	keepUnusedDataFor: 60, // Cache for 60 seconds
 	baseQuery: baseQueryWithCSRF,
 	tagTypes: ["Overview"],
 	endpoints: builder => ({

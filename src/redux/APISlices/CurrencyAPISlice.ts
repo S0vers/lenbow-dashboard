@@ -13,7 +13,6 @@ export interface Currency {
 
 export const currencyApiSlice = createApi({
 	reducerPath: "currencyApiReducer",
-	keepUnusedDataFor: 0,
 	baseQuery: baseQueryWithCSRF,
 	tagTypes: ["Currency"],
 	endpoints: builder => ({

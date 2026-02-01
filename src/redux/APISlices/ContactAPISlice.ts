@@ -15,7 +15,6 @@ export interface ConnectedContact {
 
 export const contactApiSlice = createApi({
 	reducerPath: "contactApiReducer",
-	keepUnusedDataFor: 0,
 	baseQuery: baseQueryWithCSRF,
 	tagTypes: ["Contact"],
 	endpoints: builder => ({

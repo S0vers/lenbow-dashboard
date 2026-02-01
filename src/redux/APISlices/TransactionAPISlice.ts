@@ -11,9 +11,8 @@ import {
 
 export const transactionApiSlice = createApi({
 	reducerPath: "transactionApiReducer",
-	keepUnusedDataFor: 0,
 	baseQuery: baseQueryWithCSRF,
-	tagTypes: ["Transaction", "TransactionContacts", "TransactionContact"],
+	tagTypes: ["Transaction"],
 	endpoints: builder => ({
 		transactionRequestsList: builder.query<
 			ApiResponse<TransactionInterface[]>,

@@ -141,7 +141,9 @@ export default function ChartsSection({ chartData, isLoading }: ChartsSectionPro
 										border: "1px solid hsl(var(--border))",
 										borderRadius: "6px"
 									}}
-									formatter={(value: number) => `$${value.toFixed(2)}`}
+									formatter={(value: number | undefined) =>
+										value ? `$${value.toFixed(2)}` : "$0.00"
+									}
 								/>
 								<Legend />
 								<Bar dataKey="borrowed" fill="#ef4444" name="Borrowed" radius={[4, 4, 0, 0]} />
@@ -168,7 +170,9 @@ export default function ChartsSection({ chartData, isLoading }: ChartsSectionPro
 										cx="50%"
 										cy="50%"
 										labelLine={false}
-										label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+										label={({ name, percent }) =>
+											`${name}: ${percent ? (percent * 100).toFixed(0) : 0}%`
+										}
 										outerRadius={80}
 										fill="#8884d8"
 										dataKey="value"
@@ -204,7 +208,9 @@ export default function ChartsSection({ chartData, isLoading }: ChartsSectionPro
 										cx="50%"
 										cy="50%"
 										labelLine={false}
-										label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+										label={({ name, percent }) =>
+											`${name}: ${percent ? (percent * 100).toFixed(0) : 0}%`
+										}
 										outerRadius={80}
 										fill="#8884d8"
 										dataKey="value"
