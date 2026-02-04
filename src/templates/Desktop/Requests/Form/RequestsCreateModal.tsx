@@ -328,7 +328,7 @@ export default function RequestsCreateModal({
 							</div>
 						</ResponsiveDialogDescription>
 					</ResponsiveDialogHeader>
-					<ResponsiveDialogFooter className="bg-transparent px-8 pb-8 sm:justify-end">
+					<ResponsiveDialogFooter className="m-0 bg-transparent px-6 sm:justify-end">
 						<ResponsiveDialogClose asChild>
 							<Button type="button" variant="outline" disabled={isLoading}>
 								<ChevronLeftIcon />
