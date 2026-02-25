@@ -32,11 +32,17 @@ export default function OverviewTemplate() {
 		return (
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex min-h-100 flex-col items-center justify-center text-center">
+					<div className="bg-destructive/10 ring-destructive/20 mb-6 flex h-16 w-16 items-center justify-center rounded-full ring-2">
+						<span className="text-destructive text-2xl font-bold">!</span>
+					</div>
 					<h2 className="mb-2 text-2xl font-bold">Unable to Load Dashboard</h2>
-					<p className="text-muted-foreground mb-4">
+					<p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
 						{(error as any)?.data?.message || "Something went wrong. Please try again later."}
 					</p>
-					<Link href={route.private.dashboard} className="text-primary hover:underline">
+					<Link
+						href={route.private.dashboard}
+						className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-lg px-5 py-2.5 text-sm font-medium transition-colors duration-200"
+					>
 						Refresh Page
 					</Link>
 				</div>
@@ -52,11 +58,13 @@ export default function OverviewTemplate() {
 	return (
 		<div className="container mx-auto space-y-8">
 			{/* Header */}
-			<div>
-				<h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-				<p className="text-muted-foreground mt-1">
-					Welcome back! Here&apos;s an overview of your loan activities.
-				</p>
+			<div className="flex items-start justify-between">
+				<div>
+					<h1 className="gradient-text text-3xl font-bold tracking-tight">Dashboard</h1>
+					<p className="text-muted-foreground mt-1">
+						Welcome back! Here&apos;s an overview of your loan activities.
+					</p>
+				</div>
 			</div>
 
 			{/* Metrics Cards */}

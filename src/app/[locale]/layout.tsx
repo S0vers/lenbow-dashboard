@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Poppins } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -14,10 +14,10 @@ import { ThemeProvider } from "@/providers/NextThemesProvider";
 import { RedirectProvider } from "@/providers/RedirectProvider";
 import ReduxProvider from "@/providers/ReduxProvider";
 
-const poppins = Poppins({
+const plusJakartaSans = Plus_Jakarta_Sans({
 	subsets: ["latin"],
-	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-	variable: "--font-poppins"
+	weight: ["300", "400", "500", "600", "700", "800"],
+	variable: "--font-sans"
 });
 
 export const metadata: Metadata = {
@@ -41,7 +41,11 @@ export default async function RootLayout({
 	setRequestLocale(locale);
 
 	return (
-		<html lang="en" className={poppins.className} suppressHydrationWarning>
+		<html
+			lang={locale}
+			className={`${plusJakartaSans.variable} ${plusJakartaSans.className}`}
+			suppressHydrationWarning
+		>
 			<body className="antialiased" suppressHydrationWarning>
 				<Suspense fallback={<Loader />}>
 					<ReduxProvider>

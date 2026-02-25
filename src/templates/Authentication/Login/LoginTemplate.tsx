@@ -1,7 +1,8 @@
 "use client";
 
+import { Rocket, Sparkles } from "lucide-react";
 import { useState, useTransition } from "react";
-import { FaGoogle, FaHandHoldingDollar, FaRocket } from "react-icons/fa6";
+import { FaGoogle, FaHandHoldingDollar } from "react-icons/fa6";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -84,7 +85,10 @@ export default function LoginTemplate() {
 				{/* Demo Mode Notice */}
 				{isDemoMode && (
 					<div className="bg-primary/10 border-primary/20 text-primary mb-4 rounded-2xl border p-4 text-center backdrop-blur-sm">
-						<p className="text-sm font-medium">🎭 Demo Mode Active</p>
+						<p className="flex items-center justify-center gap-2 text-sm font-medium">
+							<Sparkles className="h-4 w-4" />
+							Demo Mode Active
+						</p>
 						<p className="text-muted-foreground mt-1 text-xs">
 							Want the real application?{" "}
 							<Link
@@ -100,7 +104,7 @@ export default function LoginTemplate() {
 				)}
 
 				{/* Card */}
-				<div className="border-border/50 bg-background/80 hover:border-border space-y-8 rounded-3xl border p-10 shadow-2xl shadow-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl hover:shadow-black/10">
+				<div className="border-border/50 bg-background/85 hover:border-border/80 space-y-8 rounded-3xl border p-10 shadow-2xl shadow-black/8 backdrop-blur-xl transition-all duration-300 hover:shadow-2xl hover:shadow-black/12 dark:shadow-black/30">
 					{/* Header */}
 					<div className="flex flex-col items-center space-y-3 text-center">
 						<div className="mb-4 flex items-center gap-3">
@@ -161,7 +165,7 @@ export default function LoginTemplate() {
 										className="hover:bg-primary/5 hover:border-primary/30 group h-11 w-full gap-2 font-semibold transition-all duration-200"
 										onClick={handleTryDemo}
 									>
-										<FaRocket className="group-hover:text-primary h-4 w-4 transition-colors" />
+										<Rocket className="group-hover:text-primary h-4 w-4 transition-colors" />
 										Try with Random Demo User
 									</Button>
 								</div>

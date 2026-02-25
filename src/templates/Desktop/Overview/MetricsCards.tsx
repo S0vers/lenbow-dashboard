@@ -31,13 +31,20 @@ function MetricCard({ title, value, icon, description, variant = "default" }: Me
 	};
 
 	return (
-		<Card>
+		<Card className="metric-card-hover group cursor-default overflow-hidden">
 			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-				<CardTitle className="text-sm font-medium">{title}</CardTitle>
-				<div className={cn("rounded-lg p-2", variantStyles[variant])}>{icon}</div>
+				<CardTitle className="text-muted-foreground text-sm font-medium">{title}</CardTitle>
+				<div
+					className={cn(
+						"rounded-lg p-2 transition-transform duration-200 group-hover:scale-110",
+						variantStyles[variant]
+					)}
+				>
+					{icon}
+				</div>
 			</CardHeader>
 			<CardContent>
-				<div className="text-2xl font-bold">{value}</div>
+				<div className="text-2xl font-bold tracking-tight">{value}</div>
 				{description && <p className="text-muted-foreground mt-1 text-xs">{description}</p>}
 			</CardContent>
 		</Card>

@@ -11,19 +11,19 @@ export default function EmptyState() {
 		<div className="container mx-auto max-w-4xl px-4 py-8">
 			<Card className="border-2 border-dashed">
 				<CardHeader className="pb-4 text-center">
-					<div className="bg-primary/10 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+					<div className="from-primary/20 to-primary/5 ring-primary/20 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br ring-2">
 						<HandCoins className="text-primary h-8 w-8" />
 					</div>
-					<CardTitle className="text-2xl">Welcome to Your Dashboard!</CardTitle>
+					<CardTitle className="gradient-text text-2xl">Welcome to Your Dashboard!</CardTitle>
 					<CardDescription className="text-base">
 						Start lending or borrowing to see your activity and insights here.
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-6">
 					<div className="grid gap-4 md:grid-cols-3">
-						<Card>
+						<Card className="metric-card-hover group cursor-default">
 							<CardHeader className="pb-4">
-								<div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+								<div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/15 transition-transform duration-200 group-hover:scale-110">
 									<Users className="h-5 w-5 text-blue-600" />
 								</div>
 								<CardTitle className="text-base">Connect People</CardTitle>
@@ -41,9 +41,9 @@ export default function EmptyState() {
 							</CardContent>
 						</Card>
 
-						<Card>
+						<Card className="metric-card-hover group cursor-default">
 							<CardHeader className="pb-4">
-								<div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+								<div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/15 transition-transform duration-200 group-hover:scale-110">
 									<TrendingUp className="h-5 w-5 text-emerald-600" />
 								</div>
 								<CardTitle className="text-base">Lend Money</CardTitle>
@@ -61,9 +61,9 @@ export default function EmptyState() {
 							</CardContent>
 						</Card>
 
-						<Card>
+						<Card className="metric-card-hover group cursor-default">
 							<CardHeader className="pb-4">
-								<div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10">
+								<div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/15 transition-transform duration-200 group-hover:scale-110">
 									<HandCoins className="h-5 w-5 text-purple-600" />
 								</div>
 								<CardTitle className="text-base">Borrow Money</CardTitle>

@@ -26,9 +26,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
-							<Link href={route.private.dashboard} className="flex items-center gap-2">
-								<FaHandHoldingDollar className="size-5!" />
-								<span className="text-base font-semibold">Lenbow</span>
+							<Link href={route.private.dashboard} className="flex items-center gap-2.5">
+								<div className="from-primary/20 to-primary/5 ring-primary/30 flex size-7 items-center justify-center rounded-lg bg-linear-to-br ring-1">
+									<FaHandHoldingDollar className="text-primary size-4!" />
+								</div>
+								<span className="text-base font-bold tracking-tight">Lenbow</span>
 							</Link>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
