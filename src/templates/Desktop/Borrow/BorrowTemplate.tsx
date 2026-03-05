@@ -2,10 +2,19 @@
 
 import { Suspense } from "react";
 
-import Loader from "@/components/ui/loader";
+import dynamic from "next/dynamic";
 
-import BorrowTable from "@/templates/Desktop/Borrow/Table/BorrowTable";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+
 import BorrowProvider from "@/templates/Desktop/Borrow/Table/Provider/BorrowProvider";
+
+const BorrowTable = dynamic(
+	() => import("@/templates/Desktop/Borrow/Table/BorrowTable"),
+	{
+		ssr: false,
+		loading: () => <TableSkeleton />
+	}
+);
 
 export default function BorrowTemplate() {
 	return (
@@ -18,7 +27,7 @@ export default function BorrowTemplate() {
 					<p className="text-muted-foreground">Manage and track all your borrow in one place.</p>
 				</div>
 			</div>
-			<Suspense fallback={<Loader />}>
+			<Suspense fallback={<TableSkeleton />}>
 				<BorrowProvider>
 					<BorrowTable />
 				</BorrowProvider>

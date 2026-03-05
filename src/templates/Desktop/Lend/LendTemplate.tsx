@@ -2,10 +2,16 @@
 
 import { Suspense } from "react";
 
-import Loader from "@/components/ui/loader";
+import dynamic from "next/dynamic";
 
-import LendTable from "@/templates/Desktop/Lend/Table/LendTable";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+
 import LendProvider from "@/templates/Desktop/Lend/Table/Provider/LendProvider";
+
+const LendTable = dynamic(() => import("@/templates/Desktop/Lend/Table/LendTable"), {
+	ssr: false,
+	loading: () => <TableSkeleton />
+});
 
 export default function LendTemplate() {
 	return (
@@ -16,7 +22,7 @@ export default function LendTemplate() {
 					<p className="text-muted-foreground">Manage and track all your lend in one place.</p>
 				</div>
 			</div>
-			<Suspense fallback={<Loader />}>
+			<Suspense fallback={<TableSkeleton />}>
 				<LendProvider>
 					<LendTable />
 				</LendProvider>

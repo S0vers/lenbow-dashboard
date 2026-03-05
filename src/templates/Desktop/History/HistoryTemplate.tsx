@@ -2,10 +2,19 @@
 
 import { Suspense } from "react";
 
-import Loader from "@/components/ui/loader";
+import dynamic from "next/dynamic";
 
-import HistoryTable from "@/templates/Desktop/History/Table/HistoryTable";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+
 import HistoryProvider from "@/templates/Desktop/History/Table/Provider/HistoryProvider";
+
+const HistoryTable = dynamic(
+	() => import("@/templates/Desktop/History/Table/HistoryTable"),
+	{
+		ssr: false,
+		loading: () => <TableSkeleton />
+	}
+);
 
 export default function HistoryTemplate() {
 	return (
@@ -18,7 +27,7 @@ export default function HistoryTemplate() {
 					</p>
 				</div>
 			</div>
-			<Suspense fallback={<Loader />}>
+			<Suspense fallback={<TableSkeleton />}>
 				<HistoryProvider>
 					<HistoryTable />
 				</HistoryProvider>

@@ -3,9 +3,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
-import Loader from "@/components/ui/loader";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
@@ -47,18 +45,16 @@ export default async function RootLayout({
 			suppressHydrationWarning
 		>
 			<body className="antialiased" suppressHydrationWarning>
-				<Suspense fallback={<Loader />}>
-					<ReduxProvider>
-						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-							<RedirectProvider>
-								<NextIntlClientProvider>
-									{children}
-									<Toaster position="top-right" richColors closeButton />
-								</NextIntlClientProvider>
-							</RedirectProvider>
-						</ThemeProvider>
-					</ReduxProvider>
-				</Suspense>
+				<ReduxProvider>
+					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+						<RedirectProvider>
+							<NextIntlClientProvider>
+								{children}
+								<Toaster position="top-right" richColors closeButton />
+							</NextIntlClientProvider>
+						</RedirectProvider>
+					</ThemeProvider>
+				</ReduxProvider>
 			</body>
 		</html>
 	);

@@ -4,12 +4,25 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
+import dynamic from "next/dynamic";
+
 import Loader from "@/components/ui/loader";
 
 import { useLend } from "@/templates/Mobile/Lend/Hook/useLend";
 import LendCard from "@/templates/Mobile/Lend/List/Components/LendCard";
 import { MobileToolbar } from "@/templates/Mobile/Lend/List/Components/MobileToolbar";
-import { TransactionDetailsDrawer } from "@/templates/Mobile/Lend/List/Components/TransactionDetailsDrawer";
+
+const TransactionDetailsDrawer = dynamic(
+	() =>
+		import("@/templates/Mobile/Lend/List/Components/TransactionDetailsDrawer").then(
+			module => ({
+				default: module.TransactionDetailsDrawer
+			})
+		),
+	{
+		ssr: false
+	}
+);
 
 export default function LendList() {
 	const { tableData, isLoading, loadMore, hasMore, isFetching } = useLend();

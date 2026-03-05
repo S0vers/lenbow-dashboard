@@ -2,10 +2,19 @@
 
 import { Suspense } from "react";
 
-import Loader from "@/components/ui/loader";
+import dynamic from "next/dynamic";
 
-import PeopleTable from "@/templates/Desktop/People/Table/PeopleTable";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+
 import PeopleProvider from "@/templates/Desktop/People/Table/Provider/PeopleProvider";
+
+const PeopleTable = dynamic(
+	() => import("@/templates/Desktop/People/Table/PeopleTable"),
+	{
+		ssr: false,
+		loading: () => <TableSkeleton />
+	}
+);
 
 export default function PeopleTemplate() {
 	return (
@@ -16,7 +25,7 @@ export default function PeopleTemplate() {
 					<p className="text-muted-foreground">Manage your connected people here.</p>
 				</div>
 			</div>
-			<Suspense fallback={<Loader />}>
+			<Suspense fallback={<TableSkeleton />}>
 				<PeopleProvider>
 					<PeopleTable />
 				</PeopleProvider>

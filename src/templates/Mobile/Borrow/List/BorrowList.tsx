@@ -4,12 +4,25 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
+import dynamic from "next/dynamic";
+
 import Loader from "@/components/ui/loader";
 
 import { useBorrow } from "@/templates/Mobile/Borrow/Hook/useBorrow";
 import BorrowCard from "@/templates/Mobile/Borrow/List/Components/BorrowCard";
 import { MobileToolbar } from "@/templates/Mobile/Borrow/List/Components/MobileToolbar";
-import { TransactionDetailsDrawer } from "@/templates/Mobile/Borrow/List/Components/TransactionDetailsDrawer";
+
+const TransactionDetailsDrawer = dynamic(
+	() =>
+		import("@/templates/Mobile/Borrow/List/Components/TransactionDetailsDrawer").then(
+			module => ({
+				default: module.TransactionDetailsDrawer
+			})
+		),
+	{
+		ssr: false
+	}
+);
 
 export default function BorrowList() {
 	const { tableData, isLoading, loadMore, hasMore, isFetching } = useBorrow();

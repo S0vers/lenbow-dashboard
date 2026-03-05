@@ -1,9 +1,14 @@
 import { headers } from "next/headers";
+import { cache } from "react";
 
-export async function getDeviceType(): Promise<"mobile" | "desktop"> {
+const getDeviceTypeCached = cache(async (): Promise<"mobile" | "desktop"> => {
 	const headersList = await headers();
 	const deviceType = headersList.get("x-device-type");
 	return deviceType === "mobile" ? "mobile" : "desktop";
+});
+
+export async function getDeviceType(): Promise<"mobile" | "desktop"> {
+	return getDeviceTypeCached();
 }
 
 export async function isMobile(): Promise<boolean> {

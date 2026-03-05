@@ -2,10 +2,19 @@
 
 import { Suspense } from "react";
 
-import Loader from "@/components/ui/loader";
+import dynamic from "next/dynamic";
+
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 
 import RequestsProvider from "@/templates/Desktop/Requests/Table/Provider/RequestsProvider";
-import RequestsTable from "@/templates/Desktop/Requests/Table/RequestsTable";
+
+const RequestsTable = dynamic(
+	() => import("@/templates/Desktop/Requests/Table/RequestsTable"),
+	{
+		ssr: false,
+		loading: () => <TableSkeleton />
+	}
+);
 
 export default function RequestsTemplate() {
 	return (
@@ -16,7 +25,7 @@ export default function RequestsTemplate() {
 					<p className="text-muted-foreground">Manage and track all your requests in one place.</p>
 				</div>
 			</div>
-			<Suspense fallback={<Loader />}>
+			<Suspense fallback={<TableSkeleton />}>
 				<RequestsProvider>
 					<RequestsTable />
 				</RequestsProvider>

@@ -1,0 +1,38 @@
+---
+description: Project structure and folder conventions for lenbow-dashboard
+alwaysApply: true
+---
+
+# lenbow-dashboard structure & conventions
+
+- **Entry & routing**
+  - Next.js app router lives in `src/app/[locale]/**`.
+  - Use route groups:
+    - `(authentication)` for auth flows.
+    - `(private)` for authenticated dashboard pages.
+  - Use `@desktop` and `@mobile` segments for responsive layouts instead of branching heavily in a single component.
+
+- **Templates vs pages**
+  - Keep route `page.tsx` files thin; they should mostly import the corresponding template from `src/templates/**`.
+  - `src/templates/Desktop/**` and `src/templates/Mobile/**` hold page-level UI and data fetching per viewport and domain (Overview, Requests, Borrow, Lend, History, People, Settings, etc.).
+  - When adding a new feature, add or extend a template rather than bloating `page.tsx`.
+
+- **Components**
+  - `src/components/ui/**` contains low-level, reusable UI primitives (largely shadcn-based). Do not put business logic or data fetching here.
+  - `src/components/custom-ui/**` contains composed UI built from primitives (e.g. extended buttons, modals, badges).
+  - `src/components/table/**` contains reusable table patterns built on `@tanstack/react-table`.
+  - `src/components/helpers/**` contains generic helper components (e.g. not-found, loading, brand mark).
+
+- **State & data**
+  - `src/redux/**` contains the Redux store, hooks, RTK Query API slices, and shared types.
+  - Prefer RTK Query API slices under `src/redux/APISlices` for network calls instead of calling `fetch` directly inside components.
+
+- **Shared utilities & infrastructure**
+  - `src/lib/**` holds generic utilities like `cn`, device detection, and RTK base query helpers.
+  - `src/providers/**` defines React context and providers (Redux, theme, auth, routing, breadcrumbs) that are wired up in the root layout.
+  - `src/i18n/**` and `src/routes/**` centralize routing and locale-aware navigation; prefer `@/routes/routes` and `@/i18n/*` helpers over hard-coded paths or locales.
+  - `src/validators/**` holds Zod schemas and validation logic; reuse these across forms and API payloads instead of duplicating rules.
+
+- **Import style**
+  - Use the `@/` path alias for internal imports (e.g. `@/components/ui/card`, `@/templates/Desktop/Overview/OverviewTemplate`) instead of long relative paths.
+

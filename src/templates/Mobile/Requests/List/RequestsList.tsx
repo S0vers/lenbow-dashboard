@@ -4,12 +4,23 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
+import dynamic from "next/dynamic";
+
 import Loader from "@/components/ui/loader";
 
 import { MobileToolbar } from "./Components/MobileToolbar";
 import RequestCard from "./Components/RequestCard";
-import { TransactionDetailsDrawer } from "./Components/TransactionDetailsDrawer";
 import { useRequests } from "@/templates/Mobile/Requests/Hook/useRequests";
+
+const TransactionDetailsDrawer = dynamic(
+	() =>
+		import("./Components/TransactionDetailsDrawer").then(module => ({
+			default: module.TransactionDetailsDrawer
+		})),
+	{
+		ssr: false
+	}
+);
 
 export default function RequestsList() {
 	const { tableData, isLoading, loadMore, hasMore, isFetching } = useRequests();
