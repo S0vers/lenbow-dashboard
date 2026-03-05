@@ -31,6 +31,14 @@ export const apiRoute = {
 	changePassword: "/auth/change-password",
 	toggle2FA: "/auth/2fa",
 	deleteAccount: "/auth/account",
+	mfa: {
+		status: "/mfa/status",
+		setup: "/mfa/setup",
+		setupVerify: "/mfa/setup/verify",
+		verify: "/mfa/verify",
+		disable: "/mfa/disable",
+		backupCodes: "/mfa/backup-codes"
+	},
 	currency: "/currency",
 	transactions: "/transactions",
 	transaction: (transactionId: string) => `/transactions/${transactionId}`,

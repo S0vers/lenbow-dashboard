@@ -4,13 +4,21 @@ import { baseQueryWithCSRF } from "@/lib/rtk-base-query";
 
 import { apiRoute } from "@/routes/routes";
 
+export type LoginCredentials = {
+	email: string;
+	password: string;
+	mfaToken?: string;
+};
+
+export type LoginResponseData = User | { requiresMfa: true; userId: number };
+
 export const authenticationApiSlice = createApi({
 	reducerPath: "authenticationApiReducer",
 	keepUnusedDataFor: 0,
 	baseQuery: baseQueryWithCSRF,
 	tagTypes: ["User", "Me"],
 	endpoints: builder => ({
-		login: builder.mutation<ApiResponse<User>, { email: string; password: string }>({
+		login: builder.mutation<ApiResponse<LoginResponseData>, LoginCredentials>({
 			query: credentials => ({
 				url: apiRoute.login,
 				method: "POST",
@@ -67,6 +75,47 @@ export const authenticationApiSlice = createApi({
 				url: apiRoute.unsubscribe(token),
 				method: "GET"
 			})
+		}),
+
+		mfaStatus: builder.query<
+			ApiResponse<{ enabled: boolean; setupComplete: boolean; backupCodesRemaining: number }>,
+			void
+		>({
+			query: () => apiRoute.mfa.status,
+			providesTags: ["Me"]
+		}),
+		mfaSetup: builder.mutation<
+			ApiResponse<{ secret: string; uri: string; backupCodes: string[] }>,
+			void
+		>({
+			query: () => ({
+				url: apiRoute.mfa.setup,
+				method: "POST"
+			}),
+			invalidatesTags: ["Me"]
+		}),
+		mfaSetupVerify: builder.mutation<ApiResponse<null>, { token: string }>({
+			query: body => ({
+				url: apiRoute.mfa.setupVerify,
+				method: "POST",
+				body
+			}),
+			invalidatesTags: ["Me"]
+		}),
+		mfaDisable: builder.mutation<ApiResponse<null>, { password: string }>({
+			query: body => ({
+				url: apiRoute.mfa.disable,
+				method: "POST",
+				body
+			}),
+			invalidatesTags: ["Me"]
+		}),
+		mfaBackupCodes: builder.mutation<ApiResponse<{ backupCodes: string[] }>, void>({
+			query: () => ({
+				url: apiRoute.mfa.backupCodes,
+				method: "POST"
+			}),
+			invalidatesTags: ["Me"]
 		})
 	})
 });
@@ -79,7 +128,12 @@ export const {
 	useUpdateProfileMutation,
 	useUpdateProfileImageMutation,
 	useUpdateEmailPreferencesMutation,
-	useUnsubscribeMutation
+	useUnsubscribeMutation,
+	useMfaStatusQuery,
+	useMfaSetupMutation,
+	useMfaSetupVerifyMutation,
+	useMfaDisableMutation,
+	useMfaBackupCodesMutation
 } = authenticationApiSlice;
 
 export const authenticationApiReducer = authenticationApiSlice.reducer;

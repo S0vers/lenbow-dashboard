@@ -32,6 +32,8 @@ export default function LoginTemplate() {
 	const [isPending, startTransition] = useTransition();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [mfaToken, setMfaToken] = useState("");
+	const [mfaUserId, setMfaUserId] = useState<number | null>(null);
 	const { redirectUrl } = useRedirect();
 
 	const router = useRouter();
@@ -52,14 +54,26 @@ export default function LoginTemplate() {
 		e.preventDefault();
 
 		try {
-			const response = await login({ email, password }).unwrap();
-			toast.success(response.message || "Login successful!");
+			const response = await login({ email, password, mfaToken: mfaToken || undefined }).unwrap();
+			const data = response.data;
 
-			// Redirect after successful login
+			if (data && "requiresMfa" in data && data.requiresMfa) {
+				setMfaUserId(data.userId);
+				toast.info("Enter your 2FA code to continue.");
+				return;
+			}
+
+			toast.success(response.message || "Login successful!");
 			router.push(redirectUrl || route.private.dashboard);
-		} catch (error: any) {
-			toast.error(error?.data?.message || "Login failed. Please check your credentials.");
+		} catch (error: unknown) {
+			const err = error as { data?: { message?: string } };
+			toast.error(err?.data?.message || "Login failed. Please check your credentials.");
 		}
+	};
+
+	const handleBackFromMfa = () => {
+		setMfaUserId(null);
+		setMfaToken("");
 	};
 
 	const handleTryDemo = () => {
@@ -119,7 +133,48 @@ export default function LoginTemplate() {
 						</p>
 					</div>
 
-					{isDemoMode ? (
+					{mfaUserId !== null ? (
+						<form onSubmit={handleLogin} className="space-y-4">
+							<p className="text-muted-foreground text-center text-sm">
+								Enter the 6-digit code from your authenticator app, or a backup code.
+							</p>
+							<div className="space-y-2">
+								<Label htmlFor="mfa-code">Verification code</Label>
+								<Input
+									id="mfa-code"
+									type="text"
+									inputMode="numeric"
+									autoComplete="one-time-code"
+									placeholder="000000 or XXXXX-XXXX"
+									value={mfaToken}
+									onChange={e => setMfaToken(e.target.value.replace(/\s/g, ""))}
+									className="h-11 font-mono text-center tracking-widest"
+									maxLength={9}
+								/>
+							</div>
+							<div className="flex gap-2">
+								<Button
+									type="button"
+									variant="outline"
+									className="h-11 flex-1"
+									onClick={handleBackFromMfa}
+									disabled={isLoggingIn}
+								>
+									Back
+								</Button>
+								<LoadingButton
+									type="submit"
+									className="h-11 flex-1 font-semibold"
+									size="lg"
+									isLoading={isLoggingIn}
+									loadingText="Verifying..."
+									disabled={!mfaToken.trim()}
+								>
+									Verify
+								</LoadingButton>
+							</div>
+						</form>
+					) : isDemoMode ? (
 						<>
 							{/* Demo Login Form */}
 							<form onSubmit={handleLogin} className="space-y-4">

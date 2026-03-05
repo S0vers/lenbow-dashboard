@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DollarSign, Mail, Shield, Trash2 } from "lucide-react";
+import { DollarSign, Mail, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -42,6 +42,7 @@ import {
 	CurrencyUpdateSchema,
 	currencyUpdateSchema
 } from "@/templates/Authentication/Profile/Validation/Profile.schema";
+import MfaSettings from "./MfaSettings";
 
 interface SecuritySettingsProps {
 	user: User;
@@ -165,21 +166,8 @@ export default function SecuritySettings({ user, onDeleteAccount }: SecuritySett
 					/>
 				</div>
 
-				{/* 2FA Toggle */}
-				<div className="border-border flex items-center justify-between border-b py-4">
-					<div className="flex items-center gap-3">
-						<Shield className="text-muted-foreground h-5 w-5" />
-						<div>
-							<p className="text-foreground font-medium">
-								Two-Factor Authentication (Currently Under Development)
-							</p>
-							<p className="text-muted-foreground text-sm">
-								{user.is2faEnabled ? "Enabled" : "Disabled"}
-							</p>
-						</div>
-					</div>
-					<Switch disabled />
-				</div>
+				{/* Two-Factor Authentication */}
+				<MfaSettings />
 
 				{/* Delete Account */}
 				<div className="flex items-center justify-between py-4">
