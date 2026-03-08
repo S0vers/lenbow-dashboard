@@ -83,7 +83,7 @@ export default function BudgetTemplate() {
 				onOpenChange={setCreateSubscriptionOpen}
 			/>
 
-			<div className="rounded-lg border">
+			<div className="overflow-hidden rounded-xl border border-border shadow-sm">
 				{isLoading ? (
 					<div className="p-4 space-y-3">
 						<Skeleton className="h-10 w-full" />

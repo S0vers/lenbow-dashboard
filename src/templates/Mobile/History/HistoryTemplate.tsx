@@ -11,7 +11,7 @@ export default function HistoryTemplate() {
 	return (
 		<div className="flex h-full flex-1 flex-col gap-4 overflow-x-hidden p-4">
 			<div className="flex flex-col gap-1">
-				<h2 className="text-xl font-semibold tracking-tight">Transaction History</h2>
+				<h2 className="gradient-text text-xl font-semibold tracking-tight">Transaction History</h2>
 				<p className="text-muted-foreground text-sm">
 					Review your past transactions and monitor your account activity.
 				</p>

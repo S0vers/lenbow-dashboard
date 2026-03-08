@@ -1,14 +1,18 @@
-import { ArrowRight, HandCoins, TrendingUp, Users } from "lucide-react";
+import { ArrowRight, FileText, HandCoins, Plus, TrendingUp, Users } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Link } from "@/i18n/navigation";
 import { route } from "@/routes/routes";
 
-export default function EmptyStateMobile() {
+interface EmptyStateMobileProps {
+	onAddTransaction?: () => void;
+}
+
+export default function EmptyStateMobile({ onAddTransaction }: EmptyStateMobileProps) {
 	return (
 		<div className="space-y-4 px-4 py-6">
-			<Card className="border-2 border-dashed">
+			<Card className="rounded-2xl border-2 border-dashed border-border">
 				<CardHeader className="pb-4 text-center">
 					<div className="bg-primary/10 mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full">
 						<HandCoins className="text-primary h-7 w-7" />
@@ -17,6 +21,25 @@ export default function EmptyStateMobile() {
 					<CardDescription className="text-xs">
 						Start lending or borrowing to see your dashboard
 					</CardDescription>
+					<div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+						{onAddTransaction && (
+							<button
+								type="button"
+								onClick={onAddTransaction}
+								className="bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+							>
+								<Plus className="mr-2 h-4 w-4" />
+								Add transaction
+							</button>
+						)}
+						<Link
+							href={route.private.requests}
+							className="inline-flex min-h-[44px] items-center rounded-full border border-border bg-background px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-muted"
+						>
+							<FileText className="mr-2 h-4 w-4" />
+							New request
+						</Link>
+					</div>
 				</CardHeader>
 				<CardContent className="space-y-3">
 					<Link href={route.private.people}>

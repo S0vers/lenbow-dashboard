@@ -1,16 +1,22 @@
 "use client";
 
+import { useState } from "react";
+
 import ActionRequiredSection from "./ActionRequiredSection";
 import BudgetSnapshotSection from "./BudgetSnapshotSection";
 import EmptyState from "./EmptyState";
 import MetricsCards from "./MetricsCards";
+import QuickActions from "./QuickActions";
 import RecentTransactionsSection from "./RecentTransactionsSection";
 import UpcomingDueDatesSection from "./UpcomingDueDatesSection";
+import CreateBudgetTransactionModal from "@/templates/Desktop/Budget/Forms/CreateBudgetTransactionModal";
 import { Link } from "@/i18n/navigation";
 import { useGetOverviewQuery } from "@/redux/APISlices/OverviewAPISlice";
 import { route } from "@/routes/routes";
 
 export default function OverviewTemplate() {
+	const [createBudgetModalOpen, setCreateBudgetModalOpen] = useState(false);
+
 	const { data, isLoading, isError, error } = useGetOverviewQuery({
 		recentLimit: 10,
 		upcomingLimit: 10,
@@ -57,19 +63,36 @@ export default function OverviewTemplate() {
 
 	// Show empty state for new users
 	if (!isLoading && !hasData) {
-		return <EmptyState />;
+		return (
+			<>
+				<CreateBudgetTransactionModal
+					open={createBudgetModalOpen}
+					onOpenChange={setCreateBudgetModalOpen}
+				/>
+				<EmptyState onAddTransaction={() => setCreateBudgetModalOpen(true)} />
+			</>
+		);
 	}
 
 	return (
 		<div className="container mx-auto space-y-8">
-			{/* Header */}
-			<div className="flex items-start justify-between">
+			<CreateBudgetTransactionModal
+				open={createBudgetModalOpen}
+				onOpenChange={setCreateBudgetModalOpen}
+			/>
+
+			{/* Header + Quick actions */}
+			<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 				<div>
 					<h1 className="gradient-text text-3xl font-bold tracking-tight">Dashboard</h1>
 					<p className="text-muted-foreground mt-1">
 						Welcome back! Here&apos;s an overview of your loan activities.
 					</p>
 				</div>
+				<QuickActions
+					onAddTransaction={() => setCreateBudgetModalOpen(true)}
+					className="flex shrink-0 flex-wrap gap-2"
+				/>
 			</div>
 
 			{/* Metrics Cards */}
@@ -109,6 +132,7 @@ export default function OverviewTemplate() {
 				budgetSummary={overviewData?.budgetSummary ?? null}
 				recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
 				isLoading={isLoading}
+				onAddTransaction={() => setCreateBudgetModalOpen(true)}
 			/>
 		</div>
 	);

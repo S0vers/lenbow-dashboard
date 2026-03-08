@@ -72,7 +72,7 @@ function ActionItem({
 		<Link href={redirectLink(transactionStatusType, action.status, action.transactionId)}>
 			<div
 				className={cn(
-					"hover:bg-muted/60 flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-all duration-200 hover:shadow-sm",
+					"hover:bg-muted/60 flex cursor-pointer items-start gap-4 rounded-xl border border-border p-4 transition-all duration-200 shadow-sm hover:shadow-md",
 					action.type === "overdue_loan" &&
 						"border-destructive/50 bg-destructive/5 hover:bg-destructive/10"
 				)}

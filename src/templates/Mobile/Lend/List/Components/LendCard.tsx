@@ -45,7 +45,7 @@ export default function LendCard({ data }: LendCardProps) {
 			exit={{ opacity: 0, y: -10 }}
 			transition={{ duration: 0.2 }}
 		>
-			<Card className="border-border/60 bg-card/50 cursor-pointer shadow-sm backdrop-blur-sm transition-all hover:shadow-md active:scale-[0.98]">
+			<Card className="cursor-pointer border border-border bg-card shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md active:scale-[0.98]">
 				<div onClick={() => setActiveTransaction(data)}>
 					<CardHeader className="flex flex-row items-center gap-4 pb-3">
 						<Avatar className="border-background h-12 w-12 border-2 shadow-sm">

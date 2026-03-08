@@ -14,12 +14,14 @@ interface BudgetSnapshotMobileProps {
 	budgetSummary: BudgetSummary | null;
 	recentBudgetTransactions: RecentBudgetTransaction[];
 	isLoading?: boolean;
+	onAddTransaction?: () => void;
 }
 
 export default function BudgetSnapshotMobile({
 	budgetSummary,
 	recentBudgetTransactions,
-	isLoading
+	isLoading,
+	onAddTransaction
 }: BudgetSnapshotMobileProps) {
 	if (isLoading) {
 		return (
@@ -45,7 +47,16 @@ export default function BudgetSnapshotMobile({
 						Budget
 					</CardTitle>
 				</CardHeader>
-				<CardContent>
+				<CardContent className="flex flex-wrap items-center gap-3">
+					{onAddTransaction && (
+						<button
+							type="button"
+							onClick={onAddTransaction}
+							className="bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+						>
+							Add transaction
+						</button>
+					)}
 					<Link
 						href={route.private.budget}
 						className="text-primary hover:underline text-sm font-medium"
@@ -59,11 +70,22 @@ export default function BudgetSnapshotMobile({
 
 	return (
 		<div className="space-y-3">
-			<div className="flex items-center justify-between">
+			<div className="flex flex-wrap items-center justify-between gap-2">
 				<h3 className="font-semibold text-sm">Budget this month</h3>
-				<Link href={route.private.budget} className="text-primary text-xs hover:underline">
-					View all
-				</Link>
+				<div className="flex items-center gap-2">
+					{onAddTransaction && (
+						<button
+							type="button"
+							onClick={onAddTransaction}
+							className="bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+						>
+							Add transaction
+						</button>
+					)}
+					<Link href={route.private.budget} className="text-primary text-xs hover:underline">
+						View all
+					</Link>
+				</div>
 			</div>
 			{budgetSummary != null && (
 				<div className="grid grid-cols-3 gap-2">

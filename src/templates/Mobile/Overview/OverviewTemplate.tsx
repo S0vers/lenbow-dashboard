@@ -1,16 +1,22 @@
 "use client";
 
+import { useState } from "react";
+
 import ActionRequiredMobile from "./ActionRequiredMobile";
 import BudgetSnapshotMobile from "./BudgetSnapshotMobile";
 import EmptyStateMobile from "./EmptyStateMobile";
 import MetricsCardsMobile from "./MetricsCardsMobile";
 import RecentTransactionsMobile from "./RecentTransactionsMobile";
 import UpcomingDueDatesMobile from "./UpcomingDueDatesMobile";
+import QuickActions from "@/templates/Desktop/Overview/QuickActions";
+import CreateBudgetTransactionModal from "@/templates/Desktop/Budget/Forms/CreateBudgetTransactionModal";
 import { Link } from "@/i18n/navigation";
 import { useGetOverviewQuery } from "@/redux/APISlices/OverviewAPISlice";
 import { route } from "@/routes/routes";
 
 export default function OverviewTemplate() {
+	const [createBudgetModalOpen, setCreateBudgetModalOpen] = useState(false);
+
 	const { data, isLoading, isError, error } = useGetOverviewQuery({
 		recentLimit: 10,
 		upcomingLimit: 10,
@@ -46,9 +52,26 @@ export default function OverviewTemplate() {
 					</Link>
 				</div>
 			) : !isLoading && !hasData ? (
-				<EmptyStateMobile />
+				<>
+					<CreateBudgetTransactionModal
+						open={createBudgetModalOpen}
+						onOpenChange={setCreateBudgetModalOpen}
+					/>
+					<EmptyStateMobile onAddTransaction={() => setCreateBudgetModalOpen(true)} />
+				</>
 			) : (
 				<div className="flex-1 space-y-4 px-4 py-6">
+					<CreateBudgetTransactionModal
+						open={createBudgetModalOpen}
+						onOpenChange={setCreateBudgetModalOpen}
+					/>
+
+					{/* Quick actions - touch-friendly */}
+					<QuickActions
+						onAddTransaction={() => setCreateBudgetModalOpen(true)}
+						className="gap-2 pb-1"
+					/>
+
 					{/* Metrics */}
 					<MetricsCardsMobile metrics={overviewData?.metrics!} isLoading={isLoading} />
 
@@ -87,6 +110,7 @@ export default function OverviewTemplate() {
 						budgetSummary={overviewData?.budgetSummary ?? null}
 						recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
 						isLoading={isLoading}
+						onAddTransaction={() => setCreateBudgetModalOpen(true)}
 					/>
 				</div>
 			)}

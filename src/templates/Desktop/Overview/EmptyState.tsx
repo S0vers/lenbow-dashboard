@@ -1,4 +1,4 @@
-import { ArrowRight, HandCoins, TrendingUp, Users } from "lucide-react";
+import { ArrowRight, FileText, HandCoins, Plus, TrendingUp, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,10 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Link } from "@/i18n/navigation";
 import { route } from "@/routes/routes";
 
-export default function EmptyState() {
+interface EmptyStateProps {
+	onAddTransaction?: () => void;
+}
+
+export default function EmptyState({ onAddTransaction }: EmptyStateProps) {
 	return (
 		<div className="container mx-auto max-w-4xl px-4 py-8">
-			<Card className="border-2 border-dashed">
+			<Card className="rounded-2xl border-2 border-dashed border-border">
 				<CardHeader className="pb-4 text-center">
 					<div className="from-primary/20 to-primary/5 ring-primary/20 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br ring-2">
 						<HandCoins className="text-primary h-8 w-8" />
@@ -18,6 +22,24 @@ export default function EmptyState() {
 					<CardDescription className="text-base">
 						Start lending or borrowing to see your activity and insights here.
 					</CardDescription>
+					<div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+						{onAddTransaction && (
+							<Button
+								onClick={onAddTransaction}
+								className="rounded-full shadow-sm transition-all duration-300"
+								size="sm"
+							>
+								<Plus className="mr-2 h-4 w-4" />
+								Add transaction
+							</Button>
+						)}
+						<Button asChild variant="outline" className="rounded-full shadow-sm" size="sm">
+							<Link href={route.private.requests}>
+								<FileText className="mr-2 h-4 w-4" />
+								New request
+							</Link>
+						</Button>
+					</div>
 				</CardHeader>
 				<CardContent className="space-y-6">
 					<div className="grid gap-4 md:grid-cols-3">

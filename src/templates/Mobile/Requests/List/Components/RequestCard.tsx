@@ -39,7 +39,7 @@ export default function RequestCard({ data }: RequestCardProps) {
 			exit={{ opacity: 0, y: -10 }}
 			transition={{ duration: 0.2 }}
 		>
-			<Card className="border-border/60 bg-card/50 hover:border-border cursor-pointer shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md">
+			<Card className="cursor-pointer border border-border bg-card shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md">
 				<div onClick={() => setActiveTransaction(data)}>
 					<CardHeader className="flex flex-row items-center gap-4 pb-3">
 						<Avatar className="border-background h-12 w-12 border-2 shadow-sm">

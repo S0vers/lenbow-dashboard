@@ -22,12 +22,14 @@ interface BudgetSnapshotSectionProps {
 	budgetSummary: BudgetSummary | null;
 	recentBudgetTransactions: RecentBudgetTransaction[];
 	isLoading?: boolean;
+	onAddTransaction?: () => void;
 }
 
 export default function BudgetSnapshotSection({
 	budgetSummary,
 	recentBudgetTransactions,
-	isLoading
+	isLoading,
+	onAddTransaction
 }: BudgetSnapshotSectionProps) {
 	if (isLoading) {
 		return (
@@ -61,7 +63,16 @@ export default function BudgetSnapshotSection({
 						Track your income and expenses. Add your first transaction to see a summary here.
 					</CardDescription>
 				</CardHeader>
-				<CardContent>
+				<CardContent className="flex flex-wrap items-center gap-3">
+					{onAddTransaction && (
+						<button
+							type="button"
+							onClick={onAddTransaction}
+							className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+						>
+							Add transaction
+						</button>
+					)}
 					<Link
 						href={route.private.budget}
 						className="text-primary hover:underline text-sm font-medium"
@@ -76,7 +87,7 @@ export default function BudgetSnapshotSection({
 	return (
 		<div className="space-y-4">
 			<Card>
-				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+				<CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0 pb-2">
 					<div>
 						<CardTitle className="flex items-center gap-2">
 							<Wallet className="h-5 w-5" />
@@ -89,6 +100,15 @@ export default function BudgetSnapshotSection({
 							</Link>
 						</CardDescription>
 					</div>
+					{onAddTransaction && (
+						<button
+							type="button"
+							onClick={onAddTransaction}
+							className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+						>
+							Add transaction
+						</button>
+					)}
 				</CardHeader>
 				<CardContent>
 					{budgetSummary != null ? (

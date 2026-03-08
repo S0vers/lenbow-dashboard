@@ -19,7 +19,7 @@ export function MobileNavBar() {
 
 	return (
 		<>
-			<nav className="bg-background/80 pb-safe fixed right-0 bottom-0 left-0 z-50 border-t backdrop-blur-xl">
+			<nav className="bg-background/95 pb-safe fixed right-0 bottom-0 left-0 z-50 border-t border-border shadow-[0_-2px_10px_rgba(0,0,0,0.05)] dark:shadow-[0_-2px_10px_rgba(0,0,0,0.2)] backdrop-blur-xl">
 				<div className="flex h-16 items-center justify-around px-2">
 					{mainNavItems.map((item, index) => {
 						const isActive = pathname === item.url || pathname.startsWith(`${item.url}/`);
