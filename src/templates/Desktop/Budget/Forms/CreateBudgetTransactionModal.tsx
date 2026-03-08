@@ -1,14 +1,14 @@
 "use client";
 
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import InputNumeric from "@/components/ui/input-numeric";
 import {
 	Popover,
 	PopoverContent,
@@ -125,18 +125,34 @@ export default function CreateBudgetTransactionModal({
 						<FieldError>{form.formState.errors.name?.message}</FieldError>
 					</FieldGroup>
 					<FieldGroup>
-						<FieldLabel>Amount</FieldLabel>
-						<Input
-							type="number"
-							step="0.01"
-							min="0"
-							{...form.register("amount", {
+						<Controller
+							name="amount"
+							control={form.control}
+							rules={{
 								required: "Amount is required",
-								min: { value: 0.01, message: "Amount must be positive" }
-							})}
-							placeholder="0.00"
+								validate: (v) => {
+									const n = Number(v);
+									if (Number.isNaN(n)) return "Amount must be a number";
+									if (n < 0.01) return "Amount must be positive";
+									return true;
+								}
+							}}
+							render={({ field, fieldState }) => (
+								<>
+									<FieldLabel htmlFor="amount">Amount</FieldLabel>
+									<InputNumeric
+										{...field}
+										id="amount"
+										aria-invalid={fieldState.invalid}
+										placeholder="0.00"
+										numberType="decimal"
+										numberSign="positive"
+										inputMode="numeric"
+									/>
+									<FieldError>{fieldState.error?.message}</FieldError>
+								</>
+							)}
 						/>
-						<FieldError>{form.formState.errors.amount?.message}</FieldError>
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Type</FieldLabel>
