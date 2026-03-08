@@ -12,7 +12,7 @@ import {
 	AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { DeleteButton } from "@/components/ui/delete-button";
 
 interface DataTableDeleteSelectedProps {
 	selectedIds: string[];
@@ -29,7 +29,10 @@ export default function DataTableDeleteSelected({
 }: DataTableDeleteSelectedProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const handleDelete = () => {
+	const deleteLabel =
+		selectedIds.length > 0 ? `Delete (${selectedIds.length})` : "Delete All";
+
+	const handleConfirm = () => {
 		handleDeleteSelected();
 		setIsOpen(false);
 	};
@@ -37,48 +40,31 @@ export default function DataTableDeleteSelected({
 	return (
 		<AlertDialog open={isOpen} onOpenChange={setIsOpen}>
 			<AlertDialogTrigger asChild>
-				{selectedIds.length > 0 ? (
+				{(selectedIds.length > 0 || showDeleteAll) && (
 					<Button size="sm" className="hidden h-8 lg:flex" variant="destructive">
 						<Trash className="size-4" aria-hidden="true" />
-						Delete ({selectedIds.length})
+						{deleteLabel}
 					</Button>
-				) : (
-					showDeleteAll && (
-						<Button size="sm" className="hidden h-8 lg:flex" variant="destructive">
-							<Trash className="size-4" aria-hidden="true" />
-							Delete All
-						</Button>
-					)
 				)}
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
 					<AlertDialogDescription>
-						This action cannot be undone. This will permanently delete your account and remove your
-						data from our servers.
+						This action cannot be undone. Selected items will be permanently deleted.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-					<LoadingButton
-						variant="destructive"
-						isLoading={isDeleting}
-						onClick={handleDelete}
-						loadingText="Deleting..."
-					>
-						{selectedIds.length > 0 ? (
-							<>
-								<Trash className="size-4" aria-hidden="true" />
-								Delete ({selectedIds.length})
-							</>
-						) : (
-							<>
-								<Trash className="size-4" aria-hidden="true" />
-								Delete All
-							</>
-						)}
-					</LoadingButton>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<DeleteButton
+						deleteText={deleteLabel}
+						cancelText="Cancel Deletion"
+						countdownSeconds={10}
+						onConfirm={handleConfirm}
+						onCancel={() => setIsOpen(false)}
+						disabled={isDeleting}
+						className="w-full sm:w-auto"
+					/>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

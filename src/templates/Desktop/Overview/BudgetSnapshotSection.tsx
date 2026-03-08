@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowDownLeft, ArrowUpRight, Wallet } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Plus, Wallet } from "lucide-react";
 import { format } from "date-fns";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -23,13 +24,16 @@ interface BudgetSnapshotSectionProps {
 	recentBudgetTransactions: RecentBudgetTransaction[];
 	isLoading?: boolean;
 	onAddTransaction?: () => void;
+	/** When true, only show summary card (no recent transactions table). Use on overview. */
+	compact?: boolean;
 }
 
 export default function BudgetSnapshotSection({
 	budgetSummary,
 	recentBudgetTransactions,
 	isLoading,
-	onAddTransaction
+	onAddTransaction,
+	compact = false
 }: BudgetSnapshotSectionProps) {
 	if (isLoading) {
 		return (
@@ -65,13 +69,15 @@ export default function BudgetSnapshotSection({
 				</CardHeader>
 				<CardContent className="flex flex-wrap items-center gap-3">
 					{onAddTransaction && (
-						<button
+						<Button
 							type="button"
 							onClick={onAddTransaction}
-							className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+							size="pill"
+							className="min-w-[140px] shadow-md [&_svg]:size-5"
 						>
+							<Plus className="mr-2" />
 							Add transaction
-						</button>
+						</Button>
 					)}
 					<Link
 						href={route.private.budget}
@@ -101,13 +107,15 @@ export default function BudgetSnapshotSection({
 						</CardDescription>
 					</div>
 					{onAddTransaction && (
-						<button
+						<Button
 							type="button"
 							onClick={onAddTransaction}
-							className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+							size="pill"
+							className="min-w-[140px] shadow-md [&_svg]:size-5"
 						>
+							<Plus className="mr-2" />
 							Add transaction
-						</button>
+						</Button>
 					)}
 				</CardHeader>
 				<CardContent>
@@ -153,7 +161,7 @@ export default function BudgetSnapshotSection({
 				</CardContent>
 			</Card>
 
-			{recentBudgetTransactions.length > 0 && (
+			{!compact && recentBudgetTransactions.length > 0 && (
 				<Card>
 					<CardHeader>
 						<CardTitle>Recent budget transactions</CardTitle>

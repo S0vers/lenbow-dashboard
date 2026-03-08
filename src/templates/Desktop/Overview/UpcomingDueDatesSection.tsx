@@ -10,11 +10,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { getUserInitials } from "@/core/helper";
+import { Link } from "@/i18n/navigation";
+import { route } from "@/routes/routes";
 
 interface UpcomingDueDatesSectionProps {
 	upcomingDueDates: UpcomingDueDate[];
 	isLoading?: boolean;
 	onItemClick?: (item: UpcomingDueDate) => void;
+	/** Max items to show (e.g. 3 on overview). Omit to show all. */
+	maxItems?: number;
 }
 
 const urgencyConfig = {
@@ -140,7 +144,8 @@ function DueDateItemSkeleton() {
 export default function UpcomingDueDatesSection({
 	upcomingDueDates,
 	isLoading,
-	onItemClick
+	onItemClick,
+	maxItems
 }: UpcomingDueDatesSectionProps) {
 	if (isLoading) {
 		return (
@@ -166,12 +171,12 @@ export default function UpcomingDueDatesSection({
 					<CardDescription>Loans due in the next 30 days</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="flex flex-col items-center justify-center py-8 text-center">
-						<div className="bg-muted mb-4 rounded-full p-4">
-							<Calendar className="text-muted-foreground h-8 w-8" />
+					<div className="flex flex-col items-center justify-center py-10 text-center">
+						<div className="bg-muted/80 mb-4 rounded-full p-5">
+							<Calendar className="text-muted-foreground h-10 w-10" />
 						</div>
-						<h3 className="mb-2 text-lg font-semibold">No upcoming due dates</h3>
-						<p className="text-muted-foreground max-w-sm text-sm">
+						<h3 className="mb-2 text-xl font-semibold">No upcoming due dates</h3>
+						<p className="text-muted-foreground max-w-sm text-base">
 							You don&apos;t have any loans due in the next 30 days.
 						</p>
 					</div>
@@ -189,18 +194,29 @@ export default function UpcomingDueDatesSection({
 		return a.daysUntilDue - b.daysUntilDue;
 	});
 
+	const displayDueDates = maxItems != null ? sortedDueDates.slice(0, maxItems) : sortedDueDates;
+	const hasMore = maxItems != null && sortedDueDates.length > maxItems;
+
 	const highPriority = sortedDueDates.filter(item => item.urgency === "high").length;
 	const mediumPriority = sortedDueDates.filter(item => item.urgency === "medium").length;
 
 	return (
 		<Card>
 			<CardHeader>
-				<div className="flex items-center justify-between">
+				<div className="flex flex-wrap items-center justify-between gap-2">
 					<div>
 						<CardTitle>Upcoming Due Dates</CardTitle>
 						<CardDescription>Loans due in the next 30 days</CardDescription>
 					</div>
 					<div className="flex items-center gap-2">
+						{hasMore && (
+							<Link
+								href={route.private.requests}
+								className="text-primary text-sm font-medium hover:underline"
+							>
+								View all →
+							</Link>
+						)}
 						{highPriority > 0 && (
 							<Badge variant="destructive" className="text-xs">
 								{highPriority} High
@@ -218,9 +234,9 @@ export default function UpcomingDueDatesSection({
 				</div>
 			</CardHeader>
 			<CardContent>
-				<ScrollArea className="h-125 pr-4">
-					<div className="space-y-4">
-						{sortedDueDates.map(item => (
+				<ScrollArea className={maxItems != null ? "max-h-[320px] pr-4" : "h-125 pr-4"}>
+					<div className="space-y-3">
+						{displayDueDates.map(item => (
 							<DueDateItem key={item.id} item={item} onItemClick={onItemClick} />
 						))}
 					</div>

@@ -6,17 +6,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { Card } from "@/components/ui/card";
 import { Field, FieldError } from "@/components/ui/field";
 import {
@@ -170,43 +160,25 @@ export default function SecuritySettings({ user, onDeleteAccount }: SecuritySett
 				<MfaSettings />
 
 				{/* Delete Account */}
-				<div className="flex items-center justify-between py-4">
+				<div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
 					<div className="flex items-center gap-3">
-						<Trash2 className="text-destructive h-5 w-5" />
+						<Trash2 className="text-destructive h-5 w-5 shrink-0" />
 						<div>
 							<p className="text-foreground font-medium">
 								Delete Account (Currently Under Development)
 							</p>
 							<p className="text-muted-foreground text-sm">
-								Permanently delete your account and data
+								Permanently delete your account and data. This cannot be undone.
 							</p>
 						</div>
 					</div>
-					<AlertDialog>
-						<AlertDialogTrigger asChild>
-							<Button variant="destructive" size="sm" disabled>
-								Delete
-							</Button>
-						</AlertDialogTrigger>
-						<AlertDialogContent>
-							<AlertDialogHeader>
-								<AlertDialogTitle>Delete Account</AlertDialogTitle>
-								<AlertDialogDescription>
-									This action cannot be undone. This will permanently delete your account and remove
-									all associated data from our servers.
-								</AlertDialogDescription>
-							</AlertDialogHeader>
-							<div className="flex gap-4">
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
-								<AlertDialogAction
-									onClick={onDeleteAccount}
-									className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-								>
-									Delete Account
-								</AlertDialogAction>
-							</div>
-						</AlertDialogContent>
-					</AlertDialog>
+					<DeleteButton
+						deleteText="Delete Account"
+						cancelText="Cancel Deletion"
+						countdownSeconds={10}
+						onConfirm={onDeleteAccount}
+						disabled
+					/>
 				</div>
 			</div>
 		</Card>

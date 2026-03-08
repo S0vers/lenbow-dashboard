@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Copy, KeyRound, RefreshCw, Shield, ShieldOff } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -159,7 +160,13 @@ export default function MfaSettings() {
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-start">
 					{qrDataUrl && (
 						<div className="bg-muted shrink-0 rounded-lg p-2">
-							<img src={qrDataUrl} alt="QR code for 2FA" width={200} height={200} />
+							<Image
+								src={qrDataUrl}
+								alt="QR code for 2FA"
+								width={200}
+								height={200}
+								unoptimized
+							/>
 						</div>
 					)}
 					<div className="min-w-0 flex-1 space-y-2">

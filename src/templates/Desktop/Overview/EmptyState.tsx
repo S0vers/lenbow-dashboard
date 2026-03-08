@@ -18,24 +18,29 @@ export default function EmptyState({ onAddTransaction }: EmptyStateProps) {
 					<div className="from-primary/20 to-primary/5 ring-primary/20 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br ring-2">
 						<HandCoins className="text-primary h-8 w-8" />
 					</div>
-					<CardTitle className="gradient-text text-2xl">Welcome to Your Dashboard!</CardTitle>
-					<CardDescription className="text-base">
+					<CardTitle className="gradient-text text-2xl md:text-3xl">Welcome to Your Dashboard!</CardTitle>
+					<CardDescription className="text-base md:text-lg">
 						Start lending or borrowing to see your activity and insights here.
 					</CardDescription>
-					<div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+					<div className="mt-5 flex flex-wrap items-center justify-center gap-3">
 						{onAddTransaction && (
 							<Button
 								onClick={onAddTransaction}
-								className="rounded-full shadow-sm transition-all duration-300"
-								size="sm"
+								className="min-w-[140px] rounded-full shadow-md [&_svg]:size-5"
+								size="pill"
 							>
-								<Plus className="mr-2 h-4 w-4" />
+								<Plus className="mr-2" />
 								Add transaction
 							</Button>
 						)}
-						<Button asChild variant="outline" className="rounded-full shadow-sm" size="sm">
+						<Button
+							asChild
+							variant="outline"
+							className="min-w-[120px] rounded-full shadow-sm [&_svg]:size-5"
+							size="pill"
+						>
 							<Link href={route.private.requests}>
-								<FileText className="mr-2 h-4 w-4" />
+								<FileText className="mr-2" />
 								New request
 							</Link>
 						</Button>
@@ -108,8 +113,8 @@ export default function EmptyState({ onAddTransaction }: EmptyStateProps) {
 						<CardContent className="pt-6">
 							<div className="flex flex-col items-center gap-4 md:flex-row">
 								<div className="flex-1">
-									<h3 className="mb-1 font-semibold">Need help getting started?</h3>
-									<p className="text-muted-foreground text-sm">
+									<h3 className="mb-1 text-lg font-semibold">Need help getting started?</h3>
+									<p className="text-muted-foreground text-base">
 										Check out our guide to learn how to manage loans effectively.
 									</p>
 								</div>

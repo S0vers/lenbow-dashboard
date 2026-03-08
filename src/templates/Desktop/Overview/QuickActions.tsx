@@ -14,23 +14,23 @@ interface QuickActionsProps {
 
 export default function QuickActions({ onAddTransaction, className }: QuickActionsProps) {
 	return (
-		<div className={cn("flex flex-wrap gap-2", className)}>
+		<div className={cn("flex flex-wrap items-center gap-3", className)}>
 			<Button
 				onClick={onAddTransaction}
-				className="rounded-full shadow-sm transition-all duration-300"
-				size="sm"
+				className="min-w-[140px] rounded-full shadow-md transition-all duration-300 hover:shadow-lg [&_svg]:size-5"
+				size="pill"
 			>
-				<Plus className="mr-2 h-4 w-4" />
+				<Plus className="mr-2" />
 				Add transaction
 			</Button>
 			<Button
 				asChild
 				variant="outline"
-				className="rounded-full shadow-sm transition-all duration-300"
-				size="sm"
+				className="min-w-[120px] rounded-full shadow-sm transition-all duration-300 hover:shadow-md [&_svg]:size-5"
+				size="pill"
 			>
 				<Link href={route.private.requests}>
-					<FileText className="mr-2 h-4 w-4" />
+					<FileText className="mr-2" />
 					New request
 				</Link>
 			</Button>

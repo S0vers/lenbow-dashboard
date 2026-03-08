@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { StatusButton } from "@/components/ui/status-button";
 import { PhoneInput } from "@/components/ui/phone-input";
 import {
 	ResponsiveDialog,
@@ -119,6 +119,21 @@ export default function UpdateProfileModal({
 		onOpenChange(newOpen);
 	};
 
+	const runSubmit = () =>
+		new Promise<void>((resolve, reject) => {
+			form.handleSubmit(
+				async data => {
+					try {
+						await onFormSubmit(data);
+						resolve();
+					} catch (e) {
+						reject(e);
+					}
+				},
+				() => reject()
+			)();
+		});
+
 	return (
 		<ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
 			<ResponsiveDialogContent className="max-w-md p-4 sm:w-full sm:p-6">
@@ -130,7 +145,13 @@ export default function UpdateProfileModal({
 						Update your profile information and avatar
 					</ResponsiveDialogDescription>
 				</ResponsiveDialogHeader>
-				<form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-4 sm:space-y-6">
+				<form
+					onSubmit={e => {
+						e.preventDefault();
+						void runSubmit();
+					}}
+					className="space-y-4 sm:space-y-6"
+				>
 					{/* Hidden file input */}
 					<input
 						ref={fileInputRef}
@@ -211,14 +232,15 @@ export default function UpdateProfileModal({
 						>
 							Cancel
 						</Button>
-						<LoadingButton
+						<StatusButton
 							type="submit"
-							className="w-full text-sm sm:w-auto sm:text-base"
-							isLoading={form.formState.isSubmitting || isUploadingImage || isUpdating}
-							loadingText="Saving..."
-						>
-							Save Changes
-						</LoadingButton>
+							idleLabel="Save Changes"
+							loadingLabel="Saving..."
+							successLabel="Saved"
+							onClick={runSubmit}
+							disabled={isUploadingImage || isUpdating}
+							className="w-full sm:w-auto"
+						/>
 					</div>
 				</form>
 			</ResponsiveDialogContent>

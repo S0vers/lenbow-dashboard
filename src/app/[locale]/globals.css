@@ -174,8 +174,8 @@
 		@apply rounded-[18px] border border-border bg-background/95 shadow-md backdrop-blur-xl;
 	}
 
-	/* Metric card hover effect */
+	/* Metric card hover effect (uselayouts-style: pronounced corners + shadow) */
 	.metric-card-hover {
-		@apply rounded-xl shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md;
+		@apply rounded-2xl border border-border shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg dark:shadow-black/20;
 	}
 }

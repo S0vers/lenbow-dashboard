@@ -1,5 +1,6 @@
 import { ArrowRight, FileText, HandCoins, Plus, TrendingUp, Users } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Link } from "@/i18n/navigation";
@@ -17,28 +18,33 @@ export default function EmptyStateMobile({ onAddTransaction }: EmptyStateMobileP
 					<div className="bg-primary/10 mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full">
 						<HandCoins className="text-primary h-7 w-7" />
 					</div>
-					<CardTitle className="text-lg">Welcome!</CardTitle>
-					<CardDescription className="text-xs">
+					<CardTitle className="gradient-text text-xl">Welcome!</CardTitle>
+					<CardDescription className="text-sm">
 						Start lending or borrowing to see your dashboard
 					</CardDescription>
-					<div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+					<div className="mt-4 flex flex-wrap items-center justify-center gap-3">
 						{onAddTransaction && (
-							<button
+							<Button
 								type="button"
 								onClick={onAddTransaction}
-								className="bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+								size="pill"
+								className="min-h-[44px] min-w-[140px] shadow-md [&_svg]:size-5"
 							>
-								<Plus className="mr-2 h-4 w-4" />
+								<Plus className="mr-2" />
 								Add transaction
-							</button>
+							</Button>
 						)}
-						<Link
-							href={route.private.requests}
-							className="inline-flex min-h-[44px] items-center rounded-full border border-border bg-background px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-muted"
+						<Button
+							asChild
+							variant="outline"
+							size="pill"
+							className="min-h-[44px] min-w-[120px] [&_svg]:size-5"
 						>
-							<FileText className="mr-2 h-4 w-4" />
-							New request
-						</Link>
+							<Link href={route.private.requests}>
+								<FileText className="mr-2" />
+								New request
+							</Link>
+						</Button>
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-3">

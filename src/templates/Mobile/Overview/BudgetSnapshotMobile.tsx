@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowDownLeft, ArrowUpRight, Wallet } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Plus, Wallet } from "lucide-react";
 import { format } from "date-fns";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -49,13 +50,15 @@ export default function BudgetSnapshotMobile({
 				</CardHeader>
 				<CardContent className="flex flex-wrap items-center gap-3">
 					{onAddTransaction && (
-						<button
+						<Button
 							type="button"
 							onClick={onAddTransaction}
-							className="bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+							size="pill"
+							className="min-h-[44px] min-w-[140px] shadow-md [&_svg]:size-5"
 						>
+							<Plus className="mr-2" />
 							Add transaction
-						</button>
+						</Button>
 					)}
 					<Link
 						href={route.private.budget}
@@ -74,13 +77,15 @@ export default function BudgetSnapshotMobile({
 				<h3 className="font-semibold text-sm">Budget this month</h3>
 				<div className="flex items-center gap-2">
 					{onAddTransaction && (
-						<button
+						<Button
 							type="button"
 							onClick={onAddTransaction}
-							className="bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-300"
+							size="pill"
+							className="min-h-[44px] min-w-[140px] shadow-md [&_svg]:size-5"
 						>
+							<Plus className="mr-2" />
 							Add transaction
-						</button>
+						</Button>
 					)}
 					<Link href={route.private.budget} className="text-primary text-xs hover:underline">
 						View all

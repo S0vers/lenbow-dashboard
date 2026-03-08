@@ -1,12 +1,12 @@
 "use client";
 
 import { CalendarIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
 	Popover,
@@ -130,66 +130,77 @@ export default function CreateBudgetSubscriptionModal({
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Category</FieldLabel>
-						<Select
-							value={form.watch("categoryId")}
-							onValueChange={v => form.setValue("categoryId", v)}
-						>
-							<SelectTrigger>
-								<SelectValue placeholder="Select category" />
-							</SelectTrigger>
-							<SelectContent>
-								{categories.map(cat => (
-									<SelectItem key={cat.id} value={cat.id}>
-										{cat.name}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+						<Controller
+							name="categoryId"
+							control={form.control}
+							render={({ field }) => (
+								<Select value={field.value} onValueChange={field.onChange}>
+									<SelectTrigger>
+										<SelectValue placeholder="Select category" />
+									</SelectTrigger>
+									<SelectContent>
+										{categories.map(cat => (
+											<SelectItem key={cat.id} value={cat.id}>
+												{cat.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Recurrence</FieldLabel>
-						<Select
-							value={form.watch("recurrence")}
-							onValueChange={v =>
-								form.setValue("recurrence", v as "weekly" | "monthly" | "yearly")
-							}
-						>
-							<SelectTrigger>
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="weekly">Weekly</SelectItem>
-								<SelectItem value="monthly">Monthly</SelectItem>
-								<SelectItem value="yearly">Yearly</SelectItem>
-							</SelectContent>
-						</Select>
+						<Controller
+							name="recurrence"
+							control={form.control}
+							render={({ field }) => (
+								<Select
+									value={field.value}
+									onValueChange={v => field.onChange(v as "weekly" | "monthly" | "yearly")}
+								>
+									<SelectTrigger>
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="weekly">Weekly</SelectItem>
+										<SelectItem value="monthly">Monthly</SelectItem>
+										<SelectItem value="yearly">Yearly</SelectItem>
+									</SelectContent>
+								</Select>
+							)}
+						/>
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Next run date</FieldLabel>
-						<Popover>
-							<PopoverTrigger asChild>
-								<Button
-									variant="outline"
-									className={cn(
-										"w-full justify-start text-left font-normal",
-										!form.watch("nextRunAt") && "text-muted-foreground"
-									)}
-								>
-									<CalendarIcon className="mr-2 h-4 w-4" />
-									{form.watch("nextRunAt")
-										? format(form.watch("nextRunAt"), "PPP")
-										: "Pick date"}
-								</Button>
-							</PopoverTrigger>
-							<PopoverContent className="w-auto p-0">
-								<Calendar
-									mode="single"
-									selected={form.watch("nextRunAt")}
-									onSelect={d => d && form.setValue("nextRunAt", d)}
-									initialFocus
-								/>
-							</PopoverContent>
-						</Popover>
+						<Controller
+							name="nextRunAt"
+							control={form.control}
+							render={({ field }) => (
+								<Popover>
+									<PopoverTrigger asChild>
+										<Button
+											variant="outline"
+											className={cn(
+												"w-full justify-start text-left font-normal",
+												!field.value && "text-muted-foreground"
+											)}
+										>
+											<CalendarIcon className="mr-2 h-4 w-4" />
+											{field.value ? format(field.value, "PPP") : "Pick date"}
+										</Button>
+									</PopoverTrigger>
+									<PopoverContent className="w-auto p-0">
+										<Calendar
+											mode="single"
+											selected={field.value}
+											onSelect={d => d && field.onChange(d)}
+											initialFocus
+										/>
+									</PopoverContent>
+								</Popover>
+							)}
+						/>
 					</FieldGroup>
 					<ResponsiveDialogFooter>
 						<Button

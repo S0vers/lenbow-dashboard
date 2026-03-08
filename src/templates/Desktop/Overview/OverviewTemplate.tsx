@@ -18,9 +18,9 @@ export default function OverviewTemplate() {
 	const [createBudgetModalOpen, setCreateBudgetModalOpen] = useState(false);
 
 	const { data, isLoading, isError, error } = useGetOverviewQuery({
-		recentLimit: 10,
-		upcomingLimit: 10,
-		actionRequiredLimit: 10,
+		recentLimit: 5,
+		upcomingLimit: 5,
+		actionRequiredLimit: 5,
 		monthsBack: 6
 	});
 
@@ -75,65 +75,74 @@ export default function OverviewTemplate() {
 	}
 
 	return (
-		<div className="container mx-auto space-y-8">
+		<div className="container mx-auto max-w-5xl px-4 py-6 sm:py-8">
 			<CreateBudgetTransactionModal
 				open={createBudgetModalOpen}
 				onOpenChange={setCreateBudgetModalOpen}
 			/>
 
-			{/* Header + Quick actions */}
-			<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+			{/* Hero: title + subtitle + quick actions */}
+			<header className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
 				<div>
-					<h1 className="gradient-text text-3xl font-bold tracking-tight">Dashboard</h1>
-					<p className="text-muted-foreground mt-1">
-						Welcome back! Here&apos;s an overview of your loan activities.
+					<h1 className="gradient-text text-3xl font-bold tracking-tight md:text-4xl">
+						Dashboard
+					</h1>
+					<p className="text-muted-foreground mt-2 text-base md:text-lg">
+						Welcome back. Here&apos;s a quick snapshot.
 					</p>
 				</div>
 				<QuickActions
 					onAddTransaction={() => setCreateBudgetModalOpen(true)}
 					className="flex shrink-0 flex-wrap gap-2"
 				/>
+			</header>
+
+			<div className="space-y-12">
+				{/* Key metrics: 4 cards only */}
+				<section aria-label="Key metrics">
+					<MetricsCards metrics={overviewData?.metrics!} isLoading={isLoading} />
+				</section>
+
+				{/* Budget this month: compact card only */}
+				<section aria-label="Budget snapshot">
+					<BudgetSnapshotSection
+						budgetSummary={overviewData?.budgetSummary ?? null}
+						recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
+						isLoading={isLoading}
+						onAddTransaction={() => setCreateBudgetModalOpen(true)}
+						compact
+					/>
+				</section>
+
+				{/* Action required & Upcoming: side by side, limited items */}
+				<section aria-label="Attention" className="grid gap-6 lg:grid-cols-2">
+					<ActionRequiredSection
+						actions={overviewData?.actionRequired || []}
+						isLoading={isLoading}
+						maxItems={3}
+						onActionClick={action => {
+							console.log("Action clicked:", action);
+						}}
+					/>
+					<UpcomingDueDatesSection
+						upcomingDueDates={overviewData?.upcomingDueDates || []}
+						isLoading={isLoading}
+						maxItems={3}
+						onItemClick={item => {
+							console.log("Due date item clicked:", item);
+						}}
+					/>
+				</section>
+
+				{/* Recent activity: 5 rows + View all */}
+				<section aria-label="Recent activity">
+					<RecentTransactionsSection
+						transactions={overviewData?.recentTransactions || []}
+						isLoading={isLoading}
+						maxItems={5}
+					/>
+				</section>
 			</div>
-
-			{/* Metrics Cards */}
-			<MetricsCards metrics={overviewData?.metrics!} isLoading={isLoading} />
-
-			{/* Action Required & Upcoming Due Dates */}
-			<div className="grid gap-6 lg:grid-cols-2">
-				<ActionRequiredSection
-					actions={overviewData?.actionRequired || []}
-					isLoading={isLoading}
-					onActionClick={action => {
-						// Navigate to transaction detail or handle action
-						console.log("Action clicked:", action);
-					}}
-				/>
-				<UpcomingDueDatesSection
-					upcomingDueDates={overviewData?.upcomingDueDates || []}
-					isLoading={isLoading}
-					onItemClick={item => {
-						// Navigate to transaction detail
-						console.log("Due date item clicked:", item);
-					}}
-				/>
-			</div>
-
-			{/* Charts Section */}
-			{/* <ChartsSection chartData={overviewData?.chartData!} isLoading={isLoading} /> */}
-
-			{/* Recent Transactions */}
-			<RecentTransactionsSection
-				transactions={overviewData?.recentTransactions || []}
-				isLoading={isLoading}
-			/>
-
-			{/* Budget snapshot */}
-			<BudgetSnapshotSection
-				budgetSummary={overviewData?.budgetSummary ?? null}
-				recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
-				isLoading={isLoading}
-				onAddTransaction={() => setCreateBudgetModalOpen(true)}
-			/>
 		</div>
 	);
 }

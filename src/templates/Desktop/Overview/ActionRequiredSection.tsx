@@ -17,6 +17,8 @@ interface ActionRequiredSectionProps {
 	actions: ActionRequiredItem[];
 	isLoading?: boolean;
 	onActionClick?: (action: ActionRequiredItem) => void;
+	/** Max items to show (e.g. 3 on overview). Omit to show all. */
+	maxItems?: number;
 }
 
 const actionTypeConfig = {
@@ -186,8 +188,11 @@ function ActionItemSkeleton() {
 export default function ActionRequiredSection({
 	actions,
 	isLoading,
-	onActionClick
+	onActionClick,
+	maxItems
 }: ActionRequiredSectionProps) {
+	const displayActions = maxItems != null ? actions.slice(0, maxItems) : actions;
+	const hasMore = maxItems != null && actions.length > maxItems;
 	if (isLoading) {
 		return (
 			<Card>
@@ -212,12 +217,12 @@ export default function ActionRequiredSection({
 					<CardDescription>Items that need your attention</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="flex flex-col items-center justify-center py-8 text-center">
-						<div className="bg-muted mb-4 rounded-full p-4">
-							<Clock className="text-muted-foreground h-8 w-8" />
+					<div className="flex flex-col items-center justify-center py-10 text-center">
+						<div className="bg-muted/80 mb-4 rounded-full p-5">
+							<Clock className="text-muted-foreground h-10 w-10" />
 						</div>
-						<h3 className="mb-2 text-lg font-semibold">All caught up!</h3>
-						<p className="text-muted-foreground max-w-sm text-sm">
+						<h3 className="mb-2 text-xl font-semibold">All caught up!</h3>
+						<p className="text-muted-foreground max-w-sm text-base">
 							You have no pending actions at the moment. Check back later for updates.
 						</p>
 					</div>
@@ -229,20 +234,30 @@ export default function ActionRequiredSection({
 	return (
 		<Card>
 			<CardHeader>
-				<div className="flex items-center justify-between">
+				<div className="flex flex-wrap items-center justify-between gap-2">
 					<div>
 						<CardTitle>Action Required</CardTitle>
 						<CardDescription>Items that need your attention</CardDescription>
 					</div>
-					<Badge variant="secondary">
-						{actions.length} item{actions.length !== 1 ? "s" : ""}
-					</Badge>
+					<div className="flex items-center gap-2">
+						{hasMore && (
+							<Link
+								href={route.private.requests}
+								className="text-primary text-sm font-medium hover:underline"
+							>
+								View all →
+							</Link>
+						)}
+						<Badge variant="secondary">
+							{actions.length} item{actions.length !== 1 ? "s" : ""}
+						</Badge>
+					</div>
 				</div>
 			</CardHeader>
 			<CardContent>
-				<ScrollArea className="h-125 pr-4">
-					<div className="space-y-4">
-						{actions.map(action => (
+				<ScrollArea className={maxItems != null ? "max-h-[320px] pr-4" : "h-125 pr-4"}>
+					<div className="space-y-3">
+						{displayActions.map(action => (
 							<ActionItem
 								key={action.transactionId}
 								action={action}

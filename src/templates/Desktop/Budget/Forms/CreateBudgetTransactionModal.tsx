@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import InputNumeric from "@/components/ui/input-numeric";
 import {
@@ -108,17 +108,20 @@ export default function CreateBudgetTransactionModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-			<ResponsiveDialogContent>
-				<ResponsiveDialogHeader>
-					<ResponsiveDialogTitle>Add transaction</ResponsiveDialogTitle>
-					<ResponsiveDialogDescription>
+			<ResponsiveDialogContent className="sm:max-w-md">
+				<ResponsiveDialogHeader className="gap-1">
+					<ResponsiveDialogTitle className="gradient-text text-lg font-semibold tracking-tight md:text-xl">
+						Add transaction
+					</ResponsiveDialogTitle>
+					<ResponsiveDialogDescription className="text-base">
 						Add a new income or expense to your budget.
 					</ResponsiveDialogDescription>
 				</ResponsiveDialogHeader>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 					<FieldGroup>
 						<FieldLabel>Name</FieldLabel>
 						<Input
+							className="h-11"
 							{...form.register("name", { required: "Name is required" })}
 							placeholder="e.g. Groceries"
 						/>
@@ -142,6 +145,7 @@ export default function CreateBudgetTransactionModal({
 									<FieldLabel htmlFor="amount">Amount</FieldLabel>
 									<InputNumeric
 										{...field}
+										className="h-11"
 										id="amount"
 										aria-invalid={fieldState.invalid}
 										placeholder="0.00"
@@ -156,67 +160,77 @@ export default function CreateBudgetTransactionModal({
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Type</FieldLabel>
-						<Select
-							value={form.watch("type")}
-							onValueChange={v => form.setValue("type", v as "in" | "out")}
-						>
-							<SelectTrigger>
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="in">In</SelectItem>
-								<SelectItem value="out">Out</SelectItem>
-							</SelectContent>
-						</Select>
+						<Controller
+							name="type"
+							control={form.control}
+							render={({ field }) => (
+								<Select value={field.value} onValueChange={v => field.onChange(v as "in" | "out")}>
+									<SelectTrigger size="lg">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="in">In</SelectItem>
+										<SelectItem value="out">Out</SelectItem>
+									</SelectContent>
+								</Select>
+							)}
+						/>
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Category</FieldLabel>
-						<Select
-							value={form.watch("categoryId")}
-							onValueChange={v => form.setValue("categoryId", v)}
-						>
-							<SelectTrigger>
-								<SelectValue placeholder="Select category" />
-							</SelectTrigger>
-							<SelectContent>
-								{categories.map(cat => (
-									<SelectItem key={cat.id} value={cat.id}>
-										{cat.name}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+						<Controller
+							name="categoryId"
+							control={form.control}
+							render={({ field }) => (
+								<Select value={field.value} onValueChange={field.onChange}>
+									<SelectTrigger size="lg">
+										<SelectValue placeholder="Select category" />
+									</SelectTrigger>
+									<SelectContent>
+										{categories.map(cat => (
+											<SelectItem key={cat.id} value={cat.id}>
+												{cat.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Date</FieldLabel>
-						<Popover>
-							<PopoverTrigger asChild>
-								<Button
-									variant="outline"
-									className={cn(
-										"w-full justify-start text-left font-normal",
-										!form.watch("date") && "text-muted-foreground"
-									)}
-								>
-									<CalendarIcon className="mr-2 h-4 w-4" />
-									{form.watch("date")
-										? format(form.watch("date"), "PPP")
-										: "Pick date"}
-								</Button>
-							</PopoverTrigger>
-							<PopoverContent className="w-auto p-0">
-								<Calendar
-									mode="single"
-									selected={form.watch("date")}
-									onSelect={d => d && form.setValue("date", d)}
-									initialFocus
-								/>
-							</PopoverContent>
-						</Popover>
+						<Controller
+							name="date"
+							control={form.control}
+							render={({ field }) => (
+								<Popover>
+									<PopoverTrigger asChild>
+										<Button
+											variant="outline"
+											className={cn(
+												"h-11 w-full justify-start text-left font-normal shadow-sm",
+												!field.value && "text-muted-foreground"
+											)}
+										>
+											<CalendarIcon className="mr-2 size-4" />
+											{field.value ? format(field.value, "PPP") : "Pick date"}
+										</Button>
+									</PopoverTrigger>
+									<PopoverContent className="w-auto p-0">
+										<Calendar
+											mode="single"
+											selected={field.value}
+											onSelect={d => d && field.onChange(d)}
+											initialFocus
+										/>
+									</PopoverContent>
+								</Popover>
+							)}
+						/>
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Note (optional)</FieldLabel>
-						<Input {...form.register("note")} placeholder="Short note" />
+						<Input className="h-11" {...form.register("note")} placeholder="Short note" />
 					</FieldGroup>
 					<FieldGroup>
 						<FieldLabel>Details (optional)</FieldLabel>
@@ -226,15 +240,22 @@ export default function CreateBudgetTransactionModal({
 							rows={2}
 						/>
 					</FieldGroup>
-					<ResponsiveDialogFooter>
+					<ResponsiveDialogFooter className="gap-3 sm:gap-3">
 						<Button
 							type="button"
 							variant="outline"
+							size="pill"
+							className="min-w-[100px]"
 							onClick={() => onOpenChange(false)}
 						>
 							Cancel
 						</Button>
-						<Button type="submit" disabled={isLoading}>
+						<Button
+							type="submit"
+							size="pill"
+							className="min-w-[160px] shadow-md"
+							disabled={isLoading}
+						>
 							{isLoading ? "Adding…" : "Add transaction"}
 						</Button>
 					</ResponsiveDialogFooter>

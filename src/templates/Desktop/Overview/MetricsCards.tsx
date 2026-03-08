@@ -1,4 +1,4 @@
-import { AlertCircle, AlertTriangle, Clock, DollarSign, Users } from "lucide-react";
+import { AlertTriangle, Clock, DollarSign } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,7 @@ function MetricCard({ title, value, icon, description, variant = "default" }: Me
 				<CardTitle className="text-muted-foreground text-sm font-medium">{title}</CardTitle>
 				<div
 					className={cn(
-						"rounded-lg p-2 transition-transform duration-200 group-hover:scale-110",
+						"rounded-xl p-2.5 transition-transform duration-200 group-hover:scale-110",
 						variantStyles[variant]
 					)}
 				>
@@ -44,8 +44,10 @@ function MetricCard({ title, value, icon, description, variant = "default" }: Me
 				</div>
 			</CardHeader>
 			<CardContent>
-				<div className="text-2xl font-bold tracking-tight">{value}</div>
-				{description && <p className="text-muted-foreground mt-1 text-xs">{description}</p>}
+				<div className="text-3xl font-bold tracking-tight">{value}</div>
+				{description && (
+					<p className="text-muted-foreground mt-1.5 text-sm">{description}</p>
+				)}
 			</CardContent>
 		</Card>
 	);
@@ -69,8 +71,8 @@ function MetricCardSkeleton() {
 export default function MetricsCards({ metrics, isLoading }: MetricsCardsProps) {
 	if (isLoading) {
 		return (
-			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-				{[...Array(8)].map((_, i) => (
+			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				{[...Array(4)].map((_, i) => (
 					<MetricCardSkeleton key={i} />
 				))}
 			</div>
@@ -79,17 +81,16 @@ export default function MetricsCards({ metrics, isLoading }: MetricsCardsProps) 
 
 	const hasOverdue = metrics.overdueCount > 0;
 	const hasPendingRequests = metrics.pendingRequests > 0;
-	const hasRepaymentRequests = metrics.repaymentRequests > 0;
 
 	return (
-		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+		<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			<MetricCard
 				title="Total Borrowed"
 				value={metrics.totalBorrowed.toFixed(2)}
 				icon={<DollarSign className="h-4 w-4" />}
 				description={
 					metrics.overdueBorrowed > 0
-						? `${metrics.overdueBorrowed} overdue loan${metrics.overdueBorrowed > 1 ? "s" : ""}`
+						? `${metrics.overdueBorrowed} overdue`
 						: "Active borrowed amount"
 				}
 				variant={metrics.overdueBorrowed > 0 ? "danger" : "default"}
@@ -99,9 +100,7 @@ export default function MetricsCards({ metrics, isLoading }: MetricsCardsProps) 
 				value={metrics.totalLent.toFixed(2)}
 				icon={<DollarSign className="h-4 w-4" />}
 				description={
-					metrics.overdueLent > 0
-						? `${metrics.overdueLent} overdue loan${metrics.overdueLent > 1 ? "s" : ""}`
-						: "Active lent amount"
+					metrics.overdueLent > 0 ? `${metrics.overdueLent} overdue` : "Active lent amount"
 				}
 				variant={metrics.overdueLent > 0 ? "warning" : "success"}
 			/>
@@ -109,44 +108,15 @@ export default function MetricsCards({ metrics, isLoading }: MetricsCardsProps) 
 				title="Pending Requests"
 				value={metrics.pendingRequests}
 				icon={<Clock className="h-4 w-4" />}
-				description={hasPendingRequests ? "Requests awaiting your approval" : "No pending requests"}
+				description={hasPendingRequests ? "Awaiting your approval" : "All caught up"}
 				variant={hasPendingRequests ? "warning" : "default"}
 			/>
 			<MetricCard
-				title="Overdue Loans"
+				title="Overdue"
 				value={metrics.overdueCount}
 				icon={<AlertTriangle className="h-4 w-4" />}
-				description={hasOverdue ? "Requires immediate attention" : "All loans on track"}
+				description={hasOverdue ? "Needs attention" : "On track"}
 				variant={hasOverdue ? "danger" : "success"}
-			/>
-			<MetricCard
-				title="Repayment Requests"
-				value={metrics.repaymentRequests}
-				icon={<AlertCircle className="h-4 w-4" />}
-				description={
-					hasRepaymentRequests ? "Pending repayment confirmations" : "No pending repayments"
-				}
-				variant={hasRepaymentRequests ? "warning" : "default"}
-			/>
-			<MetricCard
-				title="Total Contacts"
-				value={metrics.totalContacts}
-				icon={<Users className="h-4 w-4" />}
-				description="Connected contacts"
-			/>
-			<MetricCard
-				title="Overdue (Borrowed)"
-				value={metrics.overdueBorrowed}
-				icon={<AlertTriangle className="h-4 w-4" />}
-				description="Loans you need to pay"
-				variant={metrics.overdueBorrowed > 0 ? "danger" : "success"}
-			/>
-			<MetricCard
-				title="Overdue (Lent)"
-				value={metrics.overdueLent}
-				icon={<AlertTriangle className="h-4 w-4" />}
-				description="Loans awaiting payment"
-				variant={metrics.overdueLent > 0 ? "warning" : "success"}
 			/>
 		</div>
 	);

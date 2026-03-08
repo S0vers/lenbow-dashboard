@@ -23,6 +23,8 @@ import { route } from "@/routes/routes";
 interface RecentTransactionsSectionProps {
 	transactions: RecentTransaction[];
 	isLoading?: boolean;
+	/** Max rows to show (e.g. 5 on overview). Omit to show all. */
+	maxItems?: number;
 }
 
 const statusConfig = {
@@ -91,14 +93,17 @@ function TransactionRowSkeleton() {
 
 export default function RecentTransactionsSection({
 	transactions,
-	isLoading
+	isLoading,
+	maxItems
 }: RecentTransactionsSectionProps) {
+	const displayTransactions = maxItems != null ? transactions.slice(0, maxItems) : transactions;
+	const hasMore = maxItems != null && transactions.length > maxItems;
 	if (isLoading) {
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle>Recent Transactions</CardTitle>
-					<CardDescription>Your latest loan activities</CardDescription>
+<CardTitle>Recent activity</CardTitle>
+				<CardDescription>Your latest loan activity</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Table>
@@ -127,12 +132,12 @@ export default function RecentTransactionsSection({
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle>Recent Transactions</CardTitle>
-					<CardDescription>Your latest loan activities</CardDescription>
+<CardTitle>Recent activity</CardTitle>
+				<CardDescription>Your latest loan activity</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="flex flex-col items-center justify-center py-8 text-center">
-						<p className="text-muted-foreground text-sm">
+					<div className="flex flex-col items-center justify-center py-10 text-center">
+						<p className="text-muted-foreground text-base">
 							No recent transactions. Start lending or borrowing to see your activity here.
 						</p>
 					</div>
@@ -154,8 +159,20 @@ export default function RecentTransactionsSection({
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Recent Transactions</CardTitle>
-				<CardDescription>Your latest loan activities</CardDescription>
+				<div className="flex flex-wrap items-center justify-between gap-2">
+					<div>
+						<CardTitle>Recent activity</CardTitle>
+						<CardDescription>Your latest loan activity</CardDescription>
+					</div>
+					{hasMore && (
+						<Link
+							href={route.private.history}
+							className="text-primary text-sm font-medium hover:underline"
+						>
+							View all →
+						</Link>
+					)}
+				</div>
 			</CardHeader>
 			<CardContent>
 				<Table>
@@ -170,10 +187,10 @@ export default function RecentTransactionsSection({
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{transactions.map(transaction => {
+						{displayTransactions.map(transaction => {
 							const config = statusConfig[transaction.status];
 							return (
-								<TableRow key={transaction.id} className="hover:bg-muted/50">
+								<TableRow key={transaction.id} className="hover:bg-muted/50 [&_td]:py-3">
 									<TableCell>
 										<div className="flex items-center gap-3">
 											<Avatar className="h-10 w-10">
