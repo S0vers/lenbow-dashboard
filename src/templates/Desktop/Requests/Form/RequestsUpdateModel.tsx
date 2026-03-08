@@ -10,12 +10,12 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Input } from "@/components/ui/input";
 import InputNumeric from "@/components/ui/input-numeric";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
 	ResponsiveDialog,
 	ResponsiveDialogClose,
 	ResponsiveDialogContent,
-	ResponsiveDialogDescription,
 	ResponsiveDialogFooter,
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
@@ -118,7 +118,7 @@ export default function RequestsUpdateModel({
 
 	return (
 		<ResponsiveDialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
-			<ResponsiveDialogContent className="flex max-h-[min(600px,80vh)] flex-col gap-0 p-0 sm:max-w-md">
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
 				{transactionIsLoading ? (
 					<>
 						<ResponsiveDialogHeader className="contents space-y-0 text-left">
@@ -152,15 +152,19 @@ export default function RequestsUpdateModel({
 						</ResponsiveDialogFooter>
 					</>
 				) : (
-					<form id="update-request-form" onSubmit={form.handleSubmit(onSubmit)}>
-						<ResponsiveDialogHeader className="contents space-y-0 text-left">
-							<ResponsiveDialogTitle className="border-b px-6 py-4">
+					<form
+						id="update-request-form"
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="flex min-h-0 flex-1 flex-col overflow-hidden"
+					>
+						<ResponsiveDialogHeader className="shrink-0 contents space-y-0 text-left">
+							<ResponsiveDialogTitle className="border-b border-border px-6 py-4">
 								Update a loan request
 							</ResponsiveDialogTitle>
-
-							<ResponsiveDialogDescription asChild>
-								<div className="p-6">
-									<FieldGroup>
+						</ResponsiveDialogHeader>
+						<ScrollArea className="min-h-0 flex-1">
+							<div className="p-6">
+								<FieldGroup>
 										<div className="flex gap-4">
 											<Controller
 												name="amount"
@@ -288,12 +292,11 @@ export default function RequestsUpdateModel({
 												</Field>
 											)}
 										/>
-									</FieldGroup>
-								</div>
-							</ResponsiveDialogDescription>
-						</ResponsiveDialogHeader>
+								</FieldGroup>
+							</div>
+						</ScrollArea>
 
-						<ResponsiveDialogFooter className="m-0 bg-transparent px-6 sm:justify-end">
+						<ResponsiveDialogFooter className="m-0 shrink-0 border-t border-border bg-muted/30 px-6 sm:justify-end">
 							<ResponsiveDialogClose asChild>
 								<Button type="button" variant="outline" disabled={isLoading}>
 									<ChevronLeftIcon />

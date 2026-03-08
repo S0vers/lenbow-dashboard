@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { StatusButton } from "@/components/ui/status-button";
 import { PhoneInput } from "@/components/ui/phone-input";
 import {
@@ -136,8 +137,8 @@ export default function UpdateProfileModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
-			<ResponsiveDialogContent className="max-w-md p-4 sm:w-full sm:p-6">
-				<ResponsiveDialogHeader>
+			<ResponsiveDialogContent className="flex max-h-[90vh] max-w-md flex-col gap-0 overflow-hidden p-0 sm:w-full">
+				<ResponsiveDialogHeader className="shrink-0 px-4 pt-4 sm:px-6 sm:pt-6">
 					<ResponsiveDialogTitle className="text-xl sm:text-2xl">
 						Edit Profile
 					</ResponsiveDialogTitle>
@@ -150,7 +151,7 @@ export default function UpdateProfileModal({
 						e.preventDefault();
 						void runSubmit();
 					}}
-					className="space-y-4 sm:space-y-6"
+					className="flex min-h-0 flex-1 flex-col overflow-hidden"
 				>
 					{/* Hidden file input */}
 					<input
@@ -162,6 +163,8 @@ export default function UpdateProfileModal({
 						disabled={isUploadingImage || isUpdating || form.formState.isSubmitting}
 					/>
 
+					<ScrollArea className="min-h-0 flex-1 pr-2">
+						<div className="space-y-4 px-4 pb-4 sm:space-y-6 sm:px-6 sm:pb-6">
 					{/* Avatar with click to upload */}
 					<div className="flex flex-col items-center gap-3 py-2">
 						<button
@@ -221,8 +224,10 @@ export default function UpdateProfileModal({
 							)}
 						/>
 					</FieldGroup>
+						</div>
+					</ScrollArea>
 
-					<div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end sm:gap-3 sm:pt-4">
+					<div className="flex shrink-0 flex-col-reverse gap-2 border-t border-border bg-muted/30 px-4 py-4 pt-2 sm:flex-row sm:justify-end sm:gap-3 sm:px-6 sm:pt-4">
 						<Button
 							type="button"
 							variant="outline"

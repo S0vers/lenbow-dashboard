@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	ResponsiveDialog,
 	ResponsiveDialogContent,
@@ -57,14 +58,16 @@ export default function CreateBudgetCategoryModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-			<ResponsiveDialogContent>
-				<ResponsiveDialogHeader>
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-md">
+				<ResponsiveDialogHeader className="shrink-0">
 					<ResponsiveDialogTitle>Add category</ResponsiveDialogTitle>
 					<ResponsiveDialogDescription>
 						Create a custom budget category. Leave slug empty to auto-generate from name.
 					</ResponsiveDialogDescription>
 				</ResponsiveDialogHeader>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+				<form onSubmit={form.handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col overflow-hidden">
+					<ScrollArea className="min-h-0 flex-1 pr-2">
+						<div className="space-y-4">
 					<FieldGroup>
 						<FieldLabel>Name</FieldLabel>
 						<Input
@@ -80,7 +83,9 @@ export default function CreateBudgetCategoryModal({
 							placeholder="e.g. subscriptions"
 						/>
 					</FieldGroup>
-					<ResponsiveDialogFooter>
+						</div>
+					</ScrollArea>
+					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30">
 						<Button
 							type="button"
 							variant="outline"

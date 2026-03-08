@@ -6,11 +6,11 @@ import { toast } from "sonner";
 import { ExtendedLoadingButton } from "@/components/custom-ui/extended-loading-button";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	ResponsiveDialog,
 	ResponsiveDialogClose,
 	ResponsiveDialogContent,
-	ResponsiveDialogDescription,
 	ResponsiveDialogFooter,
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
@@ -67,37 +67,41 @@ export default function RequestsRejectModal(props: RequestsRejectModalProps) {
 
 	return (
 		<ResponsiveDialog open={props.isRejectModalOpen} onOpenChange={props.setIsRejectModalOpen}>
-			<ResponsiveDialogContent className="flex max-h-[min(600px,80vh)] flex-col gap-0 p-0 sm:max-w-md">
-				<form id="reject-request-form" onSubmit={form.handleSubmit(onSubmit)}>
-					<ResponsiveDialogHeader className="contents space-y-0 text-left">
-						<ResponsiveDialogTitle className="border-b px-6 py-4">
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
+				<form
+					id="reject-request-form"
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="flex min-h-0 flex-1 flex-col overflow-hidden"
+				>
+					<ResponsiveDialogHeader className="shrink-0 contents space-y-0 text-left">
+						<ResponsiveDialogTitle className="border-b border-border px-6 py-4">
 							Reject the loan request
 						</ResponsiveDialogTitle>
-						<ResponsiveDialogDescription asChild>
-							<div className="p-6">
-								<FieldGroup>
-									<Controller
-										name="rejectionReason"
-										control={form.control}
-										render={({ field, fieldState }) => (
-											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor={field.name}>Reason</FieldLabel>
-												<Textarea
-													{...field}
-													id={field.name}
-													aria-invalid={fieldState.invalid}
-													placeholder="Enter rejection reason"
-													className="max-h-40"
-												/>
-												{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-											</Field>
-										)}
-									/>
-								</FieldGroup>
-							</div>
-						</ResponsiveDialogDescription>
 					</ResponsiveDialogHeader>
-					<ResponsiveDialogFooter className="bg-transparent px-8 pb-8 sm:justify-end">
+					<ScrollArea className="min-h-0 flex-1">
+						<div className="p-6">
+							<FieldGroup>
+								<Controller
+									name="rejectionReason"
+									control={form.control}
+									render={({ field, fieldState }) => (
+										<Field data-invalid={fieldState.invalid}>
+											<FieldLabel htmlFor={field.name}>Reason</FieldLabel>
+											<Textarea
+												{...field}
+												id={field.name}
+												aria-invalid={fieldState.invalid}
+												placeholder="Enter rejection reason"
+												className="max-h-40"
+											/>
+											{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+										</Field>
+									)}
+								/>
+							</FieldGroup>
+						</div>
+					</ScrollArea>
+					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30 px-6 py-4 sm:justify-end">
 						<ResponsiveDialogClose asChild>
 							<Button type="button" variant="outline" disabled={isLoading}>
 								<ChevronLeftIcon />

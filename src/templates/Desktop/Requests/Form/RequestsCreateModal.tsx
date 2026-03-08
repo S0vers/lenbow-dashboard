@@ -20,6 +20,7 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
 	SelectContent,
@@ -127,14 +128,19 @@ export default function RequestsCreateModal({
 
 	return (
 		<ResponsiveDialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-			<ResponsiveDialogContent className="flex max-h-[min(600px,80vh)] flex-col gap-0 p-0 sm:max-w-md">
-				<form id="create-request-form" onSubmit={form.handleSubmit(onSubmit)}>
-					<ResponsiveDialogHeader className="contents space-y-0 text-left">
-						<ResponsiveDialogTitle className="border-b px-6 py-4">
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
+				<form
+					id="create-request-form"
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="flex min-h-0 flex-1 flex-col overflow-hidden"
+				>
+					<ResponsiveDialogHeader className="shrink-0 contents space-y-0 text-left">
+						<ResponsiveDialogTitle className="shrink-0 border-b border-border px-6 py-4">
 							Create a loan request
 						</ResponsiveDialogTitle>
-						<ResponsiveDialogDescription asChild>
-							<div className="p-6">
+						<ScrollArea className="min-h-0 flex-1">
+							<ResponsiveDialogDescription asChild>
+								<div className="space-y-4 p-6 pr-4">
 								<FieldGroup>
 									<Controller
 										name="contactId"
@@ -325,10 +331,11 @@ export default function RequestsCreateModal({
 										)}
 									/>
 								</FieldGroup>
-							</div>
-						</ResponsiveDialogDescription>
+								</div>
+							</ResponsiveDialogDescription>
+						</ScrollArea>
 					</ResponsiveDialogHeader>
-					<ResponsiveDialogFooter className="m-0 bg-transparent px-6 sm:justify-end">
+					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30 px-6 py-4 sm:justify-end">
 						<ResponsiveDialogClose asChild>
 							<Button type="button" variant="outline" disabled={isLoading}>
 								<ChevronLeftIcon />

@@ -22,6 +22,7 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
 	SelectContent,
@@ -108,8 +109,8 @@ export default function CreateBudgetTransactionModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-			<ResponsiveDialogContent className="sm:max-w-md">
-				<ResponsiveDialogHeader className="gap-1">
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-md">
+				<ResponsiveDialogHeader className="shrink-0 gap-1">
 					<ResponsiveDialogTitle className="gradient-text text-lg font-semibold tracking-tight md:text-xl">
 						Add transaction
 					</ResponsiveDialogTitle>
@@ -117,7 +118,12 @@ export default function CreateBudgetTransactionModal({
 						Add a new income or expense to your budget.
 					</ResponsiveDialogDescription>
 				</ResponsiveDialogHeader>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="flex min-h-0 flex-1 flex-col overflow-hidden"
+				>
+					<ScrollArea className="min-h-0 flex-1 pr-2">
+						<div className="space-y-5">
 					<FieldGroup>
 						<FieldLabel>Name</FieldLabel>
 						<Input
@@ -240,7 +246,9 @@ export default function CreateBudgetTransactionModal({
 							rows={2}
 						/>
 					</FieldGroup>
-					<ResponsiveDialogFooter className="gap-3 sm:gap-3">
+						</div>
+					</ScrollArea>
+					<ResponsiveDialogFooter className="shrink-0 gap-3 sm:gap-3">
 						<Button
 							type="button"
 							variant="outline"

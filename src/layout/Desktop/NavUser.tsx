@@ -72,11 +72,11 @@ export function NavUser(props: NavUserComponentProps) {
 									{getUserInitials(user.name)}
 								</AvatarFallback>
 							</Avatar>
-							<div className="grid flex-1 text-left text-sm leading-tight">
+							<div className="grid flex-1 text-left text-base leading-tight">
 								<span className="truncate font-medium">{user.name}</span>
-								<span className="text-muted-foreground truncate text-xs">{user.email}</span>
+								<span className="text-muted-foreground truncate text-sm">{user.email}</span>
 							</div>
-							<MoreVertical className="ml-auto size-4" />
+							<MoreVertical className="ml-auto size-5" />
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
@@ -86,7 +86,7 @@ export function NavUser(props: NavUserComponentProps) {
 						sideOffset={4}
 					>
 						<DropdownMenuLabel className="p-0 font-normal">
-							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-base">
 								<Avatar className="text-foreground h-8 w-8 rounded-lg bg-transparent">
 									<AvatarImage src={userImage} alt={userName} />
 									<AvatarFallback className="text-foreground rounded-lg bg-transparent">
@@ -94,9 +94,9 @@ export function NavUser(props: NavUserComponentProps) {
 									</AvatarFallback>
 								</Avatar>
 
-								<div className="grid flex-1 text-left text-sm leading-tight">
+								<div className="grid flex-1 text-left text-base leading-tight">
 									<span className="text-foreground truncate font-medium">{user.name}</span>
-									<span className="text-muted-foreground truncate text-xs">{user.email}</span>
+									<span className="text-muted-foreground truncate text-sm">{user.email}</span>
 								</div>
 								<Tooltip>
 									<TooltipTrigger asChild>

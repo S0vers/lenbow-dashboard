@@ -116,7 +116,7 @@ export default function RequestsUpdateModel({
 
 	return (
 		<Drawer open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
-			<DrawerContent className="flex max-h-[85vh] flex-col">
+			<DrawerContent className="flex max-h-[85vh] flex-col overflow-hidden">
 				<div className="mx-auto flex h-full w-full max-w-sm flex-col overflow-hidden">
 					<DrawerHeader className="flex-none">
 						<DrawerTitle className="text-2xl font-bold">Update Request</DrawerTitle>
