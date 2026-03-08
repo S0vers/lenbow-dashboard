@@ -2,6 +2,7 @@ export const route = {
 	public: {},
 	private: {
 		dashboard: "/",
+		budget: "/budget",
 		profile: "/profile",
 		settings: "/settings",
 		requests: "/requests",
@@ -53,7 +54,13 @@ export const apiRoute = {
 	contact: (userId: string) => `/contacts/${userId}`,
 	connectedContacts: "/contacts/connected",
 	overview: "/overview",
-	transactionHistory: "/history/transactions"
+	transactionHistory: "/history/transactions",
+	budgetCategories: "/budget-categories",
+	budgetTransactions: "/budget-transactions",
+	budgetTransaction: (id: string) => `/budget-transactions/${id}`,
+	budgetTransactionReceipts: (id: string) => `/budget-transactions/${id}/receipts`,
+	budgetSubscriptions: "/budget-subscriptions",
+	budgetSubscription: (id: string) => `/budget-subscriptions/${id}`
 } as const;
 
 const DEFAULT_LOGIN_REDIRECT = route.private.dashboard;

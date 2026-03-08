@@ -1,6 +1,7 @@
 "use client";
 
 import ActionRequiredMobile from "./ActionRequiredMobile";
+import BudgetSnapshotMobile from "./BudgetSnapshotMobile";
 import EmptyStateMobile from "./EmptyStateMobile";
 import MetricsCardsMobile from "./MetricsCardsMobile";
 import RecentTransactionsMobile from "./RecentTransactionsMobile";
@@ -19,13 +20,17 @@ export default function OverviewTemplate() {
 
 	const overviewData = data?.data;
 
-	// Check if user has any data
+	// Check if user has any data (loan or budget)
 	const hasData =
 		overviewData &&
 		(overviewData.metrics.totalBorrowed > 0 ||
 			overviewData.metrics.totalLent > 0 ||
 			overviewData.recentTransactions.length > 0 ||
-			overviewData.actionRequired.length > 0);
+			overviewData.actionRequired.length > 0 ||
+			(overviewData.budgetSummary != null &&
+				(overviewData.budgetSummary.totalIncomeThisMonth > 0 ||
+					overviewData.budgetSummary.totalExpenseThisMonth > 0)) ||
+			(overviewData.recentBudgetTransactions?.length ?? 0) > 0);
 
 	return (
 		<>
@@ -75,6 +80,13 @@ export default function OverviewTemplate() {
 						onTransactionClick={transaction => {
 							console.log("Transaction clicked:", transaction);
 						}}
+					/>
+
+					{/* Budget snapshot */}
+					<BudgetSnapshotMobile
+						budgetSummary={overviewData?.budgetSummary ?? null}
+						recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
+						isLoading={isLoading}
 					/>
 				</div>
 			)}

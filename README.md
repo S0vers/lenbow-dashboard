@@ -18,6 +18,7 @@ authentication, internationalization, and a beautiful UI powered by shadcn/ui.
 - ✅ **Form Validation** - Type-safe form handling with React Hook Form and Zod
 - 🎯 **Type Safety** - Full TypeScript support
 - 🎭 **Animations** - Smooth animations with Framer Motion
+- 💰 **Budget (Self-Accounting)** - Personal income/expense tracking: transactions, categories, subscriptions, and receipt attachments; budget snapshot on dashboard overview
 
 ## 🛠️ Tech Stack
 
@@ -110,6 +111,8 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 │   │   └── [locale]/          # Internationalized routes
 │   │       ├── (authentication)/  # Auth pages
 │   │       └── (private)/     # Protected pages
+│   │           ├── @desktop/  # Desktop layout (dashboard, budget, borrow, lend, etc.)
+│   │           └── @mobile/   # Mobile layout
 │   ├── components/            # React components
 │   │   ├── ui/               # shadcn/ui components
 │   │   ├── custom-ui/        # Custom extended components
@@ -118,12 +121,14 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 │   ├── core/                 # Core utilities & constants
 │   ├── hooks/                # Custom React hooks
 │   ├── i18n/                 # Internationalization config
-│   ├── layout/               # Layout components
+│   ├── layout/               # Layout components (sidebar, mobile nav)
 │   ├── lib/                  # Utility libraries
 │   ├── providers/            # React context providers
-│   ├── redux/                # Redux store & slices
+│   ├── redux/                # Redux store & API slices (Overview, Budget, etc.)
 │   ├── routes/               # Route definitions
 │   ├── templates/            # Page templates
+│   │   ├── Desktop/          # Desktop templates (Overview, Budget, History, etc.)
+│   │   └── Mobile/           # Mobile templates
 │   └── validators/           # Zod validation schemas
 ├── messages/                 # i18n translation files
 ├── public/                   # Static assets
@@ -161,7 +166,12 @@ Built with shadcn/ui components including:
 
 - Redux Toolkit for global state
 - RTK Query for API calls with caching
-- Type-safe API slices
+- Type-safe API slices (Overview, Budget categories/transactions/subscriptions, Transactions, etc.)
+
+### Budget & Overview
+
+- **Budget** – Dedicated `/budget` page (desktop and mobile): list budget transactions, add transaction/category/subscription via modals. API integration via `BudgetAPISlice`.
+- **Overview** – Dashboard (`/`) shows loan metrics, action required, upcoming due dates, recent loan transactions, plus a **budget snapshot** (income/expense/balance this month and recent budget transactions) when the user has budget data. Links to full Budget page.
 
 ## 🎨 Customization
 
@@ -202,6 +212,13 @@ pnpm start
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## 📚 API Documentation
+
+The dashboard consumes the Lenbow API. For endpoint details (including Budget and Overview), see the API repository:
+
+- **Budget (self-accounting):** categories, transactions, subscriptions, process-due endpoint for external cron
+- **Overview:** dashboard metrics, action required, recent transactions, **budget summary** and **recent budget transactions**
 
 ## 📄 License
 

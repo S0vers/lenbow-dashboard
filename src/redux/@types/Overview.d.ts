@@ -92,12 +92,34 @@ interface UpcomingDueDate {
 	status: "pending" | "accepted" | "rejected" | "partially_paid" | "requested_repay" | "completed";
 }
 
+interface BudgetSummary {
+	totalIncomeThisMonth: number;
+	totalExpenseThisMonth: number;
+	balanceThisMonth: number;
+}
+
+interface RecentBudgetTransaction {
+	id: string;
+	name: string;
+	amount: number;
+	type: "in" | "out";
+	categoryName: string | null;
+	date: string;
+	currency: {
+		code: string;
+		name: string;
+		symbol: string;
+	};
+}
+
 interface OverviewData {
 	metrics: MetricsData;
 	actionRequired: ActionRequiredItem[];
 	chartData: ChartData;
 	recentTransactions: RecentTransaction[];
 	upcomingDueDates: UpcomingDueDate[];
+	budgetSummary: BudgetSummary | null;
+	recentBudgetTransactions: RecentBudgetTransaction[];
 }
 
 interface OverviewQueryParams {

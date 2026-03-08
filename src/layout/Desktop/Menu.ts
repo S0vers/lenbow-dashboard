@@ -6,7 +6,8 @@ import {
 	LayoutDashboard,
 	Settings,
 	User,
-	Users
+	Users,
+	Wallet
 } from "lucide-react";
 
 import type { NavItemProps, NavUserMaxItemProps } from "@/layout/Desktop/Layout.types";
@@ -42,6 +43,11 @@ const navItem: NavItemProps[] = [
 ];
 
 const navSupportingItem: NavItemProps[] = [
+	{
+		title: "Budget",
+		url: route.private.budget,
+		icon: Wallet
+	},
 	{
 		title: "History",
 		url: route.private.history,

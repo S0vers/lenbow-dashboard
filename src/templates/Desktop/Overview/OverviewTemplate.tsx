@@ -1,6 +1,7 @@
 "use client";
 
 import ActionRequiredSection from "./ActionRequiredSection";
+import BudgetSnapshotSection from "./BudgetSnapshotSection";
 import EmptyState from "./EmptyState";
 import MetricsCards from "./MetricsCards";
 import RecentTransactionsSection from "./RecentTransactionsSection";
@@ -19,13 +20,17 @@ export default function OverviewTemplate() {
 
 	const overviewData = data?.data;
 
-	// Check if user has any data
+	// Check if user has any data (loan or budget)
 	const hasData =
 		overviewData &&
 		(overviewData.metrics.totalBorrowed > 0 ||
 			overviewData.metrics.totalLent > 0 ||
 			overviewData.recentTransactions.length > 0 ||
-			overviewData.actionRequired.length > 0);
+			overviewData.actionRequired.length > 0 ||
+			(overviewData.budgetSummary != null &&
+				(overviewData.budgetSummary.totalIncomeThisMonth > 0 ||
+					overviewData.budgetSummary.totalExpenseThisMonth > 0)) ||
+			(overviewData.recentBudgetTransactions?.length ?? 0) > 0);
 
 	// Show error state
 	if (isError) {
@@ -96,6 +101,13 @@ export default function OverviewTemplate() {
 			{/* Recent Transactions */}
 			<RecentTransactionsSection
 				transactions={overviewData?.recentTransactions || []}
+				isLoading={isLoading}
+			/>
+
+			{/* Budget snapshot */}
+			<BudgetSnapshotSection
+				budgetSummary={overviewData?.budgetSummary ?? null}
+				recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
 				isLoading={isLoading}
 			/>
 		</div>
