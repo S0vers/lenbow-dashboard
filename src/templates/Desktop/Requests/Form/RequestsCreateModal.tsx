@@ -138,9 +138,9 @@ export default function RequestsCreateModal({
 						<ResponsiveDialogTitle className="shrink-0 border-b border-border px-6 py-4">
 							Create a loan request
 						</ResponsiveDialogTitle>
-						<ScrollArea className="min-h-0 flex-1">
+						<ScrollArea className="h-0 min-h-0 flex-1">
 							<ResponsiveDialogDescription asChild>
-								<div className="space-y-4 p-6 pr-4">
+								<div className="space-y-4 p-6 pr-4 pb-6">
 								<FieldGroup>
 									<Controller
 										name="contactId"

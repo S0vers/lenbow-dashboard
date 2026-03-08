@@ -122,8 +122,8 @@ export default function CreateBudgetTransactionModal({
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="flex min-h-0 flex-1 flex-col overflow-hidden"
 				>
-					<ScrollArea className="min-h-0 flex-1 pr-2">
-						<div className="space-y-5">
+					<ScrollArea className="h-0 min-h-0 flex-1 pr-2">
+						<div className="space-y-5 pb-4">
 					<FieldGroup>
 						<FieldLabel>Name</FieldLabel>
 						<Input
