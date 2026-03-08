@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/drawer";
 import InputNumeric from "@/components/ui/input-numeric";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
 	SelectContent,
@@ -145,7 +144,7 @@ export default function RequestsUpdateModel({
 							</div>
 						</div>
 					) : (
-						<ScrollArea className="-mx-4 flex-1 overflow-y-auto px-4">
+						<div className="-mx-4 max-h-[50vh] min-h-0 flex-1 overflow-y-auto px-4">
 							<form
 								id="update-request-form"
 								onSubmit={form.handleSubmit(onSubmit)}
@@ -298,7 +297,7 @@ export default function RequestsUpdateModel({
 									</div>
 								</div>
 							</form>
-						</ScrollArea>
+						</div>
 					)}
 
 					<DrawerFooter className="bg-background flex-none border-t px-4 pt-4 pb-8">

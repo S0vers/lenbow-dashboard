@@ -10,7 +10,6 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Input } from "@/components/ui/input";
 import InputNumeric from "@/components/ui/input-numeric";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
 	ResponsiveDialog,
@@ -162,8 +161,8 @@ export default function RequestsUpdateModel({
 								Update a loan request
 							</ResponsiveDialogTitle>
 						</ResponsiveDialogHeader>
-						<ScrollArea className="min-h-0 flex-1">
-							<div className="p-6">
+						<div className="-mx-6 max-h-[50vh] min-h-0 flex-1 overflow-y-auto px-6 py-4">
+							<div>
 								<FieldGroup>
 										<div className="flex gap-4">
 											<Controller
@@ -294,9 +293,9 @@ export default function RequestsUpdateModel({
 										/>
 								</FieldGroup>
 							</div>
-						</ScrollArea>
+						</div>
 
-						<ResponsiveDialogFooter className="m-0 shrink-0 border-t border-border bg-muted/30 px-6 sm:justify-end">
+						<ResponsiveDialogFooter className="m-0 shrink-0 border-t border-border bg-muted/30 px-6 py-4 sm:justify-end">
 							<ResponsiveDialogClose asChild>
 								<Button type="button" variant="outline" disabled={isLoading}>
 									<ChevronLeftIcon />

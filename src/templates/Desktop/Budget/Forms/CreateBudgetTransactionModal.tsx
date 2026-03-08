@@ -22,7 +22,6 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
 	SelectContent,
@@ -109,8 +108,8 @@ export default function CreateBudgetTransactionModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-md">
-				<ResponsiveDialogHeader className="shrink-0 gap-1">
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
+				<ResponsiveDialogHeader className="shrink-0 space-y-1 px-6 pt-6">
 					<ResponsiveDialogTitle className="gradient-text text-lg font-semibold tracking-tight md:text-xl">
 						Add transaction
 					</ResponsiveDialogTitle>
@@ -122,7 +121,8 @@ export default function CreateBudgetTransactionModal({
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="flex min-h-0 flex-1 flex-col overflow-hidden"
 				>
-					<ScrollArea className="h-0 min-h-0 flex-1 pr-2">
+					{/* Shadcn pattern: scrollable body with explicit max-height so footer stays visible */}
+					<div className="-mx-6 max-h-[50vh] min-h-0 flex-1 overflow-y-auto px-6">
 						<div className="space-y-5 pb-4">
 					<FieldGroup>
 						<FieldLabel>Name</FieldLabel>
@@ -243,12 +243,12 @@ export default function CreateBudgetTransactionModal({
 						<Textarea
 							{...form.register("details")}
 							placeholder="Longer description"
-							rows={2}
+							rows={3}
 						/>
 					</FieldGroup>
 						</div>
-					</ScrollArea>
-					<ResponsiveDialogFooter className="shrink-0 gap-3 sm:gap-3">
+					</div>
+					<ResponsiveDialogFooter className="shrink-0 gap-3 border-t px-6 py-4 sm:gap-3">
 						<Button
 							type="button"
 							variant="outline"

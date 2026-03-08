@@ -7,7 +7,6 @@ import { ExtendedLoadingButton } from "@/components/custom-ui/extended-loading-b
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import InputNumeric from "@/components/ui/input-numeric";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	ResponsiveDialog,
 	ResponsiveDialogClose,
@@ -82,8 +81,8 @@ export default function BorrowPartialRepayModal(props: BorrowPartialRepayModalPr
 							Partial Repay the loan request
 						</ResponsiveDialogTitle>
 					</ResponsiveDialogHeader>
-					<ScrollArea className="min-h-0 flex-1">
-						<div className="p-6">
+					<div className="-mx-6 max-h-[50vh] min-h-0 flex-1 overflow-y-auto px-6 py-4">
+						<div>
 							<FieldGroup>
 								<Controller
 									name="amount"
@@ -105,7 +104,7 @@ export default function BorrowPartialRepayModal(props: BorrowPartialRepayModalPr
 								/>
 							</FieldGroup>
 						</div>
-					</ScrollArea>
+					</div>
 					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30 px-6 py-4 sm:justify-end">
 						<ResponsiveDialogClose asChild>
 							<Button type="button" variant="outline" disabled={isLoading}>

@@ -20,7 +20,6 @@ import {
 	ResponsiveDialogHeader,
 	ResponsiveDialogTitle
 } from "@/components/ui/responsive-dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
 	SelectContent,
@@ -138,9 +137,9 @@ export default function RequestsCreateModal({
 						<ResponsiveDialogTitle className="shrink-0 border-b border-border px-6 py-4">
 							Create a loan request
 						</ResponsiveDialogTitle>
-						<ScrollArea className="h-0 min-h-0 flex-1">
+						<div className="-mx-6 max-h-[50vh] min-h-0 flex-1 overflow-y-auto px-6">
 							<ResponsiveDialogDescription asChild>
-								<div className="space-y-4 p-6 pr-4 pb-6">
+								<div className="space-y-4 pb-6 pt-4">
 								<FieldGroup>
 									<Controller
 										name="contactId"
@@ -333,7 +332,7 @@ export default function RequestsCreateModal({
 								</FieldGroup>
 								</div>
 							</ResponsiveDialogDescription>
-						</ScrollArea>
+						</div>
 					</ResponsiveDialogHeader>
 					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30 px-6 py-4 sm:justify-end">
 						<ResponsiveDialogClose asChild>

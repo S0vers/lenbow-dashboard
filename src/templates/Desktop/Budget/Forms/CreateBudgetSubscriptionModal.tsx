@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Popover,
 	PopoverContent,
@@ -99,16 +98,16 @@ export default function CreateBudgetSubscriptionModal({
 
 	return (
 		<ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-md">
-				<ResponsiveDialogHeader className="shrink-0">
+			<ResponsiveDialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
+				<ResponsiveDialogHeader className="shrink-0 space-y-1 px-6 pt-6">
 					<ResponsiveDialogTitle>Add subscription</ResponsiveDialogTitle>
 					<ResponsiveDialogDescription>
 						Create a recurring expense. A new transaction will be added automatically each period.
 					</ResponsiveDialogDescription>
 				</ResponsiveDialogHeader>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col overflow-hidden">
-					<ScrollArea className="min-h-0 flex-1 pr-2">
-						<div className="space-y-4">
+					<div className="-mx-6 max-h-[50vh] min-h-0 flex-1 overflow-y-auto px-6">
+						<div className="space-y-4 pb-4">
 					<FieldGroup>
 						<FieldLabel>Name</FieldLabel>
 						<Input
@@ -206,8 +205,8 @@ export default function CreateBudgetSubscriptionModal({
 						/>
 					</FieldGroup>
 						</div>
-					</ScrollArea>
-					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30">
+					</div>
+					<ResponsiveDialogFooter className="shrink-0 border-t border-border bg-muted/30 px-6 py-4">
 						<Button
 							type="button"
 							variant="outline"
