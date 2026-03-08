@@ -75,7 +75,7 @@ export default function OverviewTemplate() {
 	}
 
 	return (
-		<div className="container mx-auto max-w-6xl px-4 py-6 sm:py-8 lg:px-8">
+		<div className="container mx-auto px-4 py-6 sm:py-8 lg:px-8">
 			<CreateBudgetTransactionModal
 				open={createBudgetModalOpen}
 				onOpenChange={setCreateBudgetModalOpen}
@@ -109,7 +109,6 @@ export default function OverviewTemplate() {
 						budgetSummary={overviewData?.budgetSummary ?? null}
 						recentBudgetTransactions={overviewData?.recentBudgetTransactions ?? []}
 						isLoading={isLoading}
-						onAddTransaction={() => setCreateBudgetModalOpen(true)}
 						compact
 					/>
 				</section>
