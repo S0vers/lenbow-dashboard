@@ -1,10 +1,11 @@
 import { Check, PlusCircle } from "lucide-react";
-import { useMemo } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { SmoothDropdown } from "@/components/custom-ui/SmoothDropdown";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
@@ -14,7 +15,10 @@ import {
 	CommandList,
 	CommandSeparator
 } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
+
+const easeOutQuint: [number, number, number, number] = [0.23, 1, 0.32, 1];
 
 interface DataTableFacetedFilterProps {
 	title?: string;
@@ -39,6 +43,7 @@ export function DataTableFacetedFilter({
 	handleOptionFilter,
 	options
 }: DataTableFacetedFilterProps) {
+	const [open, setOpen] = useState(false);
 	const defaultValue = searchParams.get(queryParameter) || undefined;
 
 	const value = defaultValue?.split(",");
@@ -63,69 +68,118 @@ export function DataTableFacetedFilter({
 	};
 
 	return (
-		<SmoothDropdown triggerIcon={PlusCircle} triggerLabel={title}>
-			<div className="mb-2 flex items-center justify-between gap-2 px-1">
-				<span className="text-muted-foreground text-xs font-semibold">
-					Filters
-				</span>
-				{selectedValues &&
-					options?.find(option => selectedValues.includes(option.value)) &&
-					selectedValues.length > 0 && (
-						<div className="flex items-center gap-2">
-							<Badge variant="secondary" className="rounded-full px-2 text-xs font-normal">
-								{selectedValues.length} selected
-							</Badge>
-						</div>
-					)}
-			</div>
-			<div className="border-border/80 mb-2 rounded-xl border bg-background px-1.5 py-1">
-				<Command>
-					<CommandInput placeholder={title} />
-					<CommandList>
-						<CommandEmpty>No results found.</CommandEmpty>
-						<CommandGroup>
-							{options?.map(option => {
-								const isSelected = selectedValues?.includes(option.value);
-								return (
-									<CommandItem
-										key={option.value}
-										onSelect={() => {
-											handleSelect(option.value);
-										}}
-									>
-										<div
-											className={cn(
-												"border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
-												isSelected
-													? "bg-primary text-primary-foreground"
-													: "opacity-50 [&_svg]:invisible"
-											)}
-										>
-											<Check />
-										</div>
-										<span>{option.label}</span>
-									</CommandItem>
-								);
-							})}
-						</CommandGroup>
-						{selectedValues &&
-							options?.find(option => selectedValues.includes(option.value)) &&
-							selectedValues.length > 0 && (
-								<>
-									<CommandSeparator />
+		<Popover open={open} onOpenChange={setOpen}>
+			<PopoverTrigger asChild>
+				<Button
+					variant="outline"
+					size="pill"
+					className="h-10 rounded-full px-4 shadow-sm"
+				>
+					<PlusCircle />
+					{title}
+					{selectedValues &&
+						options?.find(option => selectedValues.includes(option.value)) &&
+						selectedValues.length > 0 && (
+							<>
+								<Separator
+									orientation="vertical"
+									className="mx-2 self-center! data-[orientation=vertical]:h-4"
+								/>
+								<Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
+									{selectedValues.length}
+								</Badge>
+								<div className="hidden space-x-1 lg:flex">
+									{selectedValues.length > 2 ? (
+										<Badge variant="secondary" className="rounded-sm px-1 font-normal">
+											{selectedValues.length} selected
+										</Badge>
+									) : (
+										options
+											.filter(option => selectedValues.includes(option.value))
+											.map(option => (
+												<Badge
+													variant="secondary"
+													key={option.value}
+													className="rounded-sm px-1 font-normal"
+												>
+													{option.label}
+												</Badge>
+											))
+									)}
+								</div>
+							</>
+						)}
+				</Button>
+			</PopoverTrigger>
+			<AnimatePresence>
+				{open && (
+					<PopoverContent
+						align="start"
+						className="w-50 border-border/60 bg-popover/95 p-0 backdrop-blur"
+						forceMount
+					>
+						<motion.div
+							initial={{ opacity: 0, y: 6, scale: 0.96 }}
+							animate={{ opacity: 1, y: 0, scale: 1 }}
+							exit={{ opacity: 0, y: 4, scale: 0.97 }}
+							transition={{
+								type: "spring",
+								damping: 26,
+								stiffness: 360,
+								mass: 0.9,
+								ease: easeOutQuint
+							}}
+						>
+							<Command>
+								<CommandInput placeholder={title} />
+								<CommandList>
+									<CommandEmpty>No results found.</CommandEmpty>
 									<CommandGroup>
-										<CommandItem
-											onSelect={handleClearFilter}
-											className="justify-center text-center text-xs font-medium"
-										>
-											Clear filters
-										</CommandItem>
+										{options?.map(option => {
+											const isSelected = selectedValues?.includes(option.value);
+											return (
+												<CommandItem
+													key={option.value}
+													onSelect={() => {
+														handleSelect(option.value);
+													}}
+												>
+													<div
+														className={cn(
+															"border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
+															isSelected
+																? "bg-primary text-primary-foreground"
+																: "opacity-50 [&_svg]:invisible"
+														)}
+													>
+														<Check />
+													</div>
+													<span>{option.label}</span>
+												</CommandItem>
+											);
+										})}
 									</CommandGroup>
-								</>
-							)}
-					</CommandList>
-				</Command>
-			</div>
-		</SmoothDropdown>
+									{selectedValues &&
+										options?.find(option => selectedValues.includes(option.value)) &&
+										selectedValues.length > 0 && (
+											<>
+												<CommandSeparator />
+												<CommandGroup>
+													<CommandItem
+														onSelect={handleClearFilter}
+														className="justify-center text-center"
+													>
+														Clear filters
+													</CommandItem>
+												</CommandGroup>
+											</>
+										)}
+								</CommandList>
+							</Command>
+						</motion.div>
+					</PopoverContent>
+				)}
+			</AnimatePresence>
+		</Popover>
 	);
 }

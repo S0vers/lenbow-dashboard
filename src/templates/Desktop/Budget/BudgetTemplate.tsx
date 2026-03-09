@@ -39,7 +39,7 @@ export default function BudgetTemplate() {
 			<div className="container mx-auto space-y-6 p-4">
 				<div>
 					<h1 className="gradient-text text-3xl font-bold tracking-tight">Budget</h1>
-					<p className="text-muted-foreground mt-1">
+					<p className="text-muted-foreground mt-2 text-base md:text-lg">
 						Unable to load budget transactions. Please try again.
 					</p>
 				</div>
@@ -52,19 +52,27 @@ export default function BudgetTemplate() {
 			<div className="flex items-start justify-between">
 				<div>
 					<h1 className="gradient-text text-3xl font-bold tracking-tight">Budget</h1>
-					<p className="text-muted-foreground mt-1">
+					<p className="text-muted-foreground mt-2 text-base md:text-lg">
 						Track your income and expenses. Add transactions, manage categories and
 						subscriptions.
 					</p>
 				</div>
 				<div className="flex gap-2">
-					<Button variant="outline" onClick={() => setCreateCategoryOpen(true)}>
+					<Button
+						variant="outline"
+						size="pill"
+						onClick={() => setCreateCategoryOpen(true)}
+					>
 						Add category
 					</Button>
-					<Button variant="outline" onClick={() => setCreateSubscriptionOpen(true)}>
+					<Button
+						variant="outline"
+						size="pill"
+						onClick={() => setCreateSubscriptionOpen(true)}
+					>
 						Add subscription
 					</Button>
-					<Button onClick={() => setCreateModalOpen(true)}>
+					<Button size="pill" onClick={() => setCreateModalOpen(true)}>
 						<Plus className="mr-2 h-4 w-4" />
 						Add transaction
 					</Button>

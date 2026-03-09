@@ -10,6 +10,10 @@ import {
 	transactionHistoryApiSlice
 } from "@/redux/APISlices/TransactionHistoryAPISlice";
 import {
+	emailTemplatesApiReducer,
+	emailTemplatesApiSlice
+} from "@/redux/APISlices/EmailTemplatesAPISlice";
+import {
 	authenticationApiReducer,
 	authenticationApiSlice
 } from "@/templates/Authentication/Login/Redux/AuthenticationAPISlice";
@@ -25,7 +29,8 @@ export const makeStore = () => {
 			currencyApiReducer,
 			overviewApiReducer,
 			budgetApiReducer,
-			transactionHistoryApiReducer
+			transactionHistoryApiReducer,
+			emailTemplatesApiReducer
 		},
 		middleware: getDefaultMiddleware =>
 			getDefaultMiddleware({
@@ -37,7 +42,8 @@ export const makeStore = () => {
 				currencyApiSlice.middleware,
 				overviewApiSlice.middleware,
 				budgetApiSlice.middleware,
-				transactionHistoryApiSlice.middleware
+				transactionHistoryApiSlice.middleware,
+				emailTemplatesApiSlice.middleware
 			])
 	});
 };

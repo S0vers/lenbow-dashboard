@@ -23,14 +23,14 @@ export function DataTableSearchInput({
 }: DataTableSearchInputProps) {
 	return (
 		<form onSubmit={onSubmit} className={cn("flex items-center", className)}>
-			<div className="flex h-10 w-[260px] items-center gap-2 rounded-full bg-muted px-3 py-1.5 lg:w-[320px]">
+			<div className="flex h-10 w-[260px] items-center gap-2 rounded-full bg-muted/70 px-3 lg:w-[320px]">
 				<Search className="size-4 text-muted-foreground" />
 				<Input
 					placeholder={placeholder}
 					value={value}
 					onChange={event => onChange(event.target.value)}
 					type="text"
-					className="h-7 w-full border-none bg-transparent px-0 text-sm shadow-none focus-visible:border-transparent focus-visible:ring-0"
+					className="h-8 w-full border-none bg-transparent px-0 text-sm shadow-none focus-visible:ring-0"
 				/>
 			</div>
 		</form>
