@@ -1,14 +1,14 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { Plus, RefreshCw, Search, X } from "lucide-react";
+import { Plus, RefreshCw, X } from "lucide-react";
 
 import { ExtendedButton } from "@/components/custom-ui/extended-button";
 import DataTableDeleteSelected from "@/components/table/data-table-delete-selected";
 import { DataTableFacetedFilter } from "@/components/table/data-table-faceted-filter";
+import { DataTableSearchInput } from "@/components/table/data-table-search-input";
 import { DataTableViewOptions } from "@/components/table/data-table-view-options";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 import RequestsCreateModal from "@/templates/Desktop/Requests/Form/RequestsCreateModal";
 import { TRANSACTION_TYPE } from "@/templates/Desktop/Requests/Table/Data/data";
@@ -46,21 +46,12 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 			/>
 			<div className="flex items-center justify-between">
 				<div className="flex flex-1 items-center space-x-2">
-					<form onSubmit={handleSearch} className="relative flex items-center">
-						<div className="relative">
-							<div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
-								<Search className="size-4" />
-								<span className="sr-only">Search</span>
-							</div>
-							<Input
-								placeholder="Type 3 letters to search..."
-								value={search}
-								onChange={event => setSearch(event.target.value)}
-								type="text"
-								className="peer pl-9"
-							/>
-						</div>
-					</form>
+					<DataTableSearchInput
+						placeholder="Type 3 letters to search..."
+						value={search}
+						onChange={setSearch}
+						onSubmit={handleSearch}
+					/>
 					<DataTableFacetedFilter
 						title="Transaction Type"
 						options={TRANSACTION_TYPE}
@@ -79,8 +70,8 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 				<div className="flex items-center gap-2">
 					<ExtendedButton
 						variant="default"
-						size="sm"
-						className="ml-auto hidden h-8 lg:flex"
+						size="pill"
+						className="ml-auto hidden h-10 rounded-full px-4 text-sm shadow-sm lg:inline-flex"
 						onClick={() => setIsRequestsCreateModalOpen(true)}
 					>
 						<Plus className="size-4" aria-hidden="true" />
@@ -88,8 +79,8 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 					</ExtendedButton>
 					<ExtendedButton
 						variant="orange"
-						size="sm"
-						className="ml-auto hidden h-8 lg:flex"
+						size="pill"
+						className="ml-auto hidden h-10 rounded-full px-4 text-sm shadow-sm lg:inline-flex"
 						onClick={() => handleRefresh()}
 						disabled={isFetching}
 					>

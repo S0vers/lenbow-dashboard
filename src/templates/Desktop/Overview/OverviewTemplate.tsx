@@ -9,10 +9,10 @@ import MetricsCards from "./MetricsCards";
 import QuickActions from "./QuickActions";
 import RecentTransactionsSection from "./RecentTransactionsSection";
 import UpcomingDueDatesSection from "./UpcomingDueDatesSection";
-import CreateBudgetTransactionModal from "@/templates/Desktop/Budget/Forms/CreateBudgetTransactionModal";
 import { Link } from "@/i18n/navigation";
 import { useGetOverviewQuery } from "@/redux/APISlices/OverviewAPISlice";
 import { route } from "@/routes/routes";
+import CreateBudgetTransactionModal from "@/templates/Desktop/Budget/Forms/CreateBudgetTransactionModal";
 
 export default function OverviewTemplate() {
 	const [createBudgetModalOpen, setCreateBudgetModalOpen] = useState(false);
@@ -84,9 +84,7 @@ export default function OverviewTemplate() {
 			{/* Hero: title + subtitle + quick actions */}
 			<header className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
 				<div>
-					<h1 className="gradient-text text-3xl font-bold tracking-tight md:text-4xl">
-						Dashboard
-					</h1>
+					<h1 className="gradient-text text-3xl font-bold tracking-tight md:text-4xl">Dashboard</h1>
 					<p className="text-muted-foreground mt-2 text-base md:text-lg">
 						Welcome back. Here&apos;s a quick snapshot.
 					</p>
@@ -145,3 +143,4 @@ export default function OverviewTemplate() {
 		</div>
 	);
 }
+
