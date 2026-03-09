@@ -3,8 +3,8 @@ import { useMemo } from "react";
 
 import { cn } from "@/lib/utils";
 
+import { SmoothDropdown } from "@/components/custom-ui/SmoothDropdown";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
@@ -14,7 +14,6 @@ import {
 	CommandList,
 	CommandSeparator
 } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
 interface DataTableFacetedFilterProps {
@@ -64,46 +63,22 @@ export function DataTableFacetedFilter({
 	};
 
 	return (
-		<Popover>
-			<PopoverTrigger asChild>
-				<Button variant="outline" size="sm" className="h-8 border-dashed">
-					<PlusCircle />
-					{title}
-					{selectedValues &&
-						options?.find(option => selectedValues.includes(option.value)) &&
-						selectedValues.length > 0 && (
-							<>
-								<Separator
-									orientation="vertical"
-									className="mx-2 self-center! data-[orientation=vertical]:h-4"
-								/>
-								<Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
-									{selectedValues.length}
-								</Badge>
-								<div className="hidden space-x-1 lg:flex">
-									{selectedValues.length > 2 ? (
-										<Badge variant="secondary" className="rounded-sm px-1 font-normal">
-											{selectedValues.length} selected
-										</Badge>
-									) : (
-										options
-											.filter(option => selectedValues.includes(option.value))
-											.map(option => (
-												<Badge
-													variant="secondary"
-													key={option.value}
-													className="rounded-sm px-1 font-normal"
-												>
-													{option.label}
-												</Badge>
-											))
-									)}
-								</div>
-							</>
-						)}
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent className="w-50 p-0" align="start">
+		<SmoothDropdown triggerIcon={PlusCircle} triggerLabel={title}>
+			<div className="mb-2 flex items-center justify-between gap-2 px-1">
+				<span className="text-muted-foreground text-xs font-semibold">
+					Filters
+				</span>
+				{selectedValues &&
+					options?.find(option => selectedValues.includes(option.value)) &&
+					selectedValues.length > 0 && (
+						<div className="flex items-center gap-2">
+							<Badge variant="secondary" className="rounded-full px-2 text-xs font-normal">
+								{selectedValues.length} selected
+							</Badge>
+						</div>
+					)}
+			</div>
+			<div className="border-border/80 mb-2 rounded-xl border bg-background px-1.5 py-1">
 				<Command>
 					<CommandInput placeholder={title} />
 					<CommandList>
@@ -141,7 +116,7 @@ export function DataTableFacetedFilter({
 									<CommandGroup>
 										<CommandItem
 											onSelect={handleClearFilter}
-											className="justify-center text-center"
+											className="justify-center text-center text-xs font-medium"
 										>
 											Clear filters
 										</CommandItem>
@@ -150,7 +125,7 @@ export function DataTableFacetedFilter({
 							)}
 					</CommandList>
 				</Command>
-			</PopoverContent>
-		</Popover>
+			</div>
+		</SmoothDropdown>
 	);
 }

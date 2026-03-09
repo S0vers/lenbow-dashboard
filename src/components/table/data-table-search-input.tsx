@@ -22,18 +22,15 @@ export function DataTableSearchInput({
 	className
 }: DataTableSearchInputProps) {
 	return (
-		<form onSubmit={onSubmit} className={cn("relative flex items-center", className)}>
-			<div className="relative">
-				<div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-2.5 peer-disabled:opacity-50">
-					<Search className="size-4" />
-					<span className="sr-only">Search</span>
-				</div>
+		<form onSubmit={onSubmit} className={cn("flex items-center", className)}>
+			<div className="flex h-10 w-[260px] items-center gap-2 rounded-full bg-muted px-3 py-1.5 lg:w-[320px]">
+				<Search className="size-4 text-muted-foreground" />
 				<Input
 					placeholder={placeholder}
 					value={value}
 					onChange={event => onChange(event.target.value)}
 					type="text"
-					className="peer h-8 w-[220px] rounded-lg px-2 py-1 text-sm pl-8 lg:w-[280px]"
+					className="h-7 w-full border-none bg-transparent px-0 text-sm shadow-none focus-visible:border-transparent focus-visible:ring-0"
 				/>
 			</div>
 		</form>
