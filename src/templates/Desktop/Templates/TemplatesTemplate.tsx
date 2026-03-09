@@ -16,9 +16,49 @@ import type {
 	EmailTemplate
 } from "@/redux/@types/EmailTemplates";
 
+function createDefaultBuilderTemplate(): BuilderEmailTemplate {
+	const now = new Date().toISOString();
+
+	return {
+		id: crypto.randomUUID(),
+		workspaceId: "local-draft",
+		name: "Untitled template",
+		subject: "Untitled subject",
+		description: null,
+		type: "builder",
+		isDefault: false,
+		category: null,
+		createdAt: now,
+		updatedAt: now,
+		blocks: []
+	};
+}
+
+function createDefaultRawHtmlTemplate(from?: EmailTemplate): EmailTemplate {
+	const now = new Date().toISOString();
+
+	return {
+		id: from?.id ?? crypto.randomUUID(),
+		workspaceId: from?.workspaceId ?? "local-draft",
+		name: from?.name ?? "Untitled template",
+		subject: from?.subject ?? "Untitled subject",
+		description: from?.description ?? null,
+		type: "raw_html",
+		isDefault: Boolean(from?.isDefault),
+		category: from?.category ?? null,
+		createdAt: from?.createdAt ?? now,
+		updatedAt: now,
+		html: "<p>Hello {{firstName}},</p>",
+		css: ""
+	};
+}
+
 export default function TemplatesTemplate() {
 	const { data } = useEmailTemplatesListQuery();
-	const [activeTemplate, setActiveTemplate] = useState<EmailTemplate | null>(null);
+	const [activeTemplate, setActiveTemplate] = useState<EmailTemplate | null>(
+		createDefaultBuilderTemplate()
+	);
+	const [mode, setMode] = useState<"builder" | "raw_html">("builder");
 	const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
 	const builderTemplate: BuilderEmailTemplate | null =
@@ -27,7 +67,7 @@ export default function TemplatesTemplate() {
 	const blocks: EmailBlock[] = builderTemplate?.blocks ?? [];
 
 	const handleAddBlock = (type: EmailBlock["type"]) => {
-		if (!builderTemplate) return;
+		const baseTemplate = builderTemplate ?? createDefaultBuilderTemplate();
 
 		const nextBlock: EmailBlock = {
 			id: crypto.randomUUID(),
@@ -36,7 +76,7 @@ export default function TemplatesTemplate() {
 		};
 
 		const nextTemplate: EmailTemplate = {
-			...builderTemplate,
+			...baseTemplate,
 			blocks: [...blocks, nextBlock]
 		};
 
@@ -71,6 +111,30 @@ export default function TemplatesTemplate() {
 
 	const selectedBlock = blocks.find(block => block.id === selectedBlockId) ?? null;
 
+	const handleModeChange = (value: string) => {
+		if (value !== "builder" && value !== "raw_html") return;
+		setMode(value);
+
+		setSelectedBlockId(null);
+
+		setActiveTemplate(prev => {
+			if (!prev) {
+				return value === "builder"
+					? createDefaultBuilderTemplate()
+					: createDefaultRawHtmlTemplate();
+			}
+
+			if (value === "builder") {
+				if (prev.type === "builder") return prev;
+				return createDefaultBuilderTemplate();
+			}
+
+			// raw_html
+			if (prev.type === "raw_html") return prev;
+			return createDefaultRawHtmlTemplate(prev);
+		});
+	};
+
 	return (
 		<div className="flex h-full flex-col gap-4">
 			<header className="flex items-center justify-between gap-2">
@@ -90,7 +154,7 @@ export default function TemplatesTemplate() {
 			<Card className="flex min-h-0 flex-1 overflow-hidden">
 				<div className="grid h-full w-full grid-cols-1 gap-4 p-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
 					<section className="flex min-h-0 flex-col gap-3">
-						<Tabs defaultValue="builder" className="flex h-full flex-col">
+						<Tabs value={mode} onValueChange={handleModeChange} className="flex h-full flex-col">
 							<TabsList className="w-fit">
 								<TabsTrigger value="builder">Builder</TabsTrigger>
 								<TabsTrigger value="raw_html">Raw HTML</TabsTrigger>
