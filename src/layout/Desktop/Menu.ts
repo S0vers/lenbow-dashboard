@@ -4,6 +4,7 @@ import {
 	Hand,
 	History,
 	LayoutDashboard,
+	Mail,
 	Settings,
 	User,
 	Users,
@@ -47,6 +48,11 @@ const navSupportingItem: NavItemProps[] = [
 		title: "Budget",
 		url: route.private.budget,
 		icon: Wallet
+	},
+	{
+		title: "Templates",
+		url: route.private.templates,
+		icon: Mail
 	},
 	{
 		title: "History",
