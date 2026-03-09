@@ -62,7 +62,6 @@ export const emailBlockPresets: EmailBlockPreset[] = [
 			borderRadius: 0
 		}
 	},
-    
 	{
 		type: "divider",
 		label: "Divider",
@@ -91,6 +90,57 @@ export const emailBlockPresets: EmailBlockPreset[] = [
 			rightTitle: "Right column",
 			rightContent: "Add supporting information here.",
 			stackOnMobile: true
+		}
+	},
+	{
+		type: "heading",
+		label: "Heading",
+		description: "Standalone section heading.",
+		defaultProps: {
+			text: "Section title",
+			level: 2,
+			align: "left",
+			color: "#0f172a",
+			marginBottom: 16
+		}
+	},
+	{
+		type: "list",
+		label: "List",
+		description: "Bullet or numbered list of items.",
+		defaultProps: {
+			items: ["First item", "Second item"],
+			style: "bullet"
+		}
+	},
+	{
+		type: "quote",
+		label: "Quote",
+		description: "Highlighted testimonial or note.",
+		defaultProps: {
+			text: "This is a short quote about your product or update.",
+			author: "Lenbow"
+		}
+	},
+	{
+		type: "social_icons",
+		label: "Social icons",
+		description: "Links to social profiles.",
+		defaultProps: {
+			items: [
+				{ type: "website", href: "https://lenbow.com" },
+				{ type: "twitter", href: "https://twitter.com" }
+			],
+			align: "center"
+		}
+	},
+	{
+		type: "footer",
+		label: "Footer",
+		description: "Legal text and unsubscribe copy.",
+		defaultProps: {
+			text: "You are receiving this email because you use Lenbow.",
+			unsubscribeUrl: "{{unsubscribeUrl}}"
 		}
 	}
 ];

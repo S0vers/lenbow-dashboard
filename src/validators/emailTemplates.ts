@@ -20,7 +20,12 @@ export const emailBlockTypeSchema = validateEnum("Block type", [
 	"image",
 	"divider",
 	"spacer",
-	"two_column"
+	"two_column",
+	"heading",
+	"list",
+	"quote",
+	"social_icons",
+	"footer"
 ] as const);
 
 const baseIdSchema = validateString("ID", { min: 1, max: 128 });
@@ -114,6 +119,65 @@ const twoColumnBlockSchema = z.object({
 	})
 });
 
+const headingBlockSchema = z.object({
+	id: baseIdSchema,
+	type: z.literal("heading"),
+	props: z.object({
+		text: validateString("Heading text", { min: 1, max: 200 }),
+		level: z.number().int().min(1).max(3).optional(),
+		align: validateEnum("Heading alignment", ["left", "center", "right"] as const).optional(),
+		color: validateString("Heading color", { max: 32 }).optional(),
+		marginBottom: z.number().int().min(0).max(64).optional()
+	})
+});
+
+const listBlockSchema = z.object({
+	id: baseIdSchema,
+	type: z.literal("list"),
+	props: z.object({
+		items: validateArray(
+			"List items",
+			validateString("List item", { min: 1, max: 200 }),
+			{ min: 1, max: 20 }
+		),
+		style: validateEnum("List style", ["bullet", "numbered"] as const).optional()
+	})
+});
+
+const quoteBlockSchema = z.object({
+	id: baseIdSchema,
+	type: z.literal("quote"),
+	props: z.object({
+		text: validateString("Quote text", { min: 1, max: 400 }),
+		author: validateString("Quote author", { max: 120 }).optional().nullable()
+	})
+});
+
+const socialIconsBlockSchema = z.object({
+	id: baseIdSchema,
+	type: z.literal("social_icons"),
+	props: z.object({
+		items: validateArray(
+			"Social links",
+			z.object({
+				type: validateEnum("Social network", ["twitter", "facebook", "linkedin", "instagram", "website"] as const),
+				href: validateUrl("Social URL")
+			}),
+			{ min: 1, max: 10 }
+		),
+		align: validateEnum("Social icons alignment", ["left", "center", "right"] as const).optional()
+	})
+});
+
+const footerBlockSchema = z.object({
+	id: baseIdSchema,
+	type: z.literal("footer"),
+	props: z.object({
+		text: validateString("Footer text", { min: 1, max: 400 }),
+		unsubscribeUrl: validateUrl("Unsubscribe URL").optional().nullable()
+	})
+});
+
 export const EmailBlockSchema = z.discriminatedUnion("type", [
 	heroBlockSchema,
 	textBlockSchema,
@@ -121,7 +185,12 @@ export const EmailBlockSchema = z.discriminatedUnion("type", [
 	imageBlockSchema,
 	dividerBlockSchema,
 	spacerBlockSchema,
-	twoColumnBlockSchema
+	twoColumnBlockSchema,
+	headingBlockSchema,
+	listBlockSchema,
+	quoteBlockSchema,
+	socialIconsBlockSchema,
+	footerBlockSchema
 ]);
 
 // -----------------------------
@@ -136,7 +205,8 @@ const baseTemplateSchema = z.object({
 	description: baseDescriptionSchema,
 	type: emailTemplateTypeSchema,
 	isDefault: z.boolean().optional(),
-	category: validateString("Category", { max: 64 }).optional().nullable()
+	category: validateString("Category", { max: 64 }).optional().nullable(),
+	lastSentAt: validateString("Last sent at", { max: 64 }).optional().nullable()
 });
 
 export const BuilderTemplateSchema = baseTemplateSchema.extend({
@@ -159,14 +229,21 @@ export const EmailTemplateSchema = z.discriminatedUnion("type", [
 // DTOs for API requests
 // -----------------------------
 
-export const CreateEmailTemplateBodySchema = EmailTemplateSchema.omit({
-	id: true,
-	workspaceId: true
-});
+export const CreateEmailTemplateBodySchema = z.discriminatedUnion("type", [
+	BuilderTemplateSchema.omit({
+		id: true,
+		workspaceId: true
+	}),
+	RawHtmlTemplateSchema.omit({
+		id: true,
+		workspaceId: true
+	})
+]);
 
-export const UpdateEmailTemplateBodySchema = EmailTemplateSchema.partial().extend({
-	id: baseIdSchema.optional()
-});
+export const UpdateEmailTemplateBodySchema = z.discriminatedUnion("type", [
+	BuilderTemplateSchema.partial(),
+	RawHtmlTemplateSchema.partial()
+]);
 
 export type CreateEmailTemplateBody = z.infer<typeof CreateEmailTemplateBodySchema>;
 export type UpdateEmailTemplateBody = z.infer<typeof UpdateEmailTemplateBodySchema>;

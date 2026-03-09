@@ -18,11 +18,13 @@ import {
 	authenticationApiSlice
 } from "@/templates/Authentication/Login/Redux/AuthenticationAPISlice";
 import { authReducer } from "@/templates/Authentication/Login/Redux/AuthenticationSlice";
+import { emailTemplatesUIReducer } from "@/redux/EmailTemplatesUISlice";
 
 export const makeStore = () => {
 	return configureStore({
 		reducer: {
 			authReducer,
+			emailTemplatesUIReducer,
 			authenticationApiReducer,
 			transactionApiReducer,
 			contactApiReducer,

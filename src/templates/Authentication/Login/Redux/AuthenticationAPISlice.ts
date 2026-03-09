@@ -102,6 +102,15 @@ export const authenticationApiSlice = createApi({
 			}),
 			invalidatesTags: ["Me"]
 		}),
+		mfaVerify: builder.mutation<ApiResponse<{ verified: boolean }>, { userId: number; token: string }>(
+			{
+				query: body => ({
+					url: apiRoute.mfa.verify,
+					method: "POST",
+					body
+				})
+			}
+		),
 		mfaDisable: builder.mutation<ApiResponse<null>, { password: string }>({
 			query: body => ({
 				url: apiRoute.mfa.disable,
@@ -132,6 +141,7 @@ export const {
 	useMfaStatusQuery,
 	useMfaSetupMutation,
 	useMfaSetupVerifyMutation,
+	useMfaVerifyMutation,
 	useMfaDisableMutation,
 	useMfaBackupCodesMutation
 } = authenticationApiSlice;

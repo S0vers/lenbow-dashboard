@@ -7,7 +7,12 @@ export type EmailBlockType =
 	| "image"
 	| "divider"
 	| "spacer"
-	| "two_column";
+	| "two_column"
+	| "heading"
+	| "list"
+	| "quote"
+	| "social_icons"
+	| "footer";
 
 export interface EmailBlock {
 	id: string;
@@ -22,6 +27,9 @@ export interface EmailTemplateBase {
 	name: string;
 	subject: string;
 	description?: string | null;
+	isDefault?: boolean;
+	category?: string | null;
+	lastSentAt?: string | null;
 	createdAt: string;
 	updatedAt: string;
 }

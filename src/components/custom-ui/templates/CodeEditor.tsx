@@ -1,3 +1,5 @@
+import { Textarea } from "@/components/ui/textarea";
+
 interface CodeEditorProps {
 	value: string;
 	onChange: (value: string) => void;
@@ -6,11 +8,11 @@ interface CodeEditorProps {
 
 export function CodeEditor({ value, onChange }: CodeEditorProps) {
 	return (
-		<textarea
+		<Textarea
 			value={value}
 			onChange={event => onChange(event.target.value)}
-			className="h-full w-full resize-none rounded-md border bg-background px-3 py-2 font-mono text-xs"
 			spellCheck={false}
+			className="min-h-[260px] font-mono text-sm leading-snug"
 		/>
 	);
 }

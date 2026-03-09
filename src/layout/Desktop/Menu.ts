@@ -24,7 +24,6 @@ const navItem: NavItemProps[] = [
 		title: "Dashboard",
 		url: route.private.dashboard,
 		icon: LayoutDashboard
-		// items: [{ title: "Profile", url: route.private.profile }],
 	},
 	{
 		title: "Requests",
@@ -52,7 +51,17 @@ const navSupportingItem: NavItemProps[] = [
 	{
 		title: "Templates",
 		url: route.private.templates,
-		icon: Mail
+		icon: Mail,
+		items: [
+			{
+				title: "Builder",
+				url: route.private.templates
+			},
+			{
+				title: "All templates",
+				url: route.private.templatesList
+			}
+		]
 	},
 	{
 		title: "History",
@@ -64,16 +73,6 @@ const navSupportingItem: NavItemProps[] = [
 		url: route.private.people,
 		icon: Users
 	}
-	// {
-	// 	title: "Notifications",
-	// 	url: route.private.notifications,
-	// 	icon: Bell
-	// },
-	// {
-	// 	title: "Support",
-	// 	url: route.private.support,
-	// 	icon: HelpCircle
-	// }
 ];
 
 export { navItem, navSupportingItem, userItems };
