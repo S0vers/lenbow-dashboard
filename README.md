@@ -250,4 +250,4 @@ pnpm install
 
 ## 📞 Support
 
-For support, please contact the development team or open an issue in the repository.
+For support, please contact the development team or open an issue in the repository.    
